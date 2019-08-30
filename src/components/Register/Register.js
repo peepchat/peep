@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 const CenterWrapper = styled.div`
   width: 100%;
   height: 120vh;
@@ -9,7 +10,9 @@ const CenterWrapper = styled.div`
   justify-content: center;
   align-content: center;
   align-items: center;
-  background: transparent url("https://discordapp.com/assets/fd91131ea693096d6be5e8aa99d18f9e.jpg") no-repeat fixed center;
+  background: transparent
+    url("https://discordapp.com/assets/fd91131ea693096d6be5e8aa99d18f9e.jpg")
+    no-repeat fixed center;
 `;
 const LoginBox = styled.div`
   width: 20rem;
@@ -142,12 +145,14 @@ const Register = props => {
             <LoginH5>Password</LoginH5>
             <LoginInput />
           </InputBox>
-          <br/>
+          <br />
           <LoginButton>
             <LoginDiv>Submit</LoginDiv>
           </LoginButton>
           <ForgotButton>
-            <ForgotDiv>Already have an account? Login</ForgotDiv>
+            <Link to="/">
+              <ForgotDiv>Already have an account? Login</ForgotDiv>
+            </Link>
           </ForgotButton>
         </form>
       </LoginBox>
