@@ -3,10 +3,9 @@ const express = require("express");
 const massive = require("massive");
 const session = require("express-session");
 const app = express();
-const AC = require("./auth_controller/auth_controller");
+const AC = require("./controllers/auth_controller");
 const AM = require("./middleware/auth.middleware");
 
-const expressSession = require("express-session");
 const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
 
 app.use(express.json());
