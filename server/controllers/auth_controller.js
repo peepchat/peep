@@ -9,7 +9,7 @@ const registerUser = async (req, res, next) => {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
     const user = await db.create_user([email, nickname, hashedPassword]);
-    console.log(user[0].user_id);
+    // console.log(user[0].user_id);
     req.session.user = {
       id: user[0].user_id,
       email,
@@ -45,7 +45,7 @@ const loginUser = async (req, res, next) => {
       email: checkedUser[0].email,
       nickname: checkedUser[0].nickname
     };
-    console.log(req.session.user);
+    // console.log(req.session.user);
     return res.json(req.session.user);
   } else {
     return res.status(403).json({ error: "Wrong username and password." });
@@ -54,7 +54,7 @@ const loginUser = async (req, res, next) => {
 
 const logoutUser = async (req, res) => {
   req.session.destroy();
-  console.log(req.session);
+  // console.log(req.session);
   return res.sendStatus(200);
 };
 
