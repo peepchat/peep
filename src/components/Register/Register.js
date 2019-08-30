@@ -10,8 +10,7 @@ const CenterWrapper = styled.div`
   justify-content: center;
   align-content: center;
   align-items: center;
-  background: transparent
-    url("https://discordapp.com/assets/fd91131ea693096d6be5e8aa99d18f9e.jpg")
+  background: url("https://discordapp.com/assets/fd91131ea693096d6be5e8aa99d18f9e.jpg")
     no-repeat fixed center;
 `;
 const LoginBox = styled.div`
