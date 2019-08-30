@@ -5,6 +5,7 @@ const session = require("express-session");
 const app = express();
 const AC = require("./controllers/auth_controller");
 const AM = require("./middleware/auth.middleware");
+const UC = require("./controllers/user_controller");
 
 const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
 
@@ -28,11 +29,14 @@ app.use(
   })
 );
 
+//auth
 app.post("/auth/register", AC.registerUser);
 app.post("/auth/login", AC.loginUser);
 app.get("/auth/logout", AC.logoutUser);
 app.get("/auth/user", AC.getUser);
 
+//user
+app.put("/api/user", UC.updatePic);
 app.listen(SERVER_PORT, () => {
   console.log(`Listening on Port ${SERVER_PORT}`);
 });
