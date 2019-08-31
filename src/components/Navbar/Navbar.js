@@ -17,12 +17,56 @@ const NavWrapper = styled.div`
     0 2px 4px 0 rgba(14, 30, 37, 0.12);
 `;
 
+const Channel = styled.div`
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
+  margin: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  padding: 1rem;
+`;
+
+const PlusButton = styled.div`
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
+  margin: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  padding: 1rem;
+  background-color: #81e6d9;
+  color: grey;
+`;
+
+const Underline = styled.div`
+  width: 80%;
+  border-bottom: solid 3px #81e6d9;
+`;
+
 const Navbar = props => {
   // useEffect(() => {
   //   props.checkUserLoggedIn().catch(() => props.history.push("/"));
   // });
 
-  return <NavWrapper>Nav</NavWrapper>;
+  return (
+    <NavWrapper>
+      <Channel>A</Channel>
+      <Underline />
+      <Channel>B</Channel>
+      <Channel>C</Channel>
+      <Channel>D</Channel>
+      <PlusButton>+</PlusButton>
+    </NavWrapper>
+  );
 };
 
 export default connect(
