@@ -1,0 +1,1 @@
+select * from peep_direct_chat order by chat_id desc limit 1;

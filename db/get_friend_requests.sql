@@ -1,3 +1,3 @@
-select * from peep_friend_requests pfr
+select pfr.*, pu.user_id, pu.email, pu.nickname, pu.profile_img, pu.bio from peep_friend_request pfr
 join peep_users pu on pfr.sent_user_id = pu.user_id
-where received_user_id = $1;
+where pfr.received_user_id = $1;

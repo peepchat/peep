@@ -1,0 +1,1 @@
+delete from peep_direct_chat_history where chat_id = $1;
