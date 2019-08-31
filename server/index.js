@@ -4,6 +4,8 @@ const massive = require("massive");
 const session = require("express-session");
 const app = express();
 const AC = require("./controllers/auth_controller");
+const FC = require("./controllers/friend_controller");
+
 const AM = require("./middleware/auth.middleware");
 const UC = require("./controllers/user_controller");
 
@@ -37,6 +39,13 @@ app.get("/auth/user", AC.getUser);
 
 //user
 app.put("/api/user", UC.updatePic);
+app.post("/api/friend/requests/:friendID", FC.friendRequest);
+app.get("/api/friend/requests", FC.getFriendRequests);
+app.get("/api/friend/requests/pending", FC.getPendingRequests);
+app.post("/api/friends/:friendID", FC.addToFriendsList);
+app.delete("/api/friends/:friendID", FC.removeFromFriendsList);
+app.get("/api/friends", FC.getFriendsList);
+
 app.listen(SERVER_PORT, () => {
   console.log(`Listening on Port ${SERVER_PORT}`);
 });

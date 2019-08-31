@@ -1,0 +1,1 @@
+delete from peep_friend_request where request_id = $1;
