@@ -1,0 +1,1 @@
+select user_id, email, nickname, profile_img, bio from peep_users;

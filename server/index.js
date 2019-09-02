@@ -39,6 +39,9 @@ app.get("/auth/user", AC.getUser);
 
 //user
 app.put("/api/user", UC.updatePic);
+app.get("/api/users", UC.getAllUsers);
+
+//friends
 app.post("/api/friend/requests/:friendID", FC.friendRequest);
 app.get("/api/friend/requests", FC.getFriendRequests);
 app.get("/api/friend/requests/pending", FC.getPendingRequests);
