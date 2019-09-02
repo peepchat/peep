@@ -14,6 +14,7 @@ const ProfileWrapper = styled.div`
   justify-content: center;
   align-items: center;
   border: 1px solid lightgrey;
+  z-index: 1;
 `;
 
 const ChatBox = styled.div`

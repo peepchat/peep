@@ -40,6 +40,7 @@ app.get("/auth/user", AC.getUser);
 //user
 app.put("/api/user", UC.updatePic);
 app.get("/api/users", UC.getAllUsers);
+app.get("/api/users", UC.searchUsers);
 
 //friends
 app.post("/api/friend/requests/:friendID", FC.friendRequest);
