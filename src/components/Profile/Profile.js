@@ -117,7 +117,7 @@ const Profile = props => {
           </button>
           {dropdown === true ? (
             <div>
-              stuff
+              User info
               <input />
               <button>Edit</button>
             </div>
