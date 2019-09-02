@@ -8,11 +8,14 @@ import { Link } from "react-router-dom";
 
 const CenterWrapper = styled.div`
   width: 100%;
+  height: 100vh;
   text-align: center;
   display: flex;
   justify-content: center;
   align-content: center;
   align-items: center;
+  background: url("https://discordapp.com/assets/fd91131ea693096d6be5e8aa99d18f9e.jpg")
+    no-repeat fixed center;
 `;
 const LoginBox = styled.div`
   width: 20rem;
@@ -159,18 +162,13 @@ const Login = props => {
         <form style={formStyle} type="submit" onSubmit={handleLogin}>
           <InputBox>
             <LoginH5>Email</LoginH5>
-            <LoginInput
-              onChange={handleChange}
-              name="email"
-              value={props.email}
-            />
+            <LoginInput onChange={handleChange} name="email" />
           </InputBox>
           <InputBox>
             <LoginH5>Password</LoginH5>
             <LoginInput
               onChange={handleChange}
               name="password"
-              value={props.password}
               type="password"
             />
           </InputBox>

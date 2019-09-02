@@ -2,9 +2,15 @@ import axios from "axios";
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import {
+  resetFields,
+  updateState
+} from "./../../redux/AuthReducer/AuthReducer";
+
 const CenterWrapper = styled.div`
   width: 100%;
-  height: 120vh;
+  height: 100vh;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -127,36 +133,75 @@ const LoginDiv = styled.div`
 `;
 //---end-styles/
 const Register = props => {
+  const handleChange = event => {
+    props.updateState({ [event.target.name]: event.target.value });
+  };
+
+  const clickGoBack = () => {
+    props.resetFields();
+  };
+
+  const handleRegister = event => {
+    event.preventDefault();
+    axios
+      .post("/auth/register", {
+        email: props.email,
+        nickname: props.nickname,
+        password: props.password
+      })
+      .then(() => {
+        props.history.push("/");
+      })
+      .catch(() => {
+        console.log("Not working");
+      });
+  };
+
   return (
     <CenterWrapper>
       <LoginBox>
         <Title>Create an account</Title>
-        <form style={formStyle}>
+        <form style={formStyle} type="submit" onSubmit={handleRegister}>
           <InputBox>
             <LoginH5>Email</LoginH5>
-            <LoginInput />
+            <LoginInput onChange={handleChange} name="email" />
           </InputBox>
           <InputBox>
             <LoginH5>Nickname</LoginH5>
-            <LoginInput />
+            <LoginInput onChange={handleChange} name="nickname" />
           </InputBox>
           <InputBox>
             <LoginH5>Password</LoginH5>
-            <LoginInput />
+            <LoginInput
+              onChange={handleChange}
+              name="password"
+              type="password"
+            />
           </InputBox>
           <br />
-          <LoginButton>
-            <LoginDiv>Submit</LoginDiv>
+          <LoginButton type="submit">
+            <LoginDiv>Register</LoginDiv>
           </LoginButton>
-          <ForgotButton>
-            <Link to="/">
+          <Link to="/">
+            <ForgotButton onClick={clickGoBack}>
               <ForgotDiv>Already have an account? Login</ForgotDiv>
-            </Link>
-          </ForgotButton>
+            </ForgotButton>
+          </Link>
         </form>
       </LoginBox>
     </CenterWrapper>
   );
 };
 
-export default Register;
+const mapStateToProps = state => {
+  return {
+    email: state.authReducer.email,
+    nickname: state.authReducer.nickname,
+    password: state.authReducer.password
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { updateState, resetFields }
+)(Register);

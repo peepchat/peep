@@ -7,6 +7,7 @@ const AC = require("./controllers/auth_controller");
 const FC = require("./controllers/friend_controller");
 
 const AM = require("./middleware/auth.middleware");
+const UC = require("./controllers/user_controller");
 
 const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
 
@@ -30,11 +31,14 @@ app.use(
   })
 );
 
+//auth
 app.post("/auth/register", AC.registerUser);
 app.post("/auth/login", AC.loginUser);
 app.get("/auth/logout", AC.logoutUser);
 app.get("/auth/user", AC.getUser);
 
+//user
+app.put("/api/user", UC.updatePic);
 app.post("/api/friend/requests/:friendID", FC.friendRequest);
 app.get("/api/friend/requests", FC.getFriendRequests);
 app.get("/api/friend/requests/pending", FC.getPendingRequests);
