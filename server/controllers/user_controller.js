@@ -13,6 +13,14 @@ const updatePic = (req, res, next) => {
     });
 };
 
+const getAllUsers = async (req, res) => {
+  const db = req.app.get("db");
+
+  const results = await db.get_all_users();
+  res.status(200).send(results);
+};
+
 module.exports = {
-  updatePic
+  updatePic,
+  getAllUsers
 };
