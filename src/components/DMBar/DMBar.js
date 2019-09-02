@@ -1,18 +1,30 @@
 import React from "react";
 import styled from "styled-components";
 
+const DMBarCont = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  left: 5%;
+  width: 20%;
+  height: 100%;
+  position: fixed;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
+  background-color: #f5f5f5;
+`;
+
 const DMBarWrapper = styled.div`
   display: flex;
   justify-content: start;
-  position: fixed;
   align-items: center;
   flex-direction: column;
   border: 1px solid lightgrey;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
     0 2px 4px 0 rgba(14, 30, 37, 0.12);
   left: 5%;
-  width: 20%;
-  height: 100%;
+  width: 100%;
+  height: 90%;
   background-color: #f5f5f5;
 `;
 
@@ -57,7 +69,7 @@ const SearchButton = styled.button`
   height: 100%;
   width: 20%;
   font-size: 1rem;
-  padding: 1rem;
+  /* padding: 1rem; */
   appearance: none;
   background-color: #81e6d9;
   border: none;
@@ -93,28 +105,44 @@ const UserNickname = styled.div`
   font-size: 1rem;
 `;
 
+const UserBar = styled.div`
+  width: 100%;
+  height: 10%;
+  border: solid 1px lightgray;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+`;
+
 const DMBar = props => {
   return (
-    <DMBarWrapper>
-      <SearchWrapper>
-        <SearchInput></SearchInput>
-        <SearchButton>x</SearchButton>
-      </SearchWrapper>
+    <DMBarCont>
+      <DMBarWrapper>
+        <SearchWrapper>
+          <SearchInput placeholder="Search..."></SearchInput>
+          <SearchButton>x</SearchButton>
+        </SearchWrapper>
 
-      <Label>Direct Messages</Label>
-      <PicNameCont>
+        <Label>Direct Messages</Label>
+        <PicNameCont>
+          <UserPic>J</UserPic>
+          <UserNickname>Mudduh J</UserNickname>
+        </PicNameCont>
+        <PicNameCont>
+          <UserPic>A</UserPic>
+          <UserNickname>Ali</UserNickname>
+        </PicNameCont>
+        <PicNameCont>
+          <UserPic>H</UserPic>
+          <UserNickname>H4Nade</UserNickname>
+        </PicNameCont>
+      </DMBarWrapper>
+      <UserBar>
         <UserPic>J</UserPic>
         <UserNickname>Mudduh J</UserNickname>
-      </PicNameCont>
-      <PicNameCont>
-        <UserPic>A</UserPic>
-        <UserNickname>Ali</UserNickname>
-      </PicNameCont>
-      <PicNameCont>
-        <UserPic>H</UserPic>
-        <UserNickname>H4Nade</UserNickname>
-      </PicNameCont>
-    </DMBarWrapper>
+      </UserBar>
+    </DMBarCont>
   );
 };
 
