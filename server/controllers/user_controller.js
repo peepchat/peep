@@ -20,7 +20,22 @@ const getAllUsers = async (req, res) => {
   res.status(200).send(results);
 };
 
+const updateNickname = (req, res) => {
+  const db = req.app.get("db");
+  const { id } = req.session.user;
+  const { nickname } = req.body;
+  db.update_nickname([id, nickname])
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+};
+
 module.exports = {
   updatePic,
-  getAllUsers
+  getAllUsers,
+  updateNickname
 };
