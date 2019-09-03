@@ -1,9 +1,12 @@
 import axios from "axios";
 
 const initialState = {
+  user_id: null,
   email: "",
   password: "",
   nickname: "",
+  profilePic: "",
+  bio: "",
   loading: false,
   user: {}
 };
@@ -13,6 +16,7 @@ const RESET_FIELDS = "RESET_FIELDS";
 const LOGIN_USER = "LOGIN_USER";
 const CHECK_USER_LOGGED_IN = "CHECK_USER_LOGGED_IN";
 const LOGOUT_USER = "LOGOUT_USER";
+const GET_USER_DATA = "GET_USER_DATA";
 
 export const updateState = event => {
   return {
@@ -35,6 +39,13 @@ export const loginUser = (email, password) => {
       email: email,
       password: password
     })
+  };
+};
+
+export const getUserInfo = () => {
+  return {
+    type: GET_USER_DATA,
+    payload: axios.get(`/auth/user/`)
   };
 };
 
@@ -61,6 +72,7 @@ export function authReducer(state = initialState, action) {
     case `${LOGIN_USER}_PENDING`:
       return { ...state, loading: true };
     case `${LOGIN_USER}_FULFILLED`:
+      // console.log(payload.data);
       return { ...state, loading: false, user: payload.data };
     case `${CHECK_USER_LOGGED_IN}_PENDING`:
       return { ...state, loading: true };
@@ -68,8 +80,22 @@ export function authReducer(state = initialState, action) {
       return { ...state, loading: false, user: payload.data };
     case `${LOGOUT_USER}_PENDING`:
       return { ...state, loading: true };
-    case `${LOGIN_USER}_FULFILLED`:
+    case `${LOGOUT_USER}_FULFILLED`:
       return { ...state, loading: false, user: {} };
+    case `${GET_USER_DATA}_PENDING`:
+      return { ...state, loading: true };
+    case `${GET_USER_DATA}_FULFILLED`:
+      console.log(payload.data);
+      const { user_id, email, nickname, profilePic, bio } = payload.data;
+      return {
+        ...state,
+        loading: false,
+        user_id,
+        email,
+        nickname,
+        profilePic,
+        bio
+      };
     default:
       return state;
   }

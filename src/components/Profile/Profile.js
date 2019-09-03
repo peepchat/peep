@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { uploadPic } from "../../redux/UserReducer/userReducer";
+import { getUserInfo } from "../../redux/AuthReducer/AuthReducer";
+import { getFriendsInfo } from "../../redux/FriendsReducer/friendsReducer";
 import { connect } from "react-redux";
 
 const ProfileWrapper = styled.div`
   width: 100%;
   height: 100%;
-  left: 5%;
-  position: fixed;
-  background: none;
+  padding-left: 26rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   align-content: center;
   border: 1px solid lightgrey;
+  z-index: 1;
 `;
 
 const ChatBox = styled.div`
@@ -54,31 +55,37 @@ const ProfileBox = styled.div`
   border-radius: 5px;
 `;
 const PropfileCard = styled.div`
-background: #202225
-border-width: 1px;
-    border-style: solid;
-    border-radius: 5px;
+  background: #202225;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
 `;
-const ProfileH2 = styled.h2`
 
-box-sizing: border-box;
-text-transform: uppercase;
-line-height: 20px;
-margin-bottom: 20px;
-margin-left: 10px;
-font-weight: 600;
-}
+const ProfilePic = styled.img`
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
+  margin: 1rem;
+`;
+
+const ProfileH2 = styled.h2`
+  box-sizing: border-box;
+  text-transform: uppercase;
+  line-height: 20px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  font-weight: 600;
 `;
 const ProfileH3 = styled.h3`
-
-box-sizing: border-box;
-text-transform: uppercase;
-line-height: 20px;
-margin-bottom: 20px;
-margin-left: 10px;
-font-weight: 600;
-color: #b9bbbe;
-}
+  box-sizing: border-box;
+  text-transform: uppercase;
+  line-height: 20px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  font-weight: 600;
+  color: #b9bbbe;
 `;
 
 const Profile = props => {
@@ -102,19 +109,29 @@ const Profile = props => {
     }
   );
 
+  const submitPicture = () => {
+    props.uploadPic(imageurl);
+    setImageurl("");
+  };
+
+  useEffect(() => {
+    props.getUserInfo();
+    console.log(props);
+  });
+
   return (
     <ProfileWrapper>
       <ChatBox>
         <ProfileH2>My Account</ProfileH2>
         <ProfileBox>
           <PropfileCard>
+            <ProfilePic src={props.profilePic} alt=""></ProfilePic>
             <ProfileH3>Nickname: {props.nickname}</ProfileH3>
             <ProfileH3>Email: {props.email}</ProfileH3>
           </PropfileCard>
           <WidgetButton onClick={() => widget.open()}>Cloudinary</WidgetButton>
-          <button onClick={() => setDropdown( !dropdown )}>
-            Edit
-          </button>
+          <WidgetButton onClick={submitPicture}>Submit</WidgetButton>
+          <button onClick={() => setDropdown(!dropdown)}>Edit</button>
           {dropdown === true ? (
             <div>
               User info
@@ -133,11 +150,14 @@ const Profile = props => {
 function mapStateToProps(state) {
   return {
     email: state.authReducer.email,
-    nickname: state.authReducer.nickname
+    nickname: state.authReducer.nickname,
+    profilePic: state.authReducer.profilePic,
+    bio: state.authReducer.bio,
+    user_id: state.authReducer.user_id
   };
 }
 
 export default connect(
   mapStateToProps,
-  { uploadPic }
+  { uploadPic, getUserInfo, getFriendsInfo }
 )(Profile);

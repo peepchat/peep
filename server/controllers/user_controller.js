@@ -20,6 +20,17 @@ const getAllUsers = async (req, res) => {
   res.status(200).send(results);
 };
 
+const searchUsers = async (req, res) => {
+  const db = req.app.get("db");
+  const { email } = req.query;
+
+  db.search_users(`%${email}%`)
+    .then(users => {
+      res.json(users);
+    })
+    .catch(err => console.log(err));
+};
+
 const updateNickname = (req, res) => {
   const db = req.app.get("db");
   const { id } = req.session.user;
@@ -37,5 +48,6 @@ const updateNickname = (req, res) => {
 module.exports = {
   updatePic,
   getAllUsers,
+  searchUsers,
   updateNickname
 };

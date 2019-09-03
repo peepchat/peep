@@ -35,11 +35,11 @@ const Title = styled.div`
   color: #fff;
 `;
 const Subtitle = styled.div`
-color: #72767d;
-font-size: 18px;
-line-height: 22pxl
-font-weight: 400;
-outline:0;
+  color: #72767d;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 400;
+  outline: 0;
 `;
 const formStyle = {
   textAlign: "left",
@@ -149,7 +149,7 @@ const Login = props => {
     props
       .loginUser(props.email, props.password)
       .then(() => {
-        props.history.push("/peep");
+        props.history.push(`/peep/dm/profile/${props.email}`);
       })
       .catch(() => setError(true));
   };

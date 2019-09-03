@@ -41,6 +41,7 @@ app.get("/auth/user", AC.getUser);
 //user
 app.put("/api/user", UC.updatePic);
 app.get("/api/users", UC.getAllUsers);
+app.get("/api/users/search", UC.searchUsers);
 app.put("/api/user/nickname", UC.updateNickname);
 
 //friends
