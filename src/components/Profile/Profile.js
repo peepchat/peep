@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { uploadPic } from "../../redux/UserReducer/userReducer";
+import { uploadPic, getFriendsData } from "../../redux/UserReducer/userReducer";
 import { getUserInfo } from "../../redux/AuthReducer/AuthReducer";
-import { getFriendsInfo } from "../../redux/FriendsReducer/friendsReducer";
 import { connect } from "react-redux";
 
 const ProfileWrapper = styled.div`
@@ -116,27 +115,43 @@ const Profile = props => {
 
   useEffect(() => {
     props.getUserInfo();
-    console.log(props);
+    props.getFriendsData(props.match.params.email);
+    // console.log(props);
   });
 
   return (
     <ProfileWrapper>
       <ChatBox>
-        <ProfileH2>My Account</ProfileH2>
+        {props.email === props.match.params.email ? (
+          <ProfileH2>My Account</ProfileH2>
+        ) : null}
         <ProfileBox>
           <PropfileCard>
-            <ProfilePic src={props.profilePic} alt=""></ProfilePic>
-            <ProfileH3>Nickname: {props.nickname}</ProfileH3>
-            <ProfileH3>Email: {props.email}</ProfileH3>
+            {!props.userPic ? (
+              <ProfilePic
+                src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                alt="default"
+              ></ProfilePic>
+            ) : (
+              <ProfilePic src={props.userPic} alt=""></ProfilePic>
+            )}
+            <ProfileH3>Nickname: {props.userNickname}</ProfileH3>
+            <ProfileH3>Email: {props.userEmail}</ProfileH3>
           </PropfileCard>
-          <WidgetButton onClick={() => widget.open()}>Cloudinary</WidgetButton>
-          <WidgetButton onClick={submitPicture}>Submit</WidgetButton>
-          <button onClick={() => setDropdown(!dropdown)}>Edit</button>
-          {dropdown === true ? (
+          {props.email === props.match.params.email ? (
             <div>
-              User info
-              <input />
-              <button>Edit</button>
+              <WidgetButton onClick={() => widget.open()}>
+                Cloudinary
+              </WidgetButton>
+              <WidgetButton onClick={submitPicture}>Submit</WidgetButton>
+              <button onClick={() => setDropdown(!dropdown)}>Edit</button>
+              {dropdown === true ? (
+                <div>
+                  User info
+                  <input />
+                  <button>Edit</button>
+                </div>
+              ) : null}
             </div>
           ) : null}
         </ProfileBox>
@@ -153,11 +168,16 @@ function mapStateToProps(state) {
     nickname: state.authReducer.nickname,
     profilePic: state.authReducer.profilePic,
     bio: state.authReducer.bio,
-    user_id: state.authReducer.user_id
+    user_id: state.authReducer.user_id,
+    userEmail: state.userReducer.email,
+    userNickname: state.userReducer.nickname,
+    userPic: state.userReducer.profilePic,
+    userBio: state.userReducer.bio,
+    userID: state.userReducer.user_id
   };
 }
 
 export default connect(
   mapStateToProps,
-  { uploadPic, getUserInfo, getFriendsInfo }
+  { uploadPic, getUserInfo, getFriendsData }
 )(Profile);

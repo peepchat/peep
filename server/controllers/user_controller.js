@@ -26,6 +26,7 @@ const searchUsers = async (req, res) => {
 
   db.search_users(`%${email}%`)
     .then(users => {
+      console.log(users);
       res.json(users);
     })
     .catch(err => console.log(err));
