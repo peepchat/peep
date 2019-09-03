@@ -10,4 +10,4 @@ const root = combineReducers({
   friendsReducer
 });
 
-export default createStore(root, compose(applyMiddleware(promise)));
+export default createStore(root, applyMiddleware(promise));

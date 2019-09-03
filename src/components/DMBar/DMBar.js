@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { searchUser } from "../../redux/UserReducer/userReducer";
+import {
+  getFriends,
+  getPending,
+  getRequests
+} from "../../redux/FriendsReducer/friendsReducer";
 import { Link } from "react-router-dom";
 import Modal from "react-awesome-modal";
 
@@ -16,7 +21,7 @@ const DMBar = props => {
   };
 
   useEffect(() => {
-    console.log(props);
+    props.getFriends();
   });
 
   return (
@@ -37,7 +42,7 @@ const DMBar = props => {
             autoComplete="off"
           ></SearchInputModal>
           <SearchInputModalIcon>
-            <i class="material-icons">search</i>
+            <i className="material-icons">search</i>
           </SearchInputModalIcon>
         </SearchInputModalWrap>
         <UserList>
@@ -48,7 +53,13 @@ const DMBar = props => {
                   <UserItem>
                     <Link
                       to={`/peep/dm/profile/${user.email}`}
-                      onClick={() => setVisible(false)}
+                      onClick={() => {
+                        setVisible(false);
+                        setSearch("");
+                        props.getFriends();
+                        props.getPending();
+                        props.getRequests();
+                      }}
                     >
                       <i className="material-icons">person</i>
                       {user.email}
@@ -67,24 +78,30 @@ const DMBar = props => {
               onClick={() => setVisible(true)}
             ></SearchInput>
             <SearchButton>
-              <i class="material-icons">search</i>
+              <i className="material-icons">search</i>
             </SearchButton>
           </SearchWrapper>
           <Label>Friends</Label>
 
-          <Label>Direct Messages</Label>
-          <PicNameCont>
-            <UserPic>J</UserPic>
-            <UserNickname>Mudduh J</UserNickname>
-          </PicNameCont>
-          <PicNameCont>
-            <UserPic>A</UserPic>
-            <UserNickname>Ali</UserNickname>
-          </PicNameCont>
-          <PicNameCont>
-            <UserPic>H</UserPic>
-            <UserNickname>H4Nade</UserNickname>
-          </PicNameCont>
+          {props.friends.map((friend, index) => {
+            return (
+              <PicNameCont key={index}>
+                {!friend.profile_img ? (
+                  <UserPic>
+                    <img
+                      src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                      alt="default"
+                    ></img>
+                  </UserPic>
+                ) : (
+                  <UserPic>
+                    <img src={friend.profile_img} alt="" />
+                  </UserPic>
+                )}
+                <UserNickname>{friend.nickname}</UserNickname>
+              </PicNameCont>
+            );
+          })}
         </DMBarWrapper>
         <UserBar>
           <UserPic>J</UserPic>
@@ -97,13 +114,14 @@ const DMBar = props => {
 
 const mapStateToProps = state => {
   return {
-    users: state.userReducer.users
+    users: state.userReducer.users,
+    friends: state.friendsReducer.friends
   };
 };
 
 export default connect(
   mapStateToProps,
-  { searchUser }
+  { searchUser, getFriends, getPending, getRequests }
 )(DMBar);
 
 const DMBarCont = styled.div`

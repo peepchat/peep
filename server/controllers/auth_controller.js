@@ -15,7 +15,7 @@ const registerUser = async (req, res, next) => {
       email,
       nickname
     };
-    res.json(user);
+    res.status(200).json(user);
   } else {
     res.status(409).json({ error: "Username taken, please try another." });
   }
@@ -24,7 +24,7 @@ const registerUser = async (req, res, next) => {
 const getUser = async (req, res, next) => {
   if (req.session.user && req.session.user.email) {
     // console.log(req.session.user);
-    res.json(req.session.user);
+    res.status(200).json(req.session.user);
   } else {
     res.status(401).json({ error: "You need to be logged in." });
   }

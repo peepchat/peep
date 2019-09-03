@@ -124,11 +124,9 @@ const Profile = props => {
   useEffect(() => {
     props.getUserInfo();
     props.getFriendsData(props.match.params.email);
-    props.getFriends();
     props.getRequests();
-    props.getPending();
-    // console.log(props);
-  });
+    console.log(props);
+  }, []);
 
   const filterFriendsArray = props.friends.filter(
     user => user.email === props.match.params.email
@@ -166,12 +164,19 @@ const Profile = props => {
             <ProfileH3>Email: {props.userEmail}</ProfileH3>
             {props.email !== props.match.params.email ? (
               <div>
-                {!filterUser ? (
-                  <button>Add Friend</button>
-                ) : filterPendingUser ? (
+                {filterPendingUser ? (
                   <div>Pending</div>
                 ) : filterUser ? (
                   <button>Remove Friend</button>
+                ) : !filterUser ? (
+                  <button
+                    onClick={() => {
+                      props.makeFriendRequest(props.userID);
+                      props.getPending();
+                    }}
+                  >
+                    Add Friend
+                  </button>
                 ) : null}
               </div>
             ) : null}
@@ -192,6 +197,35 @@ const Profile = props => {
               ) : null}
             </div>
           ) : null}
+          <div>
+            <p>Pending Requests </p>
+            {props.requests.map((request, i) => {
+              console.log(request);
+              return (
+                <div key={i}>
+                  <p>{request.email}</p>
+                  <p>{request.nickname}</p>
+
+                  {!request.profile_img ? (
+                    <ProfilePic
+                      src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                      alt="default"
+                    ></ProfilePic>
+                  ) : (
+                    <ProfilePic src={request.profile_img} alt=""></ProfilePic>
+                  )}
+                  <button
+                    onClick={() => {
+                      props.addFriend(request.user_id, request.request_id);
+                      props.getRequests();
+                    }}
+                  >
+                    Accept Request
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </ProfileBox>
       </ChatBox>
 
@@ -207,11 +241,11 @@ function mapStateToProps(state) {
     profilePic: state.authReducer.profilePic,
     bio: state.authReducer.bio,
     user_id: state.authReducer.user_id,
+    userID: state.userReducer.user_id,
     userEmail: state.userReducer.email,
     userNickname: state.userReducer.nickname,
     userPic: state.userReducer.profilePic,
     userBio: state.userReducer.bio,
-    userID: state.userReducer.user_id,
     friends: state.friendsReducer.friends,
     pending: state.friendsReducer.pending,
     requests: state.friendsReducer.requests
