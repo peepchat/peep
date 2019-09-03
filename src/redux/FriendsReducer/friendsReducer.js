@@ -42,15 +42,15 @@ export const getPending = () => {
   };
 };
 
-export const addFriend = friendID => {
-  axios.post(`/api/friends/${friendID}`);
+export const addFriend = (friendID, request_id) => {
+  axios.post(`/api/friends/${friendID}`, { request_id });
   return {
     type: ADD_FRIEND
   };
 };
 
-export const deleteFriend = friendID => {
-  axios.delete(`/api/friends/${friendID}`);
+export const deleteFriend = (friendID, requestID) => {
+  axios.delete(`/api/friends/${friendID}`, { requestID });
   return {
     type: DELETE_FRIEND
   };
@@ -71,6 +71,18 @@ export function friendsReducer(state = initialState, action) {
       return { ...state, loading: true };
     case `${GET_PENDING_REQUESTS}_FULFILLED`:
       return { ...state, loading: false, pending: payload.data };
+    case `${MAKE_FRIEND_REQUEST}_PENDING`:
+      return { ...state, loading: true };
+    case `${MAKE_FRIEND_REQUEST}_FULFILLED`:
+      return { ...state, loading: false };
+    case `${ADD_FRIEND}_PENDING`:
+      return { ...state, loading: true };
+    case `${ADD_FRIEND}_FULFILLED`:
+      return { ...state, loading: false };
+    case `${DELETE_FRIEND}_PENDING`:
+      return { ...state, loading: true };
+    case `${DELETE_FRIEND}_FULFILLED`:
+      return { ...state, loading: false };
     default:
       return state;
   }
