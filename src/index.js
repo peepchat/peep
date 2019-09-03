@@ -6,11 +6,21 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import { HashRouter as Router } from "react-router-dom";
+import { createGlobalStyle } from "styled-components";
 
+const GlobalStyle = createGlobalStyle`
+@import url('https://fonts.googleapis.com/css?family=Signika&display=swap');
+
+  body {
+    font-family: 'Signika', sans-serif;
+  }
+
+`;
 ReactDOM.render(
   <Provider store={store}>
     <Router>
       <App />
+      <GlobalStyle/>
     </Router>
   </Provider>,
   document.getElementById("root")
