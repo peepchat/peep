@@ -20,9 +20,11 @@ const DMBar = props => {
     props.searchUser(event.target.value);
   };
 
+  const getFriends = props.getFriends;
+
   useEffect(() => {
-    props.getFriends();
-  });
+    getFriends();
+  }, [getFriends]);
 
   return (
     <>
