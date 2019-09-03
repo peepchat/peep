@@ -121,12 +121,14 @@ const Profile = props => {
     setImageurl("");
   };
 
+  const { getUserInfo, getFriendsData, getRequests } = props;
+  const { email } = props.match.params;
+
   useEffect(() => {
-    props.getUserInfo();
-    props.getFriendsData(props.match.params.email);
-    props.getRequests();
-    console.log(props);
-  }, []);
+    getUserInfo();
+    getFriendsData(email);
+    getRequests();
+  }, [getUserInfo, getFriendsData, getRequests, email]);
 
   const filterFriendsArray = props.friends.filter(
     user => user.email === props.match.params.email
