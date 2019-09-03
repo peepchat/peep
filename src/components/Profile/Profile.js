@@ -2,6 +2,14 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { uploadPic, getFriendsData } from "../../redux/UserReducer/userReducer";
 import { getUserInfo } from "../../redux/AuthReducer/AuthReducer";
+import {
+  getFriends,
+  makeFriendRequest,
+  getRequests,
+  getPending,
+  addFriend,
+  deleteFriend
+} from "../../redux/FriendsReducer/friendsReducer";
 import { connect } from "react-redux";
 
 const ProfileWrapper = styled.div`
@@ -116,8 +124,27 @@ const Profile = props => {
   useEffect(() => {
     props.getUserInfo();
     props.getFriendsData(props.match.params.email);
+    props.getFriends();
+    props.getRequests();
+    props.getPending();
     // console.log(props);
   });
+
+  const filterFriendsArray = props.friends.filter(
+    user => user.email === props.match.params.email
+  );
+  let filterUser;
+  if (filterFriendsArray.length > 0) {
+    filterUser = filterFriendsArray[0];
+  }
+
+  const filterPending = props.pending.filter(
+    user => user.email === props.match.params.email
+  );
+  let filterPendingUser;
+  if (filterPending.length > 0) {
+    filterPendingUser = filterPending[0];
+  }
 
   return (
     <ProfileWrapper>
@@ -137,6 +164,17 @@ const Profile = props => {
             )}
             <ProfileH3>Nickname: {props.userNickname}</ProfileH3>
             <ProfileH3>Email: {props.userEmail}</ProfileH3>
+            {props.email !== props.match.params.email ? (
+              <div>
+                {!filterUser ? (
+                  <button>Add Friend</button>
+                ) : filterPendingUser ? (
+                  <div>Pending</div>
+                ) : filterUser ? (
+                  <button>Remove Friend</button>
+                ) : null}
+              </div>
+            ) : null}
           </PropfileCard>
           {props.email === props.match.params.email ? (
             <div>
@@ -173,11 +211,24 @@ function mapStateToProps(state) {
     userNickname: state.userReducer.nickname,
     userPic: state.userReducer.profilePic,
     userBio: state.userReducer.bio,
-    userID: state.userReducer.user_id
+    userID: state.userReducer.user_id,
+    friends: state.friendsReducer.friends,
+    pending: state.friendsReducer.pending,
+    requests: state.friendsReducer.requests
   };
 }
 
 export default connect(
   mapStateToProps,
-  { uploadPic, getUserInfo, getFriendsData }
+  {
+    uploadPic,
+    getUserInfo,
+    getFriendsData,
+    getFriends,
+    makeFriendRequest,
+    getRequests,
+    getPending,
+    addFriend,
+    deleteFriend
+  }
 )(Profile);
