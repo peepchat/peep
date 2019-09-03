@@ -149,7 +149,7 @@ const Login = props => {
     props
       .loginUser(props.email, props.password)
       .then(() => {
-        props.history.push("/peep");
+        props.history.push(`/peep/dm/profile/${props.email}`);
       })
       .catch(() => setError(true));
   };

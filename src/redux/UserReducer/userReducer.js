@@ -8,6 +8,7 @@ const initialState = {
 
 const UPLOAD_PIC = "UPLOAD_PIC";
 const SEARCH_USER = "SEARCH_USER";
+const GET_USER_INFO = "GET_USER_INFO";
 
 export const uploadPic = profile_img => {
   return {
@@ -19,7 +20,7 @@ export const uploadPic = profile_img => {
 export const searchUser = email => {
   return {
     type: SEARCH_USER,
-    payload: axios.get(`/api/users?email=${email}`)
+    payload: axios.get(`/api/users/search?email=${email}`)
   };
 };
 

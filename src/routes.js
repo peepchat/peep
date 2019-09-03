@@ -27,10 +27,9 @@ export default (
       render={() => (
         <FlexWrapper>
           <Route path="/peep" component={Navbar} />
-          <Route exact path="/peep" component={DMBar} />
           <Route path="/peep/dm" component={DMBar} />
-          <Route exact path="/peep" component={Profile} />
-          <Route exact path="/peep/dm" component={DMChatBox} />
+          <Route exact path="/peep/dm/profile/:email" component={Profile} />
+          <Route exact path="/peep/dm/:chat_id" component={DMChatBox} />
         </FlexWrapper>
       )}
     />

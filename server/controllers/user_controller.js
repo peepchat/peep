@@ -31,8 +31,23 @@ const searchUsers = async (req, res) => {
     .catch(err => console.log(err));
 };
 
+const updateNickname = (req, res) => {
+  const db = req.app.get("db");
+  const { id } = req.session.user;
+  const { nickname } = req.body;
+  db.update_nickname([id, nickname])
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+};
+
 module.exports = {
   updatePic,
   getAllUsers,
-  searchUsers
+  searchUsers,
+  updateNickname
 };

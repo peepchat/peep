@@ -1,15 +1,110 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { searchUser } from "../../redux/UserReducer/userReducer";
 import Modal from "react-awesome-modal";
 
+const DMBar = props => {
+  const [search, setSearch] = useState("");
+
+  const [visible, setVisible] = useState(false);
+
+  const updateState = event => {
+    setSearch(event.target.value);
+    props.searchUser(event.target.value);
+  };
+
+  useEffect(() => {
+    console.log(props);
+  });
+
+  return (
+    <>
+      <Modal
+        visible={visible}
+        width="700"
+        height="450"
+        effect="fadeInDown"
+        onClickAway={() => setVisible(false)}
+      >
+        <SearchInputModalWrap>
+          <SearchInputModal
+            placeholder="Search..."
+            onChange={updateState}
+            value={search}
+            type="text"
+            autoComplete="off"
+          ></SearchInputModal>
+          <SearchInputModalIcon>
+            <i class="material-icons">search</i>
+          </SearchInputModalIcon>
+        </SearchInputModalWrap>
+        <UserList>
+          {search &&
+            props.users.map(user => {
+              return (
+                <UserName>
+                  <UserItem>
+                    <i className="material-icons">person</i> {user.email}
+                  </UserItem>
+                </UserName>
+              );
+            })}
+        </UserList>
+      </Modal>
+      <DMBarCont>
+        <DMBarWrapper>
+          <SearchWrapper>
+            <SearchInput
+              placeholder="Search..."
+              onClick={() => setVisible(true)}
+            ></SearchInput>
+            <SearchButton>
+              <i class="material-icons">search</i>
+            </SearchButton>
+          </SearchWrapper>
+          <Label>Friends</Label>
+
+          <Label>Direct Messages</Label>
+          <PicNameCont>
+            <UserPic>J</UserPic>
+            <UserNickname>Mudduh J</UserNickname>
+          </PicNameCont>
+          <PicNameCont>
+            <UserPic>A</UserPic>
+            <UserNickname>Ali</UserNickname>
+          </PicNameCont>
+          <PicNameCont>
+            <UserPic>H</UserPic>
+            <UserNickname>H4Nade</UserNickname>
+          </PicNameCont>
+        </DMBarWrapper>
+        <UserBar>
+          <UserPic>J</UserPic>
+          <UserNickname>Mudduh J</UserNickname>
+        </UserBar>
+      </DMBarCont>
+    </>
+  );
+};
+
+const mapStateToProps = state => {
+  return {
+    users: state.userReducer.users
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { searchUser }
+)(DMBar);
+
 const DMBarCont = styled.div`
   display: flex;
   flex-direction: column;
 
-  left: 5%;
-  width: 20%;
+  left: 6rem;
+  width: 20rem;
   height: 100%;
   position: fixed;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
@@ -26,10 +121,15 @@ const DMBarWrapper = styled.div`
   border: 1px solid lightgrey;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
     0 2px 4px 0 rgba(14, 30, 37, 0.12);
-  left: 5%;
+  left: 6rem;
   width: 100%;
   height: 90%;
   background-color: #f5f5f5;
+
+  /* henry why */
+  div + div > div > div {
+    border-radius: 0 !important;
+  }
 `;
 
 const Label = styled.div`
@@ -69,17 +169,37 @@ const SearchInput = styled.input`
   outline: none;
 `;
 
-const SearchInputModal = styled.input`
+const SearchInputModalWrap = styled.div`
   height: 10%;
   width: 100%;
-  font-size: 1rem;
-  padding: 1rem;
+  display: flex;
+  flex-direction: row;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
     0 2px 4px 0 rgba(14, 30, 37, 0.12);
+`;
+
+const SearchInputModal = styled.input`
+  height: 100%;
+  width: 85%;
+  font-size: 1rem;
+  padding: 1rem;
   appearance: none;
   border: none;
   outline: none;
   z-index: 100;
+`;
+
+const SearchInputModalIcon = styled.div`
+  height: 100%;
+  width: 15%;
+  padding: 1rem;
+  font-size: 1rem;
+  /* box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12); */
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const UserList = styled.div`
@@ -115,7 +235,16 @@ const UserItem = styled.div`
   cursor: pointer;
   padding: 1rem;
   padding-left: 1.7rem;
-  height: 5rem;
+  height: 4rem;
+  background-color: lightgray;
+  i {
+    margin-right: 1rem;
+  }
+
+  &:hover {
+    transform: scale(1.03);
+    transition: 400ms;
+  }
 `;
 
 const SearchButton = styled.button`
@@ -167,92 +296,3 @@ const UserBar = styled.div`
   justify-content: start;
   align-items: center;
 `;
-
-const DMBar = props => {
-  const [search, setSearch] = useState("");
-  const [searchMenu, setSearchmenu] = useState(false);
-  const [visible, setVisible] = useState(false);
-
-  const updateState = event => {
-    setSearch(event.target.value);
-    props.searchUser(event.target.value);
-    if (event.target.value === "") {
-      setSearchmenu(false);
-    } else {
-      setSearchmenu(true);
-    }
-  };
-
-  let searchDrop = "searchdrop";
-  if (searchMenu) {
-    searchDrop += " searchdrop--open";
-  }
-
-  return (
-    <DMBarCont>
-      <DMBarWrapper>
-        <SearchWrapper>
-          <SearchInput
-            placeholder="Search..."
-            onClick={() => setVisible(true)}
-          ></SearchInput>
-          <SearchButton>x</SearchButton>
-        </SearchWrapper>
-
-        <Modal
-          visible={visible}
-          width="700"
-          height="450"
-          effect="fadeInDown"
-          onClickAway={() => setVisible(false)}
-        >
-          <SearchInputModal
-            placeholder="Search.."
-            onChange={updateState}
-            value={search}
-            type="text"
-            autoComplete="off"
-          ></SearchInputModal>
-          <UserList>
-            {props.users.map(user => {
-              return (
-                <UserName>
-                  <UserItem>{user.email}</UserItem>
-                </UserName>
-              );
-            })}
-          </UserList>
-        </Modal>
-
-        <Label>Direct Messages</Label>
-        <PicNameCont>
-          <UserPic>J</UserPic>
-          <UserNickname>Mudduh J</UserNickname>
-        </PicNameCont>
-        <PicNameCont>
-          <UserPic>A</UserPic>
-          <UserNickname>Ali</UserNickname>
-        </PicNameCont>
-        <PicNameCont>
-          <UserPic>H</UserPic>
-          <UserNickname>H4Nade</UserNickname>
-        </PicNameCont>
-      </DMBarWrapper>
-      <UserBar>
-        <UserPic>J</UserPic>
-        <UserNickname>Mudduh J</UserNickname>
-      </UserBar>
-    </DMBarCont>
-  );
-};
-
-const mapStateToProps = state => {
-  return {
-    users: state.userReducer.users
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { searchUser }
-)(DMBar);

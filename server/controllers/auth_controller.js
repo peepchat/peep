@@ -22,7 +22,8 @@ const registerUser = async (req, res, next) => {
 };
 
 const getUser = async (req, res, next) => {
-  if (req.session.user && req.session.user.username) {
+  if (req.session.user && req.session.user.email) {
+    console.log(req.session.user);
     res.json(req.session.user);
   } else {
     res.status(401).json({ error: "You need to be logged in." });
@@ -43,9 +44,11 @@ const loginUser = async (req, res, next) => {
     req.session.user = {
       id: checkedUser[0].user_id,
       email: checkedUser[0].email,
-      nickname: checkedUser[0].nickname
+      nickname: checkedUser[0].nickname,
+      profilePic: checkedUser[0].profile_img,
+      bio: checkedUser[0].bio
     };
-    // console.log(req.session.user);
+    console.log(req.session.user);
     return res.json(req.session.user);
   } else {
     return res.status(403).json({ error: "Wrong username and password." });
