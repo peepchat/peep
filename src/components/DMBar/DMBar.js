@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { searchUser } from "../../redux/UserReducer/userReducer";
+import { Link } from "react-router-dom";
 import Modal from "react-awesome-modal";
 
 const DMBar = props => {
@@ -45,7 +46,13 @@ const DMBar = props => {
               return (
                 <UserName>
                   <UserItem>
-                    <i className="material-icons">person</i> {user.email}
+                    <Link
+                      to={`/peep/dm/profile/${user.email}`}
+                      onClick={() => setVisible(false)}
+                    >
+                      <i className="material-icons">person</i>
+                      {user.email}
+                    </Link>
                   </UserItem>
                 </UserName>
               );
