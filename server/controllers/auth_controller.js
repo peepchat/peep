@@ -23,7 +23,7 @@ const registerUser = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
   if (req.session.user && req.session.user.email) {
-    console.log(req.session.user);
+    // console.log(req.session.user);
     res.json(req.session.user);
   } else {
     res.status(401).json({ error: "You need to be logged in." });
