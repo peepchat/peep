@@ -5,11 +5,18 @@ import {
   getUserInfo
 } from "../../redux/AuthReducer/AuthReducer";
 import { connect } from "react-redux";
+import Modal from "react-awesome-modal";
+import CreateForm from "../CreateForm/CreateForm";
+import JoinForm from "../JoinForm/JoinForm";
 import io from "socket.io-client";
 
 export const socket = io();
 
 const Navbar = props => {
+  // useEffect(() => {
+  //   props.checkUserLoggedIn().catch(() => props.history.push("/"));
+  // });
+
   const { getUserInfo, nickname, user_id } = props;
 
   useEffect(() => {
@@ -23,15 +30,68 @@ const Navbar = props => {
     });
   }
 
+  const [visible, setVisible] = useState(false);
+  const [modalView, setModalView] = useState("");
+
+  const viewCreate = () => {
+    setModalView("Create");
+  };
+
+  const viewJoin = () => {
+    setModalView("Join");
+  };
+
+  const viewDefault = () => {
+    setModalView("");
+  };
+
+  if (setVisible === false) {
+    setModalView("");
+  }
+
   return (
-    <NavWrapper>
-      <Channel>A</Channel>
-      <Underline />
-      <Channel>B</Channel>
-      <Channel>C</Channel>
-      <Channel>D</Channel>
-      <PlusButton>+</PlusButton>
-    </NavWrapper>
+    <>
+      <NavWrapper>
+        <Channel>A</Channel>
+        <Underline />
+        <Channel>B</Channel>
+        <Channel>C</Channel>
+        <Channel>D</Channel>
+        <PlusButton onClick={() => setVisible(true)}>+</PlusButton>
+      </NavWrapper>
+      <Modal
+        visible={visible}
+        width="700"
+        height="450"
+        effect="fadeInDown"
+        onClickAway={() => setVisible(false)}
+      >
+        {modalView === "" ? (
+          <ModalWrapper>
+            <CardOne>
+              <CardTitle>Create</CardTitle>
+              <CardContent>
+                Create a new group and invite your friends! It's free! He he ex
+                dee
+              </CardContent>
+              <CardButton onClick={viewCreate}>Create a group</CardButton>
+            </CardOne>
+            <CardTwo>
+              <CardTitle>Join</CardTitle>
+              <CardContent>
+                Join your friends messaging group and start making fun of your
+                friends!
+              </CardContent>
+              <CardButton onClick={viewJoin}>Join a group</CardButton>
+            </CardTwo>
+          </ModalWrapper>
+        ) : modalView === "Create" ? (
+          <CreateForm viewDefault={viewDefault} />
+        ) : modalView === "Join" ? (
+          <JoinForm />
+        ) : null}
+      </Modal>
+    </>
   );
 };
 
@@ -95,9 +155,96 @@ const PlusButton = styled.div`
   padding: 1rem;
   background-color: #81e6d9;
   color: grey;
+  &:hover {
+    transition: 400ms;
+    background-color: #4fd1c5;
+    color: white;
+    transform: scale(0.95);
+  }
 `;
 
 const Underline = styled.div`
   width: 80%;
   border-bottom: solid 3px #81e6d9;
+`;
+
+const ModalWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+`;
+
+const CardOne = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 35%;
+  height: 75%;
+  border: solid 1px lightgray;
+  padding: 1rem;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
+`;
+
+const CardTitle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  width: 85%;
+  height: 8%;
+  padding: 1rem;
+  font-size: 2rem;
+`;
+
+const CardContent = styled.div`
+  width: 85%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1rem;
+  font-size: 1rem;
+  text-align: center;
+`;
+
+const CardButton = styled.button`
+  width: 85%;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  padding: 1rem;
+  font-size: 1rem;
+  background-color: #81e6d9;
+  border: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
+  outline: none;
+
+  &:hover {
+    transition: 400ms;
+    background-color: #4fd1c5;
+    color: white;
+    transform: scale(0.95);
+  }
+`;
+
+const CardTwo = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 35%;
+  height: 75%;
+  border: solid 1px lightgray;
+  padding: 1rem;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
 `;
