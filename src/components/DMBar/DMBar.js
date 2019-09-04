@@ -86,7 +86,6 @@ const DMBar = props => {
           <Label>Friends</Label>
 
           {props.friends.map((friend, index) => {
-            console.log(friend);
             return (
               <PicNameCont key={index}>
                 {!friend.profile_img ? (
