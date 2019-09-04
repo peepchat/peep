@@ -9,7 +9,7 @@ const initialState = {
   bio: "",
   loading: false,
   user: {},
-  editNickname: "",
+  edit_Nickname: "",
   editBio: ""
 };
 
@@ -126,9 +126,9 @@ export function authReducer(state = initialState, action) {
     case `${EDIT_NICKNAME}_FULFILLED`:
       return { ...state, loading: false };
     case POPULATE_NICKNAME:
-      return { ...state, editNickname: payload };
+      return { ...state, edit_Nickname: payload };
     case HANDLE_NICKNAME:
-      return { ...state, handleNicknameChange: payload };
+      return { ...state, edit_Nickname: payload };
     default:
       return state;
   }
