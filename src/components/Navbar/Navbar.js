@@ -10,14 +10,17 @@ import io from "socket.io-client";
 export const socket = io();
 
 const Navbar = props => {
-  const { getUserInfo } = props;
+  const { getUserInfo, nickname, user_id } = props;
 
   useEffect(() => {
     getUserInfo();
   }, [getUserInfo]);
 
   if (props.nickname) {
-    socket.emit("login", `${props.nickname} has logged in.`);
+    socket.emit("login", {
+      user_id,
+      msg: `${nickname} logged in.`
+    });
   }
 
   return (

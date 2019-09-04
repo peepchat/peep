@@ -18,9 +18,12 @@ const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
 
 app.use(express.json());
 
+let database;
+
 massive(CONNECTION_STRING)
   .then(db => {
     app.set("db", db);
+    database = db;
     console.log("DB is certainly connected :)");
   })
   .catch(err => console.log(err));
@@ -47,6 +50,7 @@ app.put("/api/user", UC.updatePic);
 app.get("/api/users", UC.getAllUsers);
 app.get("/api/users/search", UC.searchUsers);
 app.put("/api/user/nickname", UC.updateNickname);
+app.put("/api/user/online");
 
 //friends
 app.post("/api/friend/requests/:friendID", FC.friendRequest);
@@ -64,16 +68,23 @@ app.delete("/api/directMessage/:message_id", DC.deleteMessage);
 io.on("connection", socket => {
   console.log("User connected");
 
+  let user_id;
+
   setTimeout(() => {
     socket.emit("testEvent", { msg: "Test Event" });
   }, 4000);
 
   socket.on("login", data => {
-    console.log(data);
+    console.log(data.msg);
+    user_id = data.user_id;
+    database.edit_online_status([user_id, true]);
   });
 
   socket.on("disconnect", () => {
     console.log("User disconnected");
+    if (user_id !== null || user_id !== undefined) {
+      database.edit_online_status([user_id, false]);
+    }
   });
 });
 
