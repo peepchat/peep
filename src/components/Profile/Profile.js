@@ -16,6 +16,12 @@ import {
   deleteFriend
 } from "../../redux/FriendsReducer/friendsReducer";
 import { connect } from "react-redux";
+import {
+  FaEdit,
+  FaCloudUploadAlt,
+  FaRegCheckCircle,
+  FaUserCheck
+} from "react-icons/fa";
 
 const Profile = props => {
   const checkUploadResult = async (error, resultEvent) => {
@@ -90,7 +96,7 @@ const Profile = props => {
           <ProfileH2>My Account</ProfileH2>
         ) : null}
         <ProfileBox>
-          <PropfileCard>
+          <ProfileCard>
             {!props.userPic ? (
               <ProfilePic
                 src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
@@ -100,12 +106,15 @@ const Profile = props => {
               <div className="profileUpload">
                 <ProfilePic src={props.userPic} alt=""></ProfilePic>
                 {editStatus === true ? (
+                  <div className='uploadBtns'>
                   <>
                     <WidgetButton onClick={() => widget.open()}>
-                      Cloudinary
+                      <FaCloudUploadAlt />
                     </WidgetButton>
-                    <WidgetButton onClick={submitPicture}>Submit</WidgetButton>
-                  </>
+                    <WidgetButton onClick={submitPicture}>
+                      <FaRegCheckCircle />
+                    </WidgetButton>
+                  </></div>
                 ) : null}
               </div>
             )}
@@ -115,11 +124,14 @@ const Profile = props => {
               {editStatus === true ? (
                 <>
                   Nickname:
-                  <input
-                    onChange={handleNicknameChange}
-                    value={props.edit_Nickname}
-                    type="text"
-                  ></input>
+                  <div className="nickDiv">
+                    <input
+                      className="nickInput"
+                      onChange={handleNicknameChange}
+                      value={props.edit_Nickname}
+                      type="text"
+                    ></input>
+                  </div>
                 </>
               ) : (
                 <>Nickname: {props.userNickname}</>
@@ -134,12 +146,13 @@ const Profile = props => {
                   <button>Remove Friend</button>
                 ) : !filterUser ? (
                   <button
+                    className="addFriendBtn"
                     onClick={() => {
                       props.makeFriendRequest(props.userID);
                       props.getPending();
                     }}
                   >
-                    Add Friend
+                    Add Friend <FaUserCheck />
                   </button>
                 ) : null}
               </PendingDiv>
@@ -152,48 +165,50 @@ const Profile = props => {
                     className="editButton"
                     onClick={() => onClickEdit(props.userNickname)}
                   >
-                    Edit
+                    <FaEdit /> Edit
                   </button>
                 ) : (
-                  <button onClick={onClickSave}>Save</button>
+                  <button className="saveBtn" onClick={onClickSave}>
+                    <FaRegCheckCircle /> Save
+                  </button>
                 )}
               </EditDiv>
             ) : null}
-          </PropfileCard>
-
-          <div>
-            <p>Pending Requests </p>
-            {props.requests.map((request, i) => {
-              console.log(request);
-              return (
-                <div key={i}>
-                  <p>{request.email}</p>
-                  <p>{request.nickname}</p>
-
-                  {!request.profile_img ? (
-                    <ProfilePic
-                      src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
-                      alt="default"
-                    ></ProfilePic>
-                  ) : (
-                    <ProfilePic src={request.profile_img} alt=""></ProfilePic>
-                  )}
-                  <button
-                    onClick={() => {
-                      props.addFriend(request.user_id, request.request_id);
-                      props.getRequests();
-                    }}
-                  >
-                    Accept Request
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+          </ProfileCard>
+          <br />
+          <RequestsWrapper>
+            <RequestDiv>
+              <ProfileH2>Pending Requests </ProfileH2>
+              {props.requests.map((request, i) => {
+                console.log(request);
+                return (
+                  <div className="pendingMapDiv" key={i}>
+                    {!request.profile_img ? (
+                      <ProfilePic
+                        src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                        alt="default"
+                      ></ProfilePic>
+                    ) : (
+                      <ProfilePic src={request.profile_img} alt=""></ProfilePic>
+                    )}
+                    <p>{request.email}</p>
+                    <p>{request.nickname}</p>
+                    <button
+                      onClick={() => {
+                        props.addFriend(request.user_id, request.request_id);
+                        props.getRequests();
+                      }}
+                    >
+                      Accept Request
+                    </button>
+                  </div>
+                );
+              })}
+            </RequestDiv>
+            <RequestDiv> Group Invites</RequestDiv>
+          </RequestsWrapper>
         </ProfileBox>
       </ChatBox>
-
-      {/* <MessageDiv>MessageDiv</MessageDiv> */}
     </ProfileWrapper>
   );
 };
@@ -259,17 +274,22 @@ const ChatBox = styled.div`
   align-content: center;
 `;
 
-const MessageDiv = styled.div`
-  width: 100%;
-  height: 10%;
-  background-color: pink;
-`;
-
 const WidgetButton = styled.button`
-  width: 75px;
-  height: 30px;
-  background-color: #81e6d9;
-  border-radius: 50%;
+  color: #fff;
+  background-color: #43b581;
+  width: 3rem;
+  height: 2rem;
+  transition: background-color 0.17s ease, color 0.17s ease;
+  box-sizing: border-box;
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 16px;
+  padding: 2px 16px;
+  position: relative;
+  font-family: "Signika", sans-serif;
 `;
 
 const ProfileBox = styled.div`
@@ -278,24 +298,31 @@ const ProfileBox = styled.div`
   border-radius: 10px;
   box-sizing: border-box;
   background: #f5f5f5;
+  background-color: #f5f5f5;
   border-color: #202225;
   padding: 20px;
   position: relative;
   border-width: 1px;
   border-style: solid;
   border-radius: 5px;
+  border: 1px solid lightgrey;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 2px 4px 0 rgba(14,30,37,0.12);
 `;
-const PropfileCard = styled.div`
+const ProfileCard = styled.div`
   background: #ccc;
   border-width: 1px;
   border-style: solid;
   border-radius: 5px;
-  .profileUpload{
-    display:flex;
+  .profileUpload {
+    width: 90px;
+    display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-
-
+    .uploadBtns{
+      display: flex;
+      justify-content: space-evenly;
+      
+    }
   }
 `;
 
@@ -315,6 +342,7 @@ const ProfileH2 = styled.h2`
   margin-bottom: 20px;
   margin-left: 10px;
   font-weight: 600;
+  border-bottom: 1px solid grey;
 `;
 const ProfileH3 = styled.h3`
   box-sizing: border-box;
@@ -324,15 +352,62 @@ const ProfileH3 = styled.h3`
   margin-left: 10px;
   font-weight: 600;
   color: #b9bbbe;
+  display:flex;
+  .nickDiv{
+    margin-left: 1%
+   width: 14rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    transition: opacity .16s linear,transform .16s cubic-bezier(.36,.19,.29,1);
+    box-shadow: 0 0 0 1px var(--saf-0),0 18px 48px 0 rgba(0,0,0,.35);
+    font-size: 15px;
+    line-height: 1.46666667;
+    font-weight: 700;
+    .nickInput {
+      padding: 10px;
+      height: 32px;
+      padding-top: 9px;
+      padding-bottom: 10px;
+      font-size: 15px;
+      line-height: 1.33333333;
+      margin-bottom: 0;
+      border-bottom-left-radius: 4px!important;
+      border-bottom-right-radius: 4px!important;
+      border-radius: 4px;
+      border: 1px solid var(--saf-0);
+      transition: border 80ms ease-out,box-shadow 80ms ease-out;
+      box-sizing: border-box;
+      margin: 0 0 20px;
+    }
+  }
 `;
 
 const PendingDiv = styled.div`
-  height: 10rem;
-  width: 10rem;
-  background: red;
+  height: 5rem;
+  width: 7.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  .addFriendBtn {
+    color: #fff;
+    background-color: #43b581;
+    min-height: 32px;
+    width: auto;
+    height: 32px;
+    min-width: 60px;
+    transition: background-color 0.17s ease, color 0.17s ease;
+    box-sizing: border-box;
+    background: #43b581;
+    border: none;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
+    padding: 2px 16px;
+    position: relative;
+    font-family: "Signika", sans-serif;
+  }
 `;
 const EditDiv = styled.div`
   height: 5rem;
@@ -340,12 +415,63 @@ const EditDiv = styled.div`
   position: absolute;
   right: 5%;
   top: 5%;
-  border: 1px solid black;
   display: flex;
   flex-direction: column;
   justify-content: center;
   .editButton {
+    color: #fff;
+    background-color: #43b581;
+    min-height: 32px;
+    width: auto;
+    height: 32px;
+    min-width: 60px;
+    transition: background-color 0.9s ease, color 0.9s ease;
+    box-sizing: border-box;
+    background: #81e6d9;
+    border: none;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
+    padding: 2px 16px;
+    position: relative;
+    font-family: "Signika", sans-serif;
   }
-  .editUpload {
+  .saveBtn {
+    color: #fff;
+    background-color: #43b581;
+    min-height: 32px;
+    width: auto;
+    height: 32px;
+    min-width: 60px;
+    transition: background-color 0.17s ease, color 0.17s ease;
+    box-sizing: border-box;
+    background: #43b581;
+    border: none;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
+    padding: 2px 16px;
+    position: relative;
+    font-family: "Signika", sans-serif;
   }
+`;
+
+const RequestDiv = styled.div`
+  background: #ccc;
+  width: 49%;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+`;
+
+const RequestsWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
