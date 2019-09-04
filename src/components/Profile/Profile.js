@@ -164,7 +164,6 @@ const Profile = props => {
           <div>
             <p>Pending Requests </p>
             {props.requests.map((request, i) => {
-              console.log(request);
               return (
                 <div key={i}>
                   <p>{request.email}</p>
