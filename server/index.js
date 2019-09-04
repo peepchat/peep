@@ -2,7 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const massive = require("massive");
 const session = require("express-session");
+
 const app = express();
+const http = require("http").createServer(app);
+const io = require("socket.io")(http);
+
 const AC = require("./controllers/auth_controller");
 const FC = require("./controllers/friend_controller");
 const UC = require("./controllers/user_controller");
@@ -57,6 +61,22 @@ app.get("/api/directMessages/:chat_id", DC.getDirectMessages);
 app.put("/api/directMessages/:message_id", DC.updateMessage);
 app.delete("/api/directMessage/:message_id", DC.deleteMessage);
 
-app.listen(SERVER_PORT, () => {
+io.on("connection", socket => {
+  console.log("User connected");
+
+  setTimeout(() => {
+    socket.emit("testEvent", { msg: "Test Event" });
+  }, 4000);
+
+  socket.on("login", data => {
+    console.log(data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
+});
+
+http.listen(SERVER_PORT, () => {
   console.log(`Listening on Port ${SERVER_PORT}`);
 });
