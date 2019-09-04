@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { uploadPic, getFriendsData } from "../../redux/UserReducer/userReducer";
-import { getUserInfo } from "../../redux/AuthReducer/AuthReducer";
+import {
+  getUserInfo,
+  populateNickname,
+  editNickname,
+  handleNicknameChange
+} from "../../redux/AuthReducer/AuthReducer";
 import {
   getFriends,
   makeFriendRequest,
@@ -21,7 +26,6 @@ const Profile = props => {
   };
 
   const [imageurl, setImageurl] = useState("");
-  const [dropdown, setDropdown] = useState(false);
   const [editStatus, setEditstatus] = useState(false);
   const widget = window.cloudinary.createUploadWidget(
     {
@@ -39,7 +43,7 @@ const Profile = props => {
     setImageurl("");
   };
 
-  const { getUserInfo, getFriendsData, getRequests } = props;
+  const { getUserInfo, getFriendsData, getRequests, editNickname } = props;
   const { email } = props.match.params;
 
   useEffect(() => {
@@ -63,7 +67,22 @@ const Profile = props => {
   if (filterPending.length > 0) {
     filterPendingUser = filterPending[0];
   }
+  const onClickEdit = nickname => {
+    console.log(nickname);
+    setEditstatus(true);
+    props.populateNickname(nickname);
+  };
 
+  const onClickSave = () => {
+    setEditstatus(false);
+    props.editNickname(props.edit_Nickname);
+    getFriendsData(email);
+    getUserInfo();
+  };
+
+  const handleNicknameChange = event => {
+    props.handleNicknameChange(event.target.value);
+  };
   return (
     <ProfileWrapper>
       <ChatBox>
@@ -92,21 +111,21 @@ const Profile = props => {
             )}
 
             <ProfileH3>
-              Nickname: {props.userNickname}
+              <span className="inputSpan" />
               {editStatus === true ? (
                 <>
-                  <input placeholder="Nickname"></input>
+                  Nickname:
+                  <input
+                    onChange={handleNicknameChange}
+                    value={props.edit_Nickname}
+                    type="text"
+                  ></input>
                 </>
-              ) : null}
+              ) : (
+                <>Nickname: {props.userNickname}</>
+              )}
             </ProfileH3>
-            <ProfileH3>
-              Email: {props.userEmail}
-              {editStatus === true ? (
-                <>
-                  <input placeholder="Email"></input>
-                </>
-              ) : null}
-            </ProfileH3>
+            <ProfileH3>Email: {props.userEmail}</ProfileH3>
             {props.email !== props.match.params.email ? (
               <PendingDiv>
                 {filterPendingUser ? (
@@ -128,18 +147,16 @@ const Profile = props => {
 
             {props.email === props.match.params.email ? (
               <EditDiv>
-                <button
-                  className="editButton"
-                  onClick={() => setEditstatus(!editStatus)}
-                >
-                  Edit
-                </button>
-                {editStatus === true ? (
-                  <div className="editUpload">
-                    
-                    <button>Save</button>
-                  </div>
-                ) : null}
+                {editStatus === false ? (
+                  <button
+                    className="editButton"
+                    onClick={() => onClickEdit(props.userNickname)}
+                  >
+                    Edit
+                  </button>
+                ) : (
+                  <button onClick={onClickSave}>Save</button>
+                )}
               </EditDiv>
             ) : null}
           </PropfileCard>
@@ -195,7 +212,8 @@ function mapStateToProps(state) {
     userBio: state.userReducer.bio,
     friends: state.friendsReducer.friends,
     pending: state.friendsReducer.pending,
-    requests: state.friendsReducer.requests
+    requests: state.friendsReducer.requests,
+    edit_Nickname: state.authReducer.edit_Nickname
   };
 }
 
@@ -210,7 +228,10 @@ export default connect(
     getRequests,
     getPending,
     addFriend,
-    deleteFriend
+    deleteFriend,
+    editNickname,
+    populateNickname,
+    handleNicknameChange
   }
 )(Profile);
 
