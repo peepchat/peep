@@ -9,6 +9,7 @@ import {
 } from "../../redux/FriendsReducer/friendsReducer";
 import { Link } from "react-router-dom";
 import Modal from "react-awesome-modal";
+import { stat } from "fs";
 
 const DMBar = props => {
   const [search, setSearch] = useState("");
@@ -89,16 +90,15 @@ const DMBar = props => {
             return (
               <PicNameCont key={index}>
                 {!friend.profile_img ? (
-                  <UserPic>
-                    <img
-                      src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
-                      alt="default"
-                    ></img>
-                  </UserPic>
+                  <UserPic src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                  alt="default"/>
+                    
+                      
+                   
+                  
                 ) : (
-                  <UserPic>
-                    <img src={friend.profile_img} alt="" />
-                  </UserPic>
+                  <UserPic src={friend.profile_img} alt="" />
+                   
                 )}
                 <UserNickname>{friend.nickname}</UserNickname>
               </PicNameCont>
@@ -106,8 +106,8 @@ const DMBar = props => {
           })}
         </DMBarWrapper>
         <UserBar>
-          <UserPic>J</UserPic>
-          <UserNickname>Mudduh J</UserNickname>
+          <UserPic src={props.profilePic}/>
+          <UserNickname>{props.nickname}</UserNickname>
         </UserBar>
       </DMBarCont>
     </>
@@ -117,7 +117,9 @@ const DMBar = props => {
 const mapStateToProps = state => {
   return {
     users: state.userReducer.users,
-    friends: state.friendsReducer.friends
+    friends: state.friendsReducer.friends,
+    nickname: state.authReducer.nickname,
+    profilePic: state.authReducer.profilePic
   };
 };
 
@@ -295,19 +297,14 @@ const PicNameCont = styled.div`
   height: 8%;
 `;
 
-const UserPic = styled.div`
+const UserPic = styled.img`
   height: 40px;
   width: 40px;
   border-radius: 50%;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
     0 2px 4px 0 rgba(14, 30, 37, 0.12);
   margin: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2rem;
-  padding: 1rem;
-  background-color: white;
+  
 `;
 
 const UserNickname = styled.div`
