@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { uploadPic, getFriendsData } from "../../redux/UserReducer/userReducer";
-import { getUserInfo } from "../../redux/AuthReducer/AuthReducer";
+import {
+  getUserInfo,
+  populateNickname,
+  editNickname,
+  handleNicknameChange
+} from "../../redux/AuthReducer/AuthReducer";
 import {
   getFriends,
   makeFriendRequest,
@@ -21,7 +26,6 @@ const Profile = props => {
   };
 
   const [imageurl, setImageurl] = useState("");
-  const [dropdown, setDropdown] = useState(false);
   const [editStatus, setEditstatus] = useState(false);
   const widget = window.cloudinary.createUploadWidget(
     {
@@ -63,7 +67,14 @@ const Profile = props => {
   if (filterPending.length > 0) {
     filterPendingUser = filterPending[0];
   }
-
+  const onClickEdit = nickname => {
+    console.log(nickname,"what")
+    setEditstatus(true);
+    props.populateNickname(nickname);
+  };
+const handleNicknameChange = event => {
+  props.handleNicknameChange(event);
+}
   return (
     <ProfileWrapper>
       <ChatBox>
@@ -93,20 +104,14 @@ const Profile = props => {
 
             <ProfileH3>
               Nickname: {props.userNickname}
+              <span className="inputSpan" />
               {editStatus === true ? (
                 <>
-                  <input placeholder="Nickname"></input>
+                  <input onChange={handleNicknameChange} value={props.editNickname} type="text"></input>
                 </>
               ) : null}
             </ProfileH3>
-            <ProfileH3>
-              Email: {props.userEmail}
-              {editStatus === true ? (
-                <>
-                  <input placeholder="Email"></input>
-                </>
-              ) : null}
-            </ProfileH3>
+            <ProfileH3>Email: {props.userEmail}</ProfileH3>
             {props.email !== props.match.params.email ? (
               <PendingDiv>
                 {filterPendingUser ? (
@@ -130,13 +135,12 @@ const Profile = props => {
               <EditDiv>
                 <button
                   className="editButton"
-                  onClick={() => setEditstatus(!editStatus)}
+                  onClick={() => onClickEdit(!onClickEdit)}
                 >
                   Edit
                 </button>
                 {editStatus === true ? (
                   <div className="editUpload">
-                    
                     <button>Save</button>
                   </div>
                 ) : null}
@@ -195,7 +199,8 @@ function mapStateToProps(state) {
     userBio: state.userReducer.bio,
     friends: state.friendsReducer.friends,
     pending: state.friendsReducer.pending,
-    requests: state.friendsReducer.requests
+    requests: state.friendsReducer.requests,
+    editNickname: state.authReducer.editNickname
   };
 }
 
@@ -210,7 +215,10 @@ export default connect(
     getRequests,
     getPending,
     addFriend,
-    deleteFriend
+    deleteFriend,
+    editNickname,
+    populateNickname,
+    handleNicknameChange
   }
 )(Profile);
 

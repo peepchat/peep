@@ -8,7 +8,9 @@ const initialState = {
   profilePic: "",
   bio: "",
   loading: false,
-  user: {}
+  user: {},
+  editNickname: "",
+  editBio: ""
 };
 
 const UPDATE_STATE = "UPDATE_STATE";
@@ -17,6 +19,9 @@ const LOGIN_USER = "LOGIN_USER";
 const CHECK_USER_LOGGED_IN = "CHECK_USER_LOGGED_IN";
 const LOGOUT_USER = "LOGOUT_USER";
 const GET_USER_DATA = "GET_USER_DATA";
+const POPULATE_NICKNAME = "POPULATE_NICKNAME";
+const EDIT_NICKNAME = "EDIT_NICKNAME";
+const HANDLE_NICKNAME = "HANDLE_NICKNAME";
 
 export const updateState = event => {
   return {
@@ -62,6 +67,26 @@ export const resetFields = () => {
   };
 };
 
+export const editNickname = nickname => {
+  return {
+    type: EDIT_NICKNAME,
+    payload: axios.put(`/api/user/nickname`, { nickname })
+  };
+};
+
+export const populateNickname = nickname => {
+  return {
+    type: POPULATE_NICKNAME,
+    payload: nickname
+  };
+};
+
+export const handleNicknameChange = nickname => {
+  return {
+    type: HANDLE_NICKNAME,
+    payload: nickname
+  };
+};
 export function authReducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
@@ -96,6 +121,14 @@ export function authReducer(state = initialState, action) {
         profilePic,
         bio
       };
+    case `${EDIT_NICKNAME}_PENDING`:
+      return { ...state, loading: true };
+    case `${EDIT_NICKNAME}_FULFILLED`:
+      return { ...state, loading: false };
+    case POPULATE_NICKNAME:
+      return { ...state, editNickname: payload };
+    case HANDLE_NICKNAME:
+      return { ...state, handleNicknameChange: payload };
     default:
       return state;
   }
