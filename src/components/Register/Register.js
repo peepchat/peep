@@ -47,7 +47,11 @@ const formStyle = {
   textAlign: "left",
   marginTop: "20px"
 };
-const InputBox = styled.div``;
+const InputBox = styled.div`
+.loginMargin {
+  margin-bottom: 10px;
+}
+`;
 
 const LoginH5 = styled.h5`
   color: #b9bbbe;
@@ -86,6 +90,7 @@ const ForgotButton = styled.button`
     font-size: 11px;
     font-weight: 500;
     line-height: 16px;
+    text-decoration:none;
 }
 `;
 const ForgotDiv = styled.div`
@@ -95,6 +100,10 @@ const ForgotDiv = styled.div`
   overflow: hidden;
   color: #7289da;
   line-height: 16px;
+  text-decoration:none;
+  .needP, .needP:visited{
+    color: #72767d
+  }
 `;
 const LoginButton = styled.button`
   color: #fff;
@@ -130,6 +139,7 @@ const LoginDiv = styled.div`
   color: #fff;
   line-height: 24px;
   user-select: none;
+  font-family: 'Signika', sans-serif;
 `;
 //---end-styles/
 const Register = props => {
@@ -161,17 +171,20 @@ const Register = props => {
     <CenterWrapper>
       <LoginBox>
         <Title>Create an account</Title>
+        <Subtitle>Time to use peep!</Subtitle>
         <form style={formStyle} type="submit" onSubmit={handleRegister}>
           <InputBox>
-            <LoginH5>Email</LoginH5>
+          <div className='loginMargin'><LoginH5>Email</LoginH5></div>
             <LoginInput onChange={handleChange} name="email" />
           </InputBox>
+          <br/>
           <InputBox>
-            <LoginH5>Nickname</LoginH5>
+          <div className='loginMargin'><LoginH5>Nickname</LoginH5></div>
             <LoginInput onChange={handleChange} name="nickname" />
           </InputBox>
+          <br/>
           <InputBox>
-            <LoginH5>Password</LoginH5>
+          <div className='loginMargin'> <LoginH5>Password</LoginH5></div>
             <LoginInput
               onChange={handleChange}
               name="password"
@@ -184,7 +197,7 @@ const Register = props => {
           </LoginButton>
           <Link to="/">
             <ForgotButton onClick={clickGoBack}>
-              <ForgotDiv>Already have an account? Login</ForgotDiv>
+              <ForgotDiv><span className='needP'>Already have an account?</span> Login</ForgotDiv>
             </ForgotButton>
           </Link>
         </form>

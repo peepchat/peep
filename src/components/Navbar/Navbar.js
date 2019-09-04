@@ -1,15 +1,34 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { checkUserLoggedIn } from "../../redux/AuthReducer/AuthReducer";
+import {
+  checkUserLoggedIn,
+  getUserInfo
+} from "../../redux/AuthReducer/AuthReducer";
 import { connect } from "react-redux";
 import Modal from "react-awesome-modal";
 import CreateForm from "../CreateForm/CreateForm";
 import JoinForm from "../JoinForm/JoinForm";
+import io from "socket.io-client";
+
+export const socket = io();
 
 const Navbar = props => {
   // useEffect(() => {
   //   props.checkUserLoggedIn().catch(() => props.history.push("/"));
   // });
+
+  const { getUserInfo, nickname, user_id } = props;
+
+  useEffect(() => {
+    getUserInfo();
+  }, [getUserInfo]);
+
+  if (props.nickname) {
+    socket.emit("login", {
+      user_id,
+      msg: `${nickname} logged in.`
+    });
+  }
 
   const [visible, setVisible] = useState(false);
   const [modalView, setModalView] = useState("");
@@ -76,9 +95,20 @@ const Navbar = props => {
   );
 };
 
+function mapStateToProps(state) {
+  return {
+    email: state.authReducer.email,
+    nickname: state.authReducer.nickname,
+    user_id: state.authReducer.user_id
+  };
+}
+
 export default connect(
-  null,
-  { checkUserLoggedIn }
+  mapStateToProps,
+  {
+    getUserInfo,
+    checkUserLoggedIn
+  }
 )(Navbar);
 
 const NavWrapper = styled.div`

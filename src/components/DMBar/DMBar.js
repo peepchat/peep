@@ -9,7 +9,6 @@ import {
 } from "../../redux/FriendsReducer/friendsReducer";
 import { Link } from "react-router-dom";
 import Modal from "react-awesome-modal";
-import { stat } from "fs";
 
 const DMBar = props => {
   const [search, setSearch] = useState("");
@@ -21,11 +20,11 @@ const DMBar = props => {
     props.searchUser(event.target.value);
   };
 
-  const getFriends = props.getFriends;
+  const { getFriends, friends } = props;
 
   useEffect(() => {
     getFriends();
-  }, [getFriends]);
+  }, [getFriends, friends]);
 
   return (
     <>
@@ -87,26 +86,25 @@ const DMBar = props => {
           <Label>Friends</Label>
 
           {props.friends.map((friend, index) => {
+            console.log(friend);
             return (
               <PicNameCont key={index}>
                 {!friend.profile_img ? (
-                  <UserPic src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
-                  alt="default"/>
-                    
-                      
-                   
-                  
+                  <UserPic
+                    src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                    alt="default"
+                  />
                 ) : (
                   <UserPic src={friend.profile_img} alt="" />
-                   
                 )}
                 <UserNickname>{friend.nickname}</UserNickname>
+                {friend.online ? <div>Online</div> : <div>Offline</div>}
               </PicNameCont>
             );
           })}
         </DMBarWrapper>
         <UserBar>
-          <UserPic src={props.profilePic}/>
+          <UserPic src={props.profilePic} />
           <UserNickname>{props.nickname}</UserNickname>
         </UserBar>
       </DMBarCont>
@@ -304,7 +302,6 @@ const UserPic = styled.img`
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
     0 2px 4px 0 rgba(14, 30, 37, 0.12);
   margin: 1rem;
-  
 `;
 
 const UserNickname = styled.div`
