@@ -290,12 +290,10 @@ const PropfileCard = styled.div`
   border-width: 1px;
   border-style: solid;
   border-radius: 5px;
-  .profileUpload{
-    display:flex;
+  .profileUpload {
+    display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-
-
   }
 `;
 
