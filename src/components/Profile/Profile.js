@@ -20,7 +20,8 @@ import {
   FaEdit,
   FaCloudUploadAlt,
   FaRegCheckCircle,
-  FaUserCheck
+  FaUserCheck,
+  FaRegWindowClose
 } from "react-icons/fa";
 
 const Profile = props => {
@@ -85,6 +86,9 @@ const Profile = props => {
     getFriendsData(email);
     getUserInfo();
   };
+  const onClickEsc = () => {
+    setEditstatus(true);
+  }
 
   const handleNicknameChange = event => {
     props.handleNicknameChange(event.target.value);
@@ -168,9 +172,12 @@ const Profile = props => {
                     <FaEdit /> Edit
                   </button>
                 ) : (
+                  <>
                   <button className="saveBtn" onClick={onClickSave}>
                     <FaRegCheckCircle /> Save
                   </button>
+                  <button className='cancelBtn' onClick={onClickEsc}><FaRegWindowClose/></button>
+                  </>
                 )}
               </EditDiv>
             ) : null}
@@ -180,7 +187,6 @@ const Profile = props => {
             <RequestDiv>
               <ProfileH2>Pending Requests </ProfileH2>
               {props.requests.map((request, i) => {
-                console.log(request);
                 return (
                   <div className="pendingMapDiv" key={i}>
                     {!request.profile_img ? (
@@ -287,7 +293,7 @@ const WidgetButton = styled.button`
   font-size: 25px;
   font-weight: 500;
   line-height: 16px;
-  padding: 2px 16px;
+  padding: 2px 10px;
   position: relative;
   font-family: "Signika", sans-serif;
 `;
@@ -314,21 +320,16 @@ const ProfileCard = styled.div`
   border-style: solid;
   border-radius: 5px;
   .profileUpload {
-<<<<<<< HEAD
     width: 90px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     .uploadBtns{
       display: flex;
-      justify-content: space-evenly;
-      
     }
-=======
     display: flex;
     flex-direction: column;
     justify-content: center;
->>>>>>> master
   }
 `;
 
