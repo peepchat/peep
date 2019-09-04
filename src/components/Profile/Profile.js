@@ -43,7 +43,7 @@ const Profile = props => {
     setImageurl("");
   };
 
-  const { getUserInfo, getFriendsData, getRequests } = props;
+  const { getUserInfo, getFriendsData, getRequests, editNickname } = props;
   const { email } = props.match.params;
 
   useEffect(() => {
@@ -68,13 +68,21 @@ const Profile = props => {
     filterPendingUser = filterPending[0];
   }
   const onClickEdit = nickname => {
-    console.log(nickname,"what")
+    console.log(nickname);
     setEditstatus(true);
     props.populateNickname(nickname);
   };
-const handleNicknameChange = event => {
-  props.handleNicknameChange(event);
-}
+
+  const onClickSave = () => {
+    setEditstatus(false);
+    props.editNickname(props.edit_Nickname);
+    getFriendsData(email);
+    getUserInfo();
+  };
+
+  const handleNicknameChange = event => {
+    props.handleNicknameChange(event.target.value);
+  };
   return (
     <ProfileWrapper>
       <ChatBox>
@@ -103,13 +111,19 @@ const handleNicknameChange = event => {
             )}
 
             <ProfileH3>
-              Nickname: {props.userNickname}
               <span className="inputSpan" />
               {editStatus === true ? (
                 <>
-                  <input onChange={handleNicknameChange} value={props.editNickname} type="text"></input>
+                  Nickname:
+                  <input
+                    onChange={handleNicknameChange}
+                    value={props.edit_Nickname}
+                    type="text"
+                  ></input>
                 </>
-              ) : null}
+              ) : (
+                <>Nickname: {props.userNickname}</>
+              )}
             </ProfileH3>
             <ProfileH3>Email: {props.userEmail}</ProfileH3>
             {props.email !== props.match.params.email ? (
@@ -133,17 +147,16 @@ const handleNicknameChange = event => {
 
             {props.email === props.match.params.email ? (
               <EditDiv>
-                <button
-                  className="editButton"
-                  onClick={() => onClickEdit(!onClickEdit)}
-                >
-                  Edit
-                </button>
-                {editStatus === true ? (
-                  <div className="editUpload">
-                    <button>Save</button>
-                  </div>
-                ) : null}
+                {editStatus === false ? (
+                  <button
+                    className="editButton"
+                    onClick={() => onClickEdit(props.userNickname)}
+                  >
+                    Edit
+                  </button>
+                ) : (
+                  <button onClick={onClickSave}>Save</button>
+                )}
               </EditDiv>
             ) : null}
           </PropfileCard>
@@ -200,7 +213,7 @@ function mapStateToProps(state) {
     friends: state.friendsReducer.friends,
     pending: state.friendsReducer.pending,
     requests: state.friendsReducer.requests,
-    editNickname: state.authReducer.editNickname
+    edit_Nickname: state.authReducer.edit_Nickname
   };
 }
 
