@@ -111,11 +111,11 @@ export function authReducer(state = initialState, action) {
       return { ...state, loading: true };
     case `${GET_USER_DATA}_FULFILLED`:
       // console.log(payload.data);
-      const { user_id, email, nickname, profilePic, bio } = payload.data;
+      const { id, email, nickname, profilePic, bio } = payload.data;
       return {
         ...state,
         loading: false,
-        user_id,
+        user_id: id,
         email,
         nickname,
         profilePic,

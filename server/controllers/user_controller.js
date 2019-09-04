@@ -38,6 +38,7 @@ const updateNickname = (req, res) => {
   const { nickname } = req.body;
   db.update_nickname([id, nickname])
     .then(() => {
+      req.session.user.nickname = nickname;
       res.sendStatus(200);
     })
     .catch(error => {

@@ -314,6 +314,7 @@ const ProfileCard = styled.div`
   border-style: solid;
   border-radius: 5px;
   .profileUpload {
+<<<<<<< HEAD
     width: 90px;
     display: flex;
     flex-direction: column;
@@ -323,6 +324,11 @@ const ProfileCard = styled.div`
       justify-content: space-evenly;
       
     }
+=======
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+>>>>>>> master
   }
 `;
 

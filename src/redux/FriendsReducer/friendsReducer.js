@@ -2,6 +2,9 @@ import axios from "axios";
 
 const initialState = {
   loading: false,
+  loadingFriends: false,
+  loadingPending: false,
+  loadingRequests: false,
   friends: [],
   requests: [],
   pending: []
@@ -60,17 +63,17 @@ export function friendsReducer(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case `${GET_FRIENDS}_PENDING`:
-      return { ...state, loading: true };
+      return { ...state, loadingFriends: true };
     case `${GET_FRIENDS}_FULFILLED`:
-      return { ...state, loading: false, friends: payload.data };
+      return { ...state, loadingFriends: false, friends: payload.data };
     case `${GET_FRIEND_REQUESTS}_PENDING`:
-      return { ...state, loading: true };
+      return { ...state, loadingRequests: true };
     case `${GET_FRIEND_REQUESTS}_FULFILLED`:
-      return { ...state, loading: false, requests: payload.data };
+      return { ...state, loadingRequests: false, requests: payload.data };
     case `${GET_PENDING_REQUESTS}_PENDING`:
-      return { ...state, loading: true };
+      return { ...state, loadingPending: true };
     case `${GET_PENDING_REQUESTS}_FULFILLED`:
-      return { ...state, loading: false, pending: payload.data };
+      return { ...state, loadingPending: false, pending: payload.data };
     case `${MAKE_FRIEND_REQUEST}_PENDING`:
       return { ...state, loading: true };
     case `${MAKE_FRIEND_REQUEST}_FULFILLED`:

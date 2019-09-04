@@ -36,6 +36,7 @@ const addToFriendsList = async (req, res) => {
   const { request_id } = req.body;
 
   db.remove_friend_request([request_id]);
+  db.remove_other_friend_request([id, friendID]);
 
   const results = await db.check_direct_chat_id();
   const chat_id = Number(results[0].chat_id) + 1;

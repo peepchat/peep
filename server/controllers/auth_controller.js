@@ -48,7 +48,7 @@ const loginUser = async (req, res, next) => {
       profilePic: checkedUser[0].profile_img,
       bio: checkedUser[0].bio
     };
-    console.log(req.session.user);
+    // console.log(req.session.user);
     return res.json(req.session.user);
   } else {
     return res.status(403).json({ error: "Wrong username and password." });
