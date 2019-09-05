@@ -87,8 +87,8 @@ const Profile = props => {
     getUserInfo();
   };
   const onClickEsc = () => {
-    setEditstatus(true);
-  }
+    setEditstatus(false);
+  };
 
   const handleNicknameChange = event => {
     props.handleNicknameChange(event.target.value);
@@ -110,15 +110,16 @@ const Profile = props => {
               <div className="profileUpload">
                 <ProfilePic src={props.userPic} alt=""></ProfilePic>
                 {editStatus === true ? (
-                  <div className='uploadBtns'>
-                  <>
-                    <WidgetButton onClick={() => widget.open()}>
-                      <FaCloudUploadAlt />
-                    </WidgetButton>
-                    <WidgetButton onClick={submitPicture}>
-                      <FaRegCheckCircle />
-                    </WidgetButton>
-                  </></div>
+                  <div className="uploadBtns">
+                    <>
+                      <WidgetButton onClick={() => widget.open()}>
+                        <FaCloudUploadAlt />
+                      </WidgetButton>
+                      <WidgetButton onClick={submitPicture}>
+                        <FaRegCheckCircle />
+                      </WidgetButton>
+                    </>
+                  </div>
                 ) : null}
               </div>
             )}
@@ -173,10 +174,12 @@ const Profile = props => {
                   </button>
                 ) : (
                   <>
-                  <button className="saveBtn" onClick={onClickSave}>
-                    <FaRegCheckCircle /> Save
-                  </button>
-                  <button className='cancelBtn' onClick={onClickEsc}><FaRegWindowClose/></button>
+                    <button className="saveBtn" onClick={onClickSave}>
+                      <FaRegCheckCircle /> Save
+                    </button>
+                    <button className="cancelBtn" onClick={onClickEsc}>
+                      <FaRegWindowClose />
+                    </button>
                   </>
                 )}
               </EditDiv>
@@ -189,17 +192,22 @@ const Profile = props => {
               {props.requests.map((request, i) => {
                 return (
                   <div className="pendingMapDiv" key={i}>
+                    <div className='pendingAlign'>
                     {!request.profile_img ? (
                       <ProfilePic
                         src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
                         alt="default"
-                      ></ProfilePic>
+                      />
                     ) : (
-                      <ProfilePic src={request.profile_img} alt=""></ProfilePic>
+                      <ProfilePic src={request.profile_img} alt=""/>
                     )}
+                    <div className='pendingP'>
                     <p>{request.email}</p>
-                    <p>{request.nickname}</p>
+                    <p>{request.nickname} has sent you a friend request!</p>
+                    </div>
+                    </div>
                     <button
+                      className="acceptRequestBtn"
                       onClick={() => {
                         props.addFriend(request.user_id, request.request_id);
                         props.getRequests();
@@ -211,7 +219,10 @@ const Profile = props => {
                 );
               })}
             </RequestDiv>
-            <RequestDiv> Group Invites</RequestDiv>
+            <RequestDiv>
+              {" "}
+              <ProfileH2> Group Requests </ProfileH2>
+            </RequestDiv>
           </RequestsWrapper>
         </ProfileBox>
       </ChatBox>
@@ -312,7 +323,8 @@ const ProfileBox = styled.div`
   border-style: solid;
   border-radius: 5px;
   border: 1px solid lightgrey;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 2px 4px 0 rgba(14,30,37,0.12);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
 `;
 const ProfileCard = styled.div`
   background: #ccc;
@@ -324,12 +336,9 @@ const ProfileCard = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    .uploadBtns{
+    .uploadBtns {
       display: flex;
     }
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
   }
 `;
 
@@ -414,6 +423,7 @@ const PendingDiv = styled.div`
     padding: 2px 16px;
     position: relative;
     font-family: "Signika", sans-serif;
+    outline: none;
   }
 `;
 const EditDiv = styled.div`
@@ -423,15 +433,13 @@ const EditDiv = styled.div`
   right: 5%;
   top: 5%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
+
   .editButton {
     color: #fff;
     background-color: #43b581;
-    min-height: 32px;
-    width: auto;
+    width: 90px;
     height: 32px;
-    min-width: 60px;
     transition: background-color 0.9s ease, color 0.9s ease;
     box-sizing: border-box;
     background: #81e6d9;
@@ -443,14 +451,13 @@ const EditDiv = styled.div`
     padding: 2px 16px;
     position: relative;
     font-family: "Signika", sans-serif;
+    outline: none;
   }
   .saveBtn {
     color: #fff;
     background-color: #43b581;
-    min-height: 32px;
-    width: auto;
-    height: 32px;
-    min-width: 60px;
+    width: 90px;
+    height: 40px;
     transition: background-color 0.17s ease, color 0.17s ease;
     box-sizing: border-box;
     background: #43b581;
@@ -462,6 +469,25 @@ const EditDiv = styled.div`
     padding: 2px 16px;
     position: relative;
     font-family: "Signika", sans-serif;
+    outline: none;
+  }
+  .cancelBtn {
+    color: red;
+    background-color: #43b581;
+    width: 3rem;
+    height: 2rem;
+    transition: background-color 0.17s ease, color 0.17s ease;
+    box-sizing: border-box;
+    background: transparent;
+    border: none;
+    border-radius: 3px;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 16px;
+    padding: 2px 10px;
+    position: relative;
+    font-family: "Signika", sans-serif;
+    outline: none;
   }
 `;
 
@@ -476,6 +502,53 @@ const RequestDiv = styled.div`
   flex-direction: column;
   align-content: center;
   align-items: center;
+  .pendingMapDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+    width: 100%;
+    border-bottom: 1px solid grey;
+    .pendingAlign{
+      display:flex;
+      border: 1px solid grey;
+      .pendingP{
+        display:flex;
+        justify-content:center;
+        flex-direction:column;
+        align-content:center;
+        align-items: center;
+        
+
+      }
+    }
+
+    .acceptRequestBtn {
+      color: #fff;
+      background-color: #43b581;
+      width: 90px;
+      height: 32px;
+      transition: background-color 0.9s ease, color 0.9s ease;
+      box-sizing: border-box;
+      background: #43b581;
+      border: none;
+      border-radius: 3px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16px;
+      padding: 2px 16px;
+      position: relative;
+      font-family: "Signika", sans-serif;
+      outline: none;
+    }
+    .pendingPicDiv {
+      width: 80;
+      height: 80;
+      left: 0;
+    }
+  }
 `;
 
 const RequestsWrapper = styled.div`
