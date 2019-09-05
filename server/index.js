@@ -69,15 +69,26 @@ io.on("connection", socket => {
   console.log("User connected");
 
   let user_id;
-
-  setTimeout(() => {
-    socket.emit("testEvent", { msg: "Test Event" });
-  }, 4000);
+  let room;
 
   socket.on("login", data => {
     console.log(data.msg);
     user_id = data.user_id;
     database.edit_online_status([user_id, true]);
+    io.emit("refresh-friends");
+  });
+
+  socket.on("dm-join", data => {
+    const { chat_id } = data;
+    room = `dm-${chat_id}`;
+    socket.join(room);
+  });
+
+  socket.on("send-chat-message", data => {
+    const { message, chat_id, user_id, gif_url } = data;
+    console.log(data);
+    database.add_direct_message([user_id, chat_id, message, gif_url]);
+    io.to(room).emit("refresh-chat-message");
   });
 
   socket.on("disconnect", () => {
@@ -85,6 +96,7 @@ io.on("connection", socket => {
     if (user_id !== null || user_id !== undefined) {
       database.edit_online_status([user_id, false]);
     }
+    io.emit("refresh-friends");
   });
 });
 

@@ -87,11 +87,7 @@ const Profile = props => {
     getUserInfo();
   };
   const onClickEsc = () => {
-<<<<<<< HEAD
     setEditstatus(false);
-=======
-    setEditstatus(true);
->>>>>>> master
   };
 
   const handleNicknameChange = event => {
@@ -196,19 +192,19 @@ const Profile = props => {
               {props.requests.map((request, i) => {
                 return (
                   <div className="pendingMapDiv" key={i}>
-                    <div className='pendingAlign'>
-                    {!request.profile_img ? (
-                      <ProfilePic
-                        src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
-                        alt="default"
-                      />
-                    ) : (
-                      <ProfilePic src={request.profile_img} alt=""/>
-                    )}
-                    <div className='pendingP'>
-                    <p>{request.email}</p>
-                    <p>{request.nickname} has sent you a friend request!</p>
-                    </div>
+                    <div className="pendingAlign">
+                      {!request.profile_img ? (
+                        <ProfilePic
+                          src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                          alt="default"
+                        />
+                      ) : (
+                        <ProfilePic src={request.profile_img} alt="" />
+                      )}
+                      <div className="pendingP">
+                        <p>{request.email}</p>
+                        <p>{request.nickname} has sent you a friend request!</p>
+                      </div>
                     </div>
                     <button
                       className="acceptRequestBtn"
@@ -372,15 +368,16 @@ const ProfileH3 = styled.h3`
   margin-left: 10px;
   font-weight: 600;
   color: #b9bbbe;
-  display:flex;
-  .nickDiv{
-    margin-left: 1%
-   width: 14rem;
+  display: flex;
+  .nickDiv {
+    margin-left: 1%;
+    width: 14rem;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    transition: opacity .16s linear,transform .16s cubic-bezier(.36,.19,.29,1);
-    box-shadow: 0 0 0 1px var(--saf-0),0 18px 48px 0 rgba(0,0,0,.35);
+    transition: opacity 0.16s linear,
+      transform 0.16s cubic-bezier(0.36, 0.19, 0.29, 1);
+    box-shadow: 0 0 0 1px var(--saf-0), 0 18px 48px 0 rgba(0, 0, 0, 0.35);
     font-size: 15px;
     line-height: 1.46666667;
     font-weight: 700;
@@ -392,11 +389,11 @@ const ProfileH3 = styled.h3`
       font-size: 15px;
       line-height: 1.33333333;
       margin-bottom: 0;
-      border-bottom-left-radius: 4px!important;
-      border-bottom-right-radius: 4px!important;
+      border-bottom-left-radius: 4px !important;
+      border-bottom-right-radius: 4px !important;
       border-radius: 4px;
       border: 1px solid var(--saf-0);
-      transition: border 80ms ease-out,box-shadow 80ms ease-out;
+      transition: border 80ms ease-out, box-shadow 80ms ease-out;
       box-sizing: border-box;
       margin: 0 0 20px;
     }
@@ -510,22 +507,20 @@ const RequestDiv = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-  flex-direction: column;
-  align-content: center;
-  align-items: center;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
     width: 100%;
     border-bottom: 1px solid grey;
-    .pendingAlign{
-      display:flex;
+    .pendingAlign {
+      display: flex;
       border: 1px solid grey;
-      .pendingP{
-        display:flex;
-        justify-content:center;
-        flex-direction:column;
-        align-content:center;
+      .pendingP {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-content: center;
         align-items: center;
-        
-
       }
     }
 

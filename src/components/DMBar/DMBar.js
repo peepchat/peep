@@ -7,8 +7,10 @@ import {
   getPending,
   getRequests
 } from "../../redux/FriendsReducer/friendsReducer";
+import { getDirectMessages } from "../../redux/MessagesReducer/MessagesReducer";
 import { Link } from "react-router-dom";
 import Modal from "react-awesome-modal";
+import { socket } from "../Navbar/Navbar";
 
 const DMBar = props => {
   const [search, setSearch] = useState("");
@@ -23,8 +25,10 @@ const DMBar = props => {
   const { getFriends, friends } = props;
 
   useEffect(() => {
-    getFriends();
-  }, [getFriends, friends]);
+    socket.on("refresh-friends", () => {
+      getFriends();
+    });
+  }, [getFriends]);
 
   return (
     <>
@@ -85,9 +89,15 @@ const DMBar = props => {
           </SearchWrapper>
           <Label>Friends</Label>
 
-          {props.friends.map((friend, index) => {
+          {friends.map((friend, index) => {
             return (
-              <PicNameCont key={index}>
+              <PicNameCont
+                key={index}
+                onClick={() => {
+                  props.history.push(`/peep/dm/${friend.chat_id}`);
+                  props.getDirectMessages(friend.chat_id);
+                }}
+              >
                 {!friend.profile_img ? (
                   <UserPic
                     src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
@@ -122,7 +132,7 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { searchUser, getFriends, getPending, getRequests }
+  { searchUser, getFriends, getPending, getRequests, getDirectMessages }
 )(DMBar);
 
 const DMBarCont = styled.div`
