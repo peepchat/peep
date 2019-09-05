@@ -87,7 +87,11 @@ const Profile = props => {
     getUserInfo();
   };
   const onClickEsc = () => {
+<<<<<<< HEAD
     setEditstatus(false);
+=======
+    setEditstatus(true);
+>>>>>>> master
   };
 
   const handleNicknameChange = event => {

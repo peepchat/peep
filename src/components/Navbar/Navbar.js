@@ -45,9 +45,9 @@ const Navbar = props => {
     setModalView("");
   };
 
-  if (setVisible === false) {
-    setModalView("");
-  }
+  // if (visible === false) {
+  //   setModalView("");
+  // }
 
   return (
     <>
@@ -88,7 +88,7 @@ const Navbar = props => {
         ) : modalView === "Create" ? (
           <CreateForm viewDefault={viewDefault} />
         ) : modalView === "Join" ? (
-          <JoinForm />
+          <JoinForm viewDefault={viewDefault} />
         ) : null}
       </Modal>
     </>
@@ -211,6 +211,7 @@ const CardContent = styled.div`
   padding: 1rem;
   font-size: 1rem;
   text-align: center;
+  line-height: 1.618;
 `;
 
 const CardButton = styled.button`
