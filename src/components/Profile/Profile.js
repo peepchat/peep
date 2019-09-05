@@ -88,7 +88,7 @@ const Profile = props => {
   };
   const onClickEsc = () => {
     setEditstatus(true);
-  }
+  };
 
   const handleNicknameChange = event => {
     props.handleNicknameChange(event.target.value);
@@ -110,15 +110,16 @@ const Profile = props => {
               <div className="profileUpload">
                 <ProfilePic src={props.userPic} alt=""></ProfilePic>
                 {editStatus === true ? (
-                  <div className='uploadBtns'>
-                  <>
-                    <WidgetButton onClick={() => widget.open()}>
-                      <FaCloudUploadAlt />
-                    </WidgetButton>
-                    <WidgetButton onClick={submitPicture}>
-                      <FaRegCheckCircle />
-                    </WidgetButton>
-                  </></div>
+                  <div className="uploadBtns">
+                    <>
+                      <WidgetButton onClick={() => widget.open()}>
+                        <FaCloudUploadAlt />
+                      </WidgetButton>
+                      <WidgetButton onClick={submitPicture}>
+                        <FaRegCheckCircle />
+                      </WidgetButton>
+                    </>
+                  </div>
                 ) : null}
               </div>
             )}
@@ -173,46 +174,16 @@ const Profile = props => {
                   </button>
                 ) : (
                   <>
-                  <button className="saveBtn" onClick={onClickSave}>
-                    <FaRegCheckCircle /> Save
-                  </button>
-                  <button className='cancelBtn' onClick={onClickEsc}><FaRegWindowClose/></button>
+                    <button className="saveBtn" onClick={onClickSave}>
+                      <FaRegCheckCircle /> Save
+                    </button>
+                    <button className="cancelBtn" onClick={onClickEsc}>
+                      <FaRegWindowClose />
+                    </button>
                   </>
                 )}
               </EditDiv>
             ) : null}
-<<<<<<< HEAD
-          </PropfileCard>
-
-          <div>
-            <p>Pending Requests </p>
-            {props.requests.map((request, i) => {
-              return (
-                <div key={i}>
-                  <p>{request.email}</p>
-                  <p>{request.nickname}</p>
-
-                  {!request.profile_img ? (
-                    <ProfilePic
-                      src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
-                      alt="default"
-                    ></ProfilePic>
-                  ) : (
-                    <ProfilePic src={request.profile_img} alt=""></ProfilePic>
-                  )}
-                  <button
-                    onClick={() => {
-                      props.addFriend(request.user_id, request.request_id);
-                      props.getRequests();
-                    }}
-                  >
-                    Accept Request
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-=======
           </ProfileCard>
           <br />
           <RequestsWrapper>
@@ -245,7 +216,6 @@ const Profile = props => {
             </RequestDiv>
             <RequestDiv> Group Invites</RequestDiv>
           </RequestsWrapper>
->>>>>>> master
         </ProfileBox>
       </ChatBox>
     </ProfileWrapper>
@@ -345,7 +315,8 @@ const ProfileBox = styled.div`
   border-style: solid;
   border-radius: 5px;
   border: 1px solid lightgrey;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 2px 4px 0 rgba(14,30,37,0.12);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
 `;
 const ProfileCard = styled.div`
   background: #ccc;
@@ -357,7 +328,7 @@ const ProfileCard = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    .uploadBtns{
+    .uploadBtns {
       display: flex;
     }
     display: flex;
