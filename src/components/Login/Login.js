@@ -46,9 +46,9 @@ const formStyle = {
   marginTop: "20px"
 };
 const InputBox = styled.div`
-.loginMargin {
-  margin-bottom: 10px;
-}
+  .loginMargin {
+    margin-bottom: 10px;
+  }
 `;
 
 const LoginH5 = styled.h5`
@@ -97,8 +97,8 @@ const ForgotDiv = styled.div`
   overflow: hidden;
   color: #7289da;
   line-height: 16px;
-  .needP{
-    color: #72767d
+  .needP {
+    color: #72767d;
   }
 `;
 const LoginButton = styled.button`
@@ -119,6 +119,7 @@ const LoginButton = styled.button`
   box-sizing: border-box;
   border: none;
   border-radius: 3px;
+  cursor: pointer;
 `;
 const LoginDiv = styled.div`
   margin: 0 auto;
@@ -135,7 +136,7 @@ const LoginDiv = styled.div`
   color: #fff;
   line-height: 24px;
   user-select: none;
-  font-family: 'Signika', sans-serif;
+  font-family: "Signika", sans-serif;
 `;
 const WrongInfo = styled.p`
   margin: 0 auto;
@@ -168,12 +169,16 @@ const Login = props => {
         <Subtitle>Time to use peep!</Subtitle>
         <form style={formStyle} type="submit" onSubmit={handleLogin}>
           <InputBox>
-            <div className='loginMargin'><LoginH5>Email</LoginH5></div>
+            <div className="loginMargin">
+              <LoginH5>Email</LoginH5>
+            </div>
             <LoginInput onChange={handleChange} name="email" />
           </InputBox>
-          <br/>
+          <br />
           <InputBox>
-          <div className='loginMargin'><LoginH5>Password</LoginH5></div>
+            <div className="loginMargin">
+              <LoginH5>Password</LoginH5>
+            </div>
             <LoginInput
               onChange={handleChange}
               name="password"
@@ -189,7 +194,9 @@ const Login = props => {
           {error ? <WrongInfo>Wrong username & password</WrongInfo> : null}
           <ForgotButton>
             <Link to="/register">
-              <ForgotDiv><span className='needP'>Need an account?</span> Register</ForgotDiv>
+              <ForgotDiv>
+                <span className="needP">Need an account?</span> Register
+              </ForgotDiv>
             </Link>
           </ForgotButton>
         </form>
