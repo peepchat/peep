@@ -45,9 +45,9 @@ const Navbar = props => {
     setModalView("");
   };
 
-  if (setVisible === false) {
-    setModalView("");
-  }
+  // if (visible === false) {
+  //   setModalView("");
+  // }
 
   return (
     <>
