@@ -39,7 +39,7 @@ const Title = styled.div`
 const Subtitle = styled.div`
 color: #72767d;
 font-size: 18px;
-line-height: 22pxl
+line-height: 22pxl;
 font-weight: 400;
 outline:0;
 `;
@@ -91,6 +91,7 @@ const ForgotButton = styled.button`
     font-weight: 500;
     line-height: 16px;
     text-decoration:none;
+    outline: none;
 }
 `;
 const ForgotDiv = styled.div`
@@ -101,8 +102,10 @@ const ForgotDiv = styled.div`
   color: #7289da;
   line-height: 16px;
   text-decoration:none;
+  outline: none;
+  cursor: pointer;
   .needP, .needP:visited{
-    color: #72767d
+    color: #72767d;
   }
 `;
 const LoginButton = styled.button`
@@ -123,6 +126,7 @@ const LoginButton = styled.button`
   box-sizing: border-box;
   border: none;
   border-radius: 3px;
+  cursor: pointer;
 `;
 const LoginDiv = styled.div`
   margin: 0 auto;

@@ -186,44 +186,51 @@ const Profile = props => {
             ) : null}
           </ProfileCard>
           <br />
-          <RequestsWrapper>
-            <RequestDiv>
-              <ProfileH2>Pending Requests </ProfileH2>
-              {props.requests.map((request, i) => {
-                return (
-                  <div className="pendingMapDiv" key={i}>
-                    <div className="pendingAlign">
-                      {!request.profile_img ? (
-                        <ProfilePic
-                          src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
-                          alt="default"
-                        />
-                      ) : (
-                        <ProfilePic src={request.profile_img} alt="" />
-                      )}
-                      <div className="pendingP">
-                        <p>{request.email}</p>
-                        <p>{request.nickname} has sent you a friend request!</p>
+          {props.email === props.match.params.email ? (
+            <RequestsWrapper>
+              <RequestDiv>
+                <ProfileH2>Pending Requests </ProfileH2>
+                {props.requests.map((request, i) => {
+                  return (
+                    <div className="pendingMapDiv" key={i}>
+                      <div className="pendingAlign">
+                        {!request.profile_img ? (
+                          <ProfilePic
+                            src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                            alt="default"
+                          />
+                        ) : (
+                          <ProfilePic src={request.profile_img} alt="" />
+                        )}
+                        <div className="pendingP">
+                          <p className="nicknameP">
+                            Friend request from {request.nickname}
+                          </p>
+                          <br />
+                          <p>{request.email}</p>
+                        </div>
                       </div>
+                      <br />
+                      <button
+                        className="acceptRequestBtn"
+                        onClick={() => {
+                          props.addFriend(request.user_id, request.request_id);
+                          props.getRequests();
+                        }}
+                      >
+                        Accept Request
+                      </button>
+                      <br />
                     </div>
-                    <button
-                      className="acceptRequestBtn"
-                      onClick={() => {
-                        props.addFriend(request.user_id, request.request_id);
-                        props.getRequests();
-                      }}
-                    >
-                      Accept Request
-                    </button>
-                  </div>
-                );
-              })}
-            </RequestDiv>
-            <RequestDiv>
-              {" "}
-              <ProfileH2> Group Requests </ProfileH2>
-            </RequestDiv>
-          </RequestsWrapper>
+                  );
+                })}
+              </RequestDiv>
+              <RequestDiv>
+                {" "}
+                <ProfileH2> Group Requests </ProfileH2>
+              </RequestDiv>
+            </RequestsWrapper>
+          ) : null}
         </ProfileBox>
       </ChatBox>
     </ProfileWrapper>
@@ -307,6 +314,7 @@ const WidgetButton = styled.button`
   padding: 2px 10px;
   position: relative;
   font-family: "Signika", sans-serif;
+  cursor: pointer;
 `;
 
 const ProfileBox = styled.div`
@@ -327,7 +335,7 @@ const ProfileBox = styled.div`
     0 2px 4px 0 rgba(14, 30, 37, 0.12);
 `;
 const ProfileCard = styled.div`
-  background: #ccc;
+  background: hsl(0, 0%, 93%);
   border-width: 1px;
   border-style: solid;
   border-radius: 5px;
@@ -369,6 +377,9 @@ const ProfileH3 = styled.h3`
   font-weight: 600;
   color: #b9bbbe;
   display: flex;
+  .inputSpan {
+    font-size: 1rem;
+  }
   .nickDiv {
     margin-left: 1%;
     width: 14rem;
@@ -423,7 +434,7 @@ const PendingDiv = styled.div`
     line-height: 16px;
     padding: 2px 16px;
     position: relative;
-    font-family: "Signika", sans-serif;
+    font-family: "Open Sans", sans-serif;
     outline: none;
   }
 `;
@@ -451,8 +462,9 @@ const EditDiv = styled.div`
     line-height: 16px;
     padding: 2px 16px;
     position: relative;
-    font-family: "Signika", sans-serif;
+    font-family: "Open Sans", sans-serif;
     outline: none;
+    cursor: pointer;
   }
   .saveBtn {
     color: #fff;
@@ -471,6 +483,7 @@ const EditDiv = styled.div`
     position: relative;
     font-family: "Signika", sans-serif;
     outline: none;
+    cursor: pointer;
   }
   .cancelBtn {
     color: red;
@@ -489,11 +502,12 @@ const EditDiv = styled.div`
     position: relative;
     font-family: "Signika", sans-serif;
     outline: none;
+    cursor: pointer;
   }
 `;
 
 const RequestDiv = styled.div`
-  background: #ccc;
+  background: hsl(0, 0%, 93%);
   width: 49%;
   border-width: 1px;
   border-style: solid;
@@ -510,12 +524,21 @@ const RequestDiv = styled.div`
     flex-direction: column;
     align-content: center;
     align-items: center;
-    width: 100%;
-    border-bottom: 1px solid grey;
+    width: 95%;
+
     .pendingAlign {
       display: flex;
-      border: 1px solid grey;
+      border-radius: 5px;
+      background: hsl(24, 9%, 82%);
+      box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
       .pendingP {
+        .nicknameP {
+          font-size: 18px;
+          font-weight: bold;
+          color: hsl(214, 7%, 47%);
+        }
+        font-size: 14px;
+        color: hsl(214, 7%, 47%);
         display: flex;
         justify-content: center;
         flex-direction: column;
@@ -526,21 +549,23 @@ const RequestDiv = styled.div`
 
     .acceptRequestBtn {
       color: #fff;
-      background-color: #43b581;
+      background-color: white;
       width: 90px;
-      height: 32px;
-      transition: background-color 0.9s ease, color 0.9s ease;
+      height: 40px;
       box-sizing: border-box;
       background: #43b581;
       border: none;
       border-radius: 3px;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 300;
       line-height: 16px;
       padding: 2px 16px;
       position: relative;
-      font-family: "Signika", sans-serif;
+      font-family: "Open Sans", sans-serif;
       outline: none;
+      &:hover {
+        cursor: pointer;
+      }
     }
     .pendingPicDiv {
       width: 80;
