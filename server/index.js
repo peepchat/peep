@@ -11,6 +11,7 @@ const AC = require("./controllers/auth_controller");
 const FC = require("./controllers/friend_controller");
 const UC = require("./controllers/user_controller");
 const DC = require("./controllers/direct_chat_controller");
+const GC = require("./controllers/group_chat_controller");
 
 const AM = require("./middleware/auth.middleware");
 
@@ -66,6 +67,22 @@ app.put("/api/directMessages/:message_id", DC.updateMessage);
 app.delete("/api/directMessage/:message_id", DC.deleteMessage);
 
 //group messages
+app.post("/api/group", GC.createGroup);
+app.put("/api/group/:group_id", GC.editGroup);
+app.get("/api/group/search", GC.searchGroup);
+app.get("/api/user/groups", GC.getUserGroups);
+app.get("/api/group/members/:group_id", GC.getGroupMembers);
+app.post("/api/group/member/:group_id", GC.addUser);
+app.post("/api/group/request/:group_id", GC.makeRequest);
+app.get("/api/group/requests/pending", GC.getPendingGroupRequests);
+app.get("/api/group/requests", GC.getGroupRequests);
+app.post("/api/group/request/accept", GC.acceptRequest);
+app.delete("/api/group/request/decline", GC.declineRequest);
+app.delete("/api/group/member/:group_id", GC.removeMember);
+app.get("/api/group/messages/:group_id", GC.getGroupMessages);
+app.put("/api/group/message/:message_id", GC.editGroupMessage);
+app.delete("/api/group/message/:message_id", GC.deleteGroupMessage);
+app.delete("/api/group/:group_id", GC.deleteGroup);
 
 io.on("connection", socket => {
   console.log("User connected");

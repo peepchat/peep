@@ -69,7 +69,102 @@ const addUser = (req, res) => {
     });
 };
 
-const makeRequest = (req, res) => {};
+const makeRequest = async (req, res) => {
+  const db = req.app.get("db");
+  const { id } = req.session.user;
+  const { group_id } = req.params;
+  const result = await db.check_group_request([id, group_id]);
+  const existingRequest = result[0];
+  if (!existingRequest) {
+    db.make_group_request([id, group_id]);
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(500);
+  }
+};
+
+const getPendingGroupRequests = async (req, res) => {
+  const db = req.app.get("db");
+  const { id } = req.session.user;
+  const results = await db.get_pending_group_requests([id]);
+  res.status(200).send(results);
+};
+
+const getGroupRequests = async (req, res) => {
+  const db = req.app.get("db");
+  const { id } = req.session.user;
+  const results = await db.get_group_requests([id]);
+  res.status(200).send(results);
+};
+
+const acceptRequest = async (req, res) => {
+  const db = req.app.get("db");
+  const { request_id, user_id, group_id } = req.body;
+  db.remove_group_request([request_id]);
+  db.add_group_member([user_id, group_id, false]);
+  res.sendStatus(200);
+};
+
+const declineRequest = async (req, res) => {
+  const db = req.app.get("db");
+  const { request_id } = req.body;
+  db.remove_group_request([request_id]);
+  res.sendStatus(200);
+};
+
+const removeMember = async (req, res) => {
+  const db = req.app.get("db");
+  const { group_id } = req.params;
+  const { user_id } = req.body;
+  db.remove_group_member([user_id, group_id]);
+  res.sendStatus(200);
+};
+
+const getGroupMessages = async (req, res) => {
+  const db = req.app.get("db");
+  const { group_id } = req.params;
+  const results = await db.get_group_messages([group_id]);
+  res.status(200).send(results);
+};
+
+const editGroupMessage = (req, res) => {
+  const db = req.app.get("db");
+  const { message_id } = req.params;
+  const { message } = req.body;
+  db.edit_group_message([message_id, message])
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+};
+
+const deleteGroupMessage = (req, res) => {
+  const db = req.app.get("db");
+  const { message_id } = req.params;
+  db.delete_group_message([message_id])
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+};
+
+const deleteGroup = (req, res) => {
+  const db = req.app.get("db");
+  const { group_id } = req.params;
+
+  db.remove_all_group_requests([group_id]);
+  db.remove_group_chat_history([group_id]);
+  db.remove_all_group_members([group_id]);
+  db.delete_group([group_id]);
+
+  res.sendStatus(200);
+};
 
 module.exports = {
   createGroup,
@@ -77,5 +172,15 @@ module.exports = {
   searchGroup,
   getUserGroups,
   getGroupMembers,
-  addUser
+  addUser,
+  makeRequest,
+  getGroupRequests,
+  getPendingGroupRequests,
+  acceptRequest,
+  declineRequest,
+  removeMember,
+  getGroupMessages,
+  deleteGroupMessage,
+  deleteGroup,
+  editGroupMessage
 };
