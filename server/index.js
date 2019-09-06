@@ -65,6 +65,8 @@ app.get("/api/directMessages/:chat_id", DC.getDirectMessages);
 app.put("/api/directMessages/:message_id", DC.updateMessage);
 app.delete("/api/directMessage/:message_id", DC.deleteMessage);
 
+//group messages
+
 io.on("connection", socket => {
   console.log("User connected");
 
