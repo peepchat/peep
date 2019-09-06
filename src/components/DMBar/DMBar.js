@@ -30,6 +30,8 @@ const DMBar = props => {
     });
   }, [getFriends]);
 
+  console.log(friends);
+
   return (
     <>
       <Modal
