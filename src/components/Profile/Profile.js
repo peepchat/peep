@@ -102,10 +102,24 @@ const Profile = props => {
         <ProfileBox>
           <ProfileCard>
             {!props.userPic ? (
-              <ProfilePic
-                src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
-                alt="default"
-              ></ProfilePic>
+              <div className="profileUpload">
+                <ProfilePic
+                  src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                  alt="default"
+                ></ProfilePic>
+                {editStatus === true ? (
+                  <div className="uploadBtns">
+                    <>
+                      <WidgetButton onClick={() => widget.open()}>
+                        <FaCloudUploadAlt />
+                      </WidgetButton>
+                      <WidgetButton onClick={submitPicture}>
+                        <FaRegCheckCircle />
+                      </WidgetButton>
+                    </>
+                  </div>
+                ) : null}
+              </div>
             ) : (
               <div className="profileUpload">
                 <ProfilePic src={props.userPic} alt=""></ProfilePic>
@@ -533,6 +547,7 @@ const RequestDiv = styled.div`
       box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
       .pendingP {
         .nicknameP {
+          margin-right:5px;
           font-size: 18px;
           font-weight: bold;
           color: hsl(214, 7%, 47%);
