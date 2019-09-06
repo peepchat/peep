@@ -36,8 +36,8 @@ const DMBar = props => {
     <>
       <Modal
         visible={visible}
-        width="700"
-        height="450"
+        width="750"
+        height="550"
         effect="fadeInDown"
         onClickAway={() => setVisible(false)}
       >
@@ -69,7 +69,12 @@ const DMBar = props => {
                         props.getRequests();
                       }}
                     >
-                      <i className="material-icons">person</i>
+                      {user.profile_img ? (
+                        <SearchPic src={user.profile_img}></SearchPic>
+                      ) : (
+                        <i className="material-icons">person</i>
+                      )}
+
                       {user.email}
                     </Link>
                   </UserItem>
@@ -256,6 +261,16 @@ const UserList = styled.div`
   appearance: none;
   border: none;
   outline: none;
+  overflow-y: auto;
+`;
+
+const SearchPic = styled.img`
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
+  margin-right: 1rem;
 `;
 
 const UserName = styled.div`
@@ -269,9 +284,9 @@ const UserItem = styled.div`
   letter-spacing: 1px;
   margin: 1rem 0;
   list-style: none;
-  background: white;
   border: solid 1px white;
-  box-shadow: $box-shadow;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
   left: 0;
   display: flex;
   flex-direction: row;
@@ -288,6 +303,13 @@ const UserItem = styled.div`
   &:hover {
     transform: scale(1.03);
     transition: 400ms;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
+    display: flex;
+    align-items: center;
   }
 `;
 

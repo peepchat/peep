@@ -24,33 +24,35 @@ const LoginBox = styled.div`
   padding: 40px;
   font-size: 18px;
   color: #72767d;
-  background: #36393f;
+  background: white;
   box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   box-sizing: border-box;
 `;
+
 const Title = styled.div`
   font-size: 26px;
   line-height: 32px;
   margin-bottom: 8px;
   font-weight: 300;
-  color: #fff;
+  color: #72767d;
 `;
+
 const Subtitle = styled.div`
-color: #72767d;
-font-size: 18px;
-line-height: 22pxl;
-font-weight: 400;
-outline:0;
+  color: #72767d;
+  font-size: 18px;
+  line-height: 22pxl;
+  font-weight: 400;
+  outline: 0;
 `;
 const formStyle = {
   textAlign: "left",
   marginTop: "20px"
 };
 const InputBox = styled.div`
-.loginMargin {
-  margin-bottom: 10px;
-}
+  .loginMargin {
+    margin-bottom: 10px;
+  }
 `;
 
 const LoginH5 = styled.h5`
@@ -61,8 +63,8 @@ const LoginH5 = styled.h5`
   font-weight: 200;
 `;
 const LoginInput = styled.input`
-  color: #f6f6f7;
-  background-color: rgba(0, 0, 0, 0.1);
+  color: #72767d;
+  /* background-color: rgba(0, 0, 0, 0.1); */
   border-color: rgba(0, 0, 0, 0.3);
   padding: 10px;
   height: 40px;
@@ -72,7 +74,10 @@ const LoginInput = styled.input`
   border-width: 1px;
   border-style: solid;
   border-radius: 3px;
+  border: none;
+  border-bottom: solid 2px #4fd1c5;
 `;
+
 const ForgotButton = styled.button`
     color: #7289da;
     display: block;
@@ -99,18 +104,19 @@ const ForgotDiv = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  color: #7289da;
+  color: #4fd1c5;
   line-height: 16px;
-  text-decoration:none;
+  text-decoration: none;
   outline: none;
   cursor: pointer;
-  .needP, .needP:visited{
+  .needP,
+  .needP:visited {
     color: #72767d;
   }
 `;
 const LoginButton = styled.button`
   color: #fff;
-  background-color: #7289da;
+  background-color: #4fd1c5;
   font-size: 16px;
   line-height: 24px;
   margin-bottom: 8px;
@@ -124,9 +130,17 @@ const LoginButton = styled.button`
   padding: 2px 16px;
   font-weight: 500;
   box-sizing: border-box;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
   border: none;
   border-radius: 3px;
   cursor: pointer;
+
+  &:hover {
+    transition: 400ms;
+    transform: scale(0.97);
+    background-color: #319795;
+  }
 `;
 const LoginDiv = styled.div`
   margin: 0 auto;
@@ -143,7 +157,7 @@ const LoginDiv = styled.div`
   color: #fff;
   line-height: 24px;
   user-select: none;
-  font-family: 'Signika', sans-serif;
+  font-family: "Signika", sans-serif;
 `;
 //---end-styles/
 const Register = props => {
@@ -178,17 +192,24 @@ const Register = props => {
         <Subtitle>Time to use peep!</Subtitle>
         <form style={formStyle} type="submit" onSubmit={handleRegister}>
           <InputBox>
-          <div className='loginMargin'><LoginH5>Email</LoginH5></div>
+            <div className="loginMargin">
+              <LoginH5>Email</LoginH5>
+            </div>
             <LoginInput onChange={handleChange} name="email" />
           </InputBox>
-          <br/>
+          <br />
           <InputBox>
-          <div className='loginMargin'><LoginH5>Nickname</LoginH5></div>
+            <div className="loginMargin">
+              <LoginH5>Nickname</LoginH5>
+            </div>
             <LoginInput onChange={handleChange} name="nickname" />
           </InputBox>
-          <br/>
+          <br />
           <InputBox>
-          <div className='loginMargin'> <LoginH5>Password</LoginH5></div>
+            <div className="loginMargin">
+              {" "}
+              <LoginH5>Password</LoginH5>
+            </div>
             <LoginInput
               onChange={handleChange}
               name="password"
@@ -201,7 +222,9 @@ const Register = props => {
           </LoginButton>
           <Link to="/">
             <ForgotButton onClick={clickGoBack}>
-              <ForgotDiv><span className='needP'>Already have an account?</span> Login</ForgotDiv>
+              <ForgotDiv>
+                <span className="needP">Already have an account?</span> Login
+              </ForgotDiv>
             </ForgotButton>
           </Link>
         </form>

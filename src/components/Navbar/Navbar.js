@@ -14,13 +14,10 @@ import io from "socket.io-client";
 export const socket = io();
 
 const Navbar = props => {
-  // useEffect(() => {
-  //   props.checkUserLoggedIn().catch(() => props.history.push("/"));
-  // });
-
   const { getUserInfo, nickname, user_id } = props;
 
   useEffect(() => {
+    props.checkUserLoggedIn().catch(() => props.history.push("/"));
     getUserInfo();
   }, [getUserInfo]);
 
