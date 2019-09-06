@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { socket } from "../Navbar/Navbar";
-import { getDirectMessages } from "../../redux/MessagesReducer/MessagesReducer";
+import {
+  getDirectMessages,
+  addDirectMessage
+} from "../../redux/MessagesReducer/MessagesReducer";
 import moment from "moment";
 
 const ChatBox = props => {
@@ -18,12 +21,18 @@ const ChatBox = props => {
     setMsgInput(event.target.value);
   };
 
+  // console.log(socket);
+
   useEffect(() => {
     socket.on("refresh-chat-message", () => {
-      getDirectMessages(chat_id);
+      setTimeout(() => {
+        getDirectMessages(chat_id);
+      }, 65);
     });
     getDirectMessages(chat_id);
   }, [getDirectMessages, chat_id]);
+
+  console.log(directMessages);
 
   return (
     <ChatBoxWrapper>
@@ -37,17 +46,20 @@ const ChatBox = props => {
       })}
       <ChatMessagesCont>
         <ChatInputCont
-          onSubmit={event => {
+          onSubmit={async event => {
             event.preventDefault();
             if (msgInput === "") {
               alert("Empty Message");
             } else {
-              socket.emit("send-chat-message", {
+              await socket.emit("chat-message", {
                 message: msgInput,
                 chat_id,
                 user_id
               });
-              setMsgInput("");
+              await setMsgInput("");
+              await setTimeout(() => {
+                getDirectMessages(chat_id);
+              }, 75);
             }
           }}
         >
@@ -68,13 +80,14 @@ function mapStateToProps(state) {
     user_id: state.authReducer.user_id,
     email: state.authReducer.email,
     nickname: state.authReducer.nickname,
+    profilePic: state.authReducer.profilePic,
     directMessages: state.messagesReducer.directMessages
   };
 }
 
 export default connect(
   mapStateToProps,
-  { getDirectMessages }
+  { getDirectMessages, addDirectMessage }
 )(ChatBox);
 
 const ChatBoxWrapper = styled.div`
