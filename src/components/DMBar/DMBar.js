@@ -80,10 +80,11 @@ const DMBar = props => {
       </Modal>
       <DMBarCont>
         <DMBarWrapper>
-          <SearchWrapper>
+          <SearchWrapper onClick={() => setVisible(true)}>
             <SearchInput
+              disabled
+              readonly
               placeholder="Search..."
-              onClick={() => setVisible(true)}
             ></SearchInput>
             <SearchButton>
               <i className="material-icons">search</i>
@@ -108,14 +109,18 @@ const DMBar = props => {
                 ) : (
                   <UserPic src={friend.profile_img} alt="" />
                 )}
+                {friend.online ? <Online /> : <Offline />}
                 <UserNickname>{friend.nickname}</UserNickname>
-                {friend.online ? <div>Online</div> : <div>Offline</div>}
               </PicNameCont>
             );
           })}
         </DMBarWrapper>
         <UserBar>
-          <UserPic src={props.profilePic} />
+          {props.profilePic !== "" ? (
+            <UserPic src={props.profilePic} />
+          ) : (
+            <UserPic src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png" />
+          )}
           <UserNickname>{props.nickname}</UserNickname>
         </UserBar>
       </DMBarCont>
@@ -205,6 +210,7 @@ const SearchInput = styled.input`
   appearance: none;
   border: none;
   outline: none;
+  cursor: pointer;
 `;
 
 const SearchInputModalWrap = styled.div`
@@ -285,6 +291,24 @@ const UserItem = styled.div`
   }
 `;
 
+const Online = styled.div`
+  width: 12px;
+  height: 12px;
+  border: solid 1px lightgray;
+  background-color: #68d391;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+`;
+
+const Offline = styled.div`
+  width: 12px;
+  height: 12px;
+  border: solid 1px lightgray;
+  background-color: gray;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+`;
+
 const SearchButton = styled.button`
   height: 100%;
   width: 20%;
@@ -295,6 +319,7 @@ const SearchButton = styled.button`
   border: none;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
     0 2px 4px 0 rgba(14, 30, 37, 0.12);
+  cursor: pointer;
 `;
 
 const PicNameCont = styled.div`
@@ -304,6 +329,11 @@ const PicNameCont = styled.div`
   align-items: center;
   width: 100%;
   height: 8%;
+
+  &:hover {
+    transition: 200ms;
+    background-color: lightgray;
+  }
 `;
 
 const UserPic = styled.img`
