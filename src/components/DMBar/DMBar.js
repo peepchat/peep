@@ -69,7 +69,12 @@ const DMBar = props => {
                         props.getRequests();
                       }}
                     >
-                      <i className="material-icons">person</i>
+                      {user.profile_img ? (
+                        <SearchPic src={user.profile_img}></SearchPic>
+                      ) : (
+                        <i className="material-icons">person</i>
+                      )}
+
                       {user.email}
                     </Link>
                   </UserItem>
@@ -257,6 +262,15 @@ const UserList = styled.div`
   border: none;
   outline: none;
   overflow-y: auto;
+`;
+
+const SearchPic = styled.img`
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
+  margin-right: 1rem;
 `;
 
 const UserName = styled.div`
