@@ -22,7 +22,7 @@ const LoginBox = styled.div`
   padding: 40px;
   font-size: 18px;
   color: #72767d;
-  background: #36393f;
+  background: white;
   box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   box-sizing: border-box;
@@ -32,7 +32,7 @@ const Title = styled.div`
   line-height: 32px;
   margin-bottom: 8px;
   font-weight: 300;
-  color: #fff;
+  color: #72767d;
 `;
 const Subtitle = styled.div`
   color: #72767d;
@@ -59,8 +59,8 @@ const LoginH5 = styled.h5`
   font-weight: 200;
 `;
 const LoginInput = styled.input`
-  color: #f6f6f7;
-  background-color: rgba(0, 0, 0, 0.1);
+  color: #72767d;
+  /* background-color: rgba(0, 0, 0, 0.1); */
   border-color: rgba(0, 0, 0, 0.3);
   padding: 10px;
   height: 40px;
@@ -70,32 +70,33 @@ const LoginInput = styled.input`
   border-width: 1px;
   border-style: solid;
   border-radius: 3px;
+  border: none;
+  border-bottom: solid 2px #4fd1c5;
 `;
 const ForgotButton = styled.button`
-    color: #7289da;
-    display: block;
-    padding-left: 0;
-    padding-right: 0;
-    margin-bottom: 20px;
-    margin-top: 4px;
-    width: auto;
-    height: auto;
-    padding: 2px 4px;
-    box-sizing: border-box;
-    background: none;
-    border: none;
-    border-radius: 3px;
-    font-size: 11px;
-    font-weight: 500;
-    line-height: 16px;
-}
+  color: #7289da;
+  display: block;
+  padding-left: 0;
+  padding-right: 0;
+  margin-bottom: 20px;
+  margin-top: 4px;
+  width: auto;
+  height: auto;
+  padding: 2px 4px;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
 `;
 const ForgotDiv = styled.div`
   margin: 0 auto;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  color: #7289da;
+  color: #4fd1c5;
   line-height: 16px;
   .needP {
     color: #72767d;
@@ -103,7 +104,7 @@ const ForgotDiv = styled.div`
 `;
 const LoginButton = styled.button`
   color: #fff;
-  background-color: #7289da;
+  background-color: #4fd1c5;
   font-size: 16px;
   line-height: 24px;
   margin-bottom: 8px;
@@ -117,9 +118,17 @@ const LoginButton = styled.button`
   padding: 2px 16px;
   font-weight: 500;
   box-sizing: border-box;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
   border: none;
   border-radius: 3px;
   cursor: pointer;
+
+  &:hover {
+    transition: 400ms;
+    transform: scale(0.97);
+    background-color: #319795;
+  }
 `;
 const LoginDiv = styled.div`
   margin: 0 auto;
