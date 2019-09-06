@@ -75,20 +75,23 @@ io.on("connection", socket => {
     console.log(data.msg);
     user_id = data.user_id;
     database.edit_online_status([user_id, true]);
-    io.emit("refresh-friends");
+    setTimeout(() => {
+      io.emit("refresh-friends");
+    }, 250);
   });
 
   socket.on("dm-join", data => {
     const { chat_id } = data;
+    //leave previous room
+    socket.leave(room);
     room = `dm-${chat_id}`;
     socket.join(room);
   });
 
-  socket.on("send-chat-message", data => {
+  socket.on("chat-message", async data => {
     const { message, chat_id, user_id, gif_url } = data;
-    console.log(data);
-    database.add_direct_message([user_id, chat_id, message, gif_url]);
-    io.to(room).emit("refresh-chat-message");
+    await database.add_direct_message([user_id, chat_id, message, gif_url]);
+    await io.to(room).emit("refresh-chat-message");
   });
 
   socket.on("disconnect", () => {
@@ -96,7 +99,9 @@ io.on("connection", socket => {
     if (user_id !== null || user_id !== undefined) {
       database.edit_online_status([user_id, false]);
     }
-    io.emit("refresh-friends");
+    setTimeout(() => {
+      io.emit("refresh-friends");
+    }, 100);
   });
 });
 
