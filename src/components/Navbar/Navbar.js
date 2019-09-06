@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import {
   checkUserLoggedIn,
-  getUserInfo
+  getUserInfo,
+  logoutUser
 } from "../../redux/AuthReducer/AuthReducer";
 import { connect } from "react-redux";
 import Modal from "react-awesome-modal";
@@ -45,19 +46,33 @@ const Navbar = props => {
     setModalView("");
   };
 
-  // if (visible === false) {
-  //   setModalView("");
-  // }
+  const handleLogout = () => {
+    props.logoutUser().then(() => props.history.push("/"));
+    setVisible(false);
+    setModalView("");
+    // socket.emit("disconnect");
+  };
+
+  const goToHome = () => {
+    props.history.push(`/peep/dm/profile/${props.email}`);
+  };
 
   return (
     <>
       <NavWrapper>
-        <Channel>A</Channel>
-        <Underline />
-        <Channel>B</Channel>
-        <Channel>C</Channel>
-        <Channel>D</Channel>
-        <PlusButton onClick={() => setVisible(true)}>+</PlusButton>
+        <ChannelWrapper>
+          <Channel onClick={goToHome}>A</Channel>
+          <Underline />
+          <Channel>B</Channel>
+          <Channel>C</Channel>
+          <Channel>D</Channel>
+          <PlusButton onClick={() => setVisible(true)}>+</PlusButton>
+        </ChannelWrapper>
+        <LogoutButtonCont>
+          <LogoutButton onClick={handleLogout}>
+            <i class="material-icons">exit_to_app</i>
+          </LogoutButton>
+        </LogoutButtonCont>
       </NavWrapper>
       <Modal
         visible={visible}
@@ -107,7 +122,8 @@ export default connect(
   mapStateToProps,
   {
     getUserInfo,
-    checkUserLoggedIn
+    checkUserLoggedIn,
+    logoutUser
   }
 )(Navbar);
 
@@ -127,6 +143,15 @@ const NavWrapper = styled.div`
     0 2px 4px 0 rgba(14, 30, 37, 0.12);
 `;
 
+const ChannelWrapper = styled.div`
+  height: 90%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+`;
+
 const Channel = styled.div`
   height: 60px;
   width: 60px;
@@ -139,6 +164,40 @@ const Channel = styled.div`
   align-items: center;
   font-size: 2rem;
   padding: 1rem;
+`;
+
+const LogoutButtonCont = styled.div`
+  width: 100%;
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LogoutButton = styled.button`
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  /* position: fixed; */
+  bottom: 0;
+  left: 0;
+  border: none;
+  i {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  &:hover {
+    transition: 400ms;
+    background-color: #f56565;
+    transform: scale(0.95);
+    color: white;
+  }
 `;
 
 const PlusButton = styled.div`
