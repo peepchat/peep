@@ -7,6 +7,7 @@ import {
   addDirectMessage
 } from "../../redux/MessagesReducer/MessagesReducer";
 import moment from "moment";
+import { FaPlusCircle, FaRegSmile } from "react-icons/fa";
 
 const ChatBox = props => {
   const [msgInput, setMsgInput] = useState("");
@@ -14,13 +15,6 @@ const ChatBox = props => {
   const { user_id, getDirectMessages, directMessages } = props;
 
   const { chat_id } = props.match.params;
-
-  // const messagesEndRef = useRef(null)
-  
-  // const scrollToBottom = () => {
-  //   messagesEndRef.current.scrollIntoView({behavior: "smooth"})
-  // }
-  // useEffect(scrollToBottom, [directMessages])
 
   socket.emit("dm-join", { chat_id });
 
@@ -47,11 +41,19 @@ const ChatBox = props => {
         {directMessages.map((dm, index) => {
           return (
             <div className="keyContainer" key={index}>
-              <img src={dm.profile_img} alt="profile" />
-              {dm.nickname} {dm.message} {moment(dm.date).calendar()}
-              {/* <div ref={this.messagesEndRef}/> */}
+              <div className="imgCont">
+                <img className="avatar" src={dm.profile_img} alt="profile" />
+              </div>
+              <div className="messageCont">
+                <span className="messageHeader">
+                  <div className="nicknameCont">
+                    {dm.nickname}
+                    <div className="dateCont">{moment(dm.date).calendar()}</div>
+                  </div>
+                </span>
+                <p className="messageText">{dm.message} </p>
+              </div>
             </div>
-           
           );
         })}
       </ChatMessagesCont>
@@ -74,13 +76,17 @@ const ChatBox = props => {
           }
         }}
       >
-        <button className="mediaButton">M</button>
         <ChatInput
           onChange={handleChange}
           value={msgInput}
-          placeholder="bitch"
+          placeholder="Message..."
         />
-        <button className="gifButton">G</button>
+        <button className="gifButton">
+          <FaRegSmile />
+        </button>
+        <button className="mediaButton">
+          <FaPlusCircle />
+        </button>
         {/* <ChatSubmit type="submit">Send</ChatSubmit> */}
       </ChatInputCont>
     </ChatBoxWrapper>
@@ -110,32 +116,111 @@ const ChatBoxWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  flex: 1 1 auto;
+  position: relative;
   outline: 0;
 `;
 
 const ChatMessagesCont = styled.div`
   width: 100%;
-  height: 100%;
+  height: 90%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  position: absolute;
+  overflow-y: auto;
+  overflow-x: none;
+  top: 0;
+  .keyContainer {
+    opacity: 1;
+    transition: opacity 500ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    width: 100%;
+    display: flex;
+    position: relative;
+    box-sizing: border-box;
+    text-align: left;
+    align-items: center;
+    justify-content: flex-start;
+    text-decoration: none;
+    padding: 1em !important;
+    color: black;
+    /* border-top: 2px solid hsl(0, 0%, 93%); */
+    white-space: pre-line;
+    overflow-wrap: break-word;
+    .imgCont {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      overflow: hidden;
+      position: relative;
+      font-size: 1.25rem;
+      align-items: center;
+      flex-shrink: 0;
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+      user-select: none;
+      border-radius: 50%;
+      justify-content: center;
+      margin-right: 0.5rem;
+      .avatar {
+        height: 48px;
+        font-size: 1.25rem;
+        user-select: none;
+      }
+    }
+    .messageCont {
+      margin-top: 6px;
+      margin-bottom: 6px;
+      flex: 1 1 auto;
+      min-width: 0;
+      color: black !important;
+      .messageText {
+        font-size: 0.875rem;
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        font-weight: 500;
+        line-height: 1.43;
+        letter-spacing: 0.01071em;
+        color: black;
+      }
+      .messageHeader {
+        font-size: 1rem;
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        font-weight: 500;
+        line-height: 1.5;
+        letter-spacing: 0.00938em;
+        margin: 0;
+        .nicknameCont {
+          font-size: 1rem;
+          font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+          font-weight: 500;
+          line-height: 1.5;
+          letter-spacing: 0.00938em;
+          display: inline;
+          .dateCont {
+            display: inline;
+            color: grey;
+            font-size: 13px;
+            padding-left: 4px;
+          }
+        }
+      }
+    }
+  }
 `;
 
 const ChatInputCont = styled.form`
-  width: 72%;
+  width: 100%;
   height: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed;
+  background-color: hsl(0, 0%, 96%);
+  border-radius: 5px;
+  position: absolute;
   bottom: 0;
-  background-color: hsl(0, 0%, 93%);
+  left: 0;
+  right: 0;
   .mediaButton {
-    color: #fff;
+    background-color: hsl(0, 0%, 93%);
     width: 3rem;
     height: 2rem;
     transition: background-color 0.17s ease, color 0.17s ease;
@@ -152,7 +237,7 @@ const ChatInputCont = styled.form`
     cursor: pointer;
   }
   .gifButton {
-    color: #fff;
+    background-color: hsl(0, 0%, 93%);
     width: 3rem;
     height: 2rem;
     transition: background-color 0.17s ease, color 0.17s ease;
@@ -173,28 +258,26 @@ const ChatInputCont = styled.form`
 const ChatInput = styled.input`
   width: 80%;
   height: 20%;
-  padding: 20px;
+  padding: 21px;
   border-radius: 20px;
   border-color: teal;
   outline: none;
 `;
 
-const ChatSubmit = styled.button`
-  color: #fff;
-  width: 3rem;
-  height: 2rem;
-  transition: background-color 0.17s ease, color 0.17s ease;
-  box-sizing: border-box;
-  background: transparent;
-  border: none;
-  border-radius: 3px;
-  font-size: 25px;
-  font-weight: 500;
-  line-height: 16px;
-  padding: 2px 10px;
-  position: relative;
-  font-family: "Signika", sans-serif;
-  cursor: pointer;
-`;
-
-const MapDiv = styled.div``;
+// const ChatSubmit = styled.button`
+//   color: #fff;
+//   width: 3rem;
+//   height: 2rem;
+//   transition: background-color 0.17s ease, color 0.17s ease;
+//   box-sizing: border-box;
+//   background: transparent;
+//   border: none;
+//   border-radius: 3px;
+//   font-size: 25px;
+//   font-weight: 500;
+//   line-height: 16px;
+//   padding: 2px 10px;
+//   position: relative;
+//   font-family: "Signika", sans-serif;
+//   cursor: pointer;
+// `;
