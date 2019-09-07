@@ -162,7 +162,12 @@ const Profile = props => {
                 {filterPendingUser ? (
                   <div>Pending</div>
                 ) : filterUser ? (
-                  <button>Remove Friend</button>
+                  <button
+                    className="deleteFriendBtn"
+                    onClick={() => props.deleteFriend(props.userID)}
+                  >
+                    Remove Friend
+                  </button>
                 ) : !filterUser ? (
                   <button
                     className="addFriendBtn"
@@ -266,7 +271,8 @@ function mapStateToProps(state) {
     friends: state.friendsReducer.friends,
     pending: state.friendsReducer.pending,
     requests: state.friendsReducer.requests,
-    edit_Nickname: state.authReducer.edit_Nickname
+    edit_Nickname: state.authReducer.edit_Nickname,
+    loading: state.userReducer.loading
   };
 }
 
@@ -313,8 +319,7 @@ const ChatBox = styled.div`
 `;
 
 const WidgetButton = styled.button`
-  color: #fff;
-  background-color: #43b581;
+  color: ${props => props.theme.teal2};
   width: 3rem;
   height: 2rem;
   transition: background-color 0.17s ease, color 0.17s ease;
@@ -329,6 +334,12 @@ const WidgetButton = styled.button`
   position: relative;
   font-family: "Signika", sans-serif;
   cursor: pointer;
+  &:hover {
+    transition: 400ms;
+    background-color: ${props => props.theme.teal2};
+    transform: scale(0.97);
+    color: white;
+  }
 `;
 
 const ProfileBox = styled.div`
@@ -341,8 +352,7 @@ const ProfileBox = styled.div`
   border-color: #202225;
   padding: 20px;
   position: relative;
-  border-width: 1px;
-  border-style: solid;
+
   border-radius: 5px;
   border: 1px solid lightgrey;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
@@ -350,8 +360,7 @@ const ProfileBox = styled.div`
 `;
 const ProfileCard = styled.div`
   background: hsl(0, 0%, 93%);
-  border-width: 1px;
-  border-style: solid;
+
   border-radius: 5px;
   .profileUpload {
     width: 90px;
@@ -433,14 +442,13 @@ const PendingDiv = styled.div`
   justify-content: center;
   .addFriendBtn {
     color: #fff;
-    background-color: #43b581;
+    background-color: ${props => props.theme.teal1};
     min-height: 32px;
     width: auto;
     height: 32px;
     min-width: 60px;
     transition: background-color 0.17s ease, color 0.17s ease;
     box-sizing: border-box;
-    background: #43b581;
     border: none;
     border-radius: 3px;
     font-size: 14px;
@@ -450,6 +458,11 @@ const PendingDiv = styled.div`
     position: relative;
     font-family: "Open Sans", sans-serif;
     outline: none;
+    &:hover {
+      transition: 400ms;
+      background-color: ${props => props.theme.teal3};
+      transform: scale(0.97);
+    }
   }
 `;
 const EditDiv = styled.div`
@@ -463,7 +476,7 @@ const EditDiv = styled.div`
 
   .editButton {
     color: #fff;
-    background-color: #43b581;
+    background-color: ${props => props.theme.teal1};
     width: 90px;
     height: 32px;
     transition: background-color 0.9s ease, color 0.9s ease;
@@ -479,15 +492,20 @@ const EditDiv = styled.div`
     font-family: "Open Sans", sans-serif;
     outline: none;
     cursor: pointer;
+
+    &:hover {
+      transition: 400ms;
+      background-color: ${props => props.theme.teal3};
+      transform: scale(0.97);
+    }
   }
   .saveBtn {
     color: #fff;
-    background-color: #43b581;
+    background-color: ${props => props.theme.teal2};
     width: 90px;
     height: 40px;
     transition: background-color 0.17s ease, color 0.17s ease;
     box-sizing: border-box;
-    background: #43b581;
     border: none;
     border-radius: 3px;
     font-size: 14px;
@@ -498,6 +516,11 @@ const EditDiv = styled.div`
     font-family: "Signika", sans-serif;
     outline: none;
     cursor: pointer;
+    &:hover {
+      transition: 400ms;
+      background-color: ${props => props.theme.teal3};
+      transform: scale(0.97);
+    }
   }
   .cancelBtn {
     color: red;
@@ -517,14 +540,20 @@ const EditDiv = styled.div`
     font-family: "Signika", sans-serif;
     outline: none;
     cursor: pointer;
+
+    &:hover {
+      transition: 400ms;
+      color: white;
+      background-color: red;
+      transform: scale(0.96);
+    }
   }
 `;
 
 const RequestDiv = styled.div`
   background: hsl(0, 0%, 93%);
   width: 49%;
-  border-width: 1px;
-  border-style: solid;
+
   border-radius: 5px;
   display: flex;
   justify-content: center;
@@ -547,7 +576,7 @@ const RequestDiv = styled.div`
       box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
       .pendingP {
         .nicknameP {
-          margin-right:5px;
+          margin-right: 5px;
           font-size: 18px;
           font-weight: bold;
           color: hsl(214, 7%, 47%);
@@ -564,11 +593,10 @@ const RequestDiv = styled.div`
 
     .acceptRequestBtn {
       color: #fff;
-      background-color: white;
       width: 90px;
       height: 40px;
       box-sizing: border-box;
-      background: #43b581;
+      background: ${props => props.theme.teal1};
       border: none;
       border-radius: 3px;
       font-size: 14px;
@@ -580,6 +608,9 @@ const RequestDiv = styled.div`
       outline: none;
       &:hover {
         cursor: pointer;
+        transition: 400ms;
+        background-color: ${props => props.theme.teal2};
+        transform: scale(0.96);
       }
     }
     .pendingPicDiv {

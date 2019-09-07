@@ -53,9 +53,9 @@ export const addFriend = (friendID, request_id) => {
 };
 
 export const deleteFriend = (friendID, requestID) => {
-  axios.delete(`/api/friends/${friendID}`, { requestID });
   return {
-    type: DELETE_FRIEND
+    type: DELETE_FRIEND,
+    payload: axios.delete(`/api/friends/${friendID}`, { requestID })
   };
 };
 

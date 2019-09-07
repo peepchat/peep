@@ -10,6 +10,7 @@ import Modal from "react-awesome-modal";
 import CreateForm from "../CreateForm/CreateForm";
 import JoinForm from "../JoinForm/JoinForm";
 import io from "socket.io-client";
+import Loader from "../Loader/Loader";
 
 export const socket = io();
 
@@ -56,6 +57,7 @@ const Navbar = props => {
 
   return (
     <>
+      <Loader></Loader>
       <NavWrapper>
         <ChannelWrapper>
           <Channel onClick={goToHome}>A</Channel>

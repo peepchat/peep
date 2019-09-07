@@ -57,18 +57,18 @@ const DMBar = props => {
           {search &&
             props.users.map(user => {
               return (
-                <UserName>
-                  <UserItem>
-                    <Link
-                      to={`/peep/dm/profile/${user.email}`}
-                      onClick={() => {
-                        setVisible(false);
-                        setSearch("");
-                        props.getFriends();
-                        props.getPending();
-                        props.getRequests();
-                      }}
-                    >
+                <Link
+                  to={`/peep/dm/profile/${user.email}`}
+                  onClick={() => {
+                    setVisible(false);
+                    setSearch("");
+                    props.getFriends();
+                    props.getPending();
+                    props.getRequests();
+                  }}
+                >
+                  <UserName>
+                    <UserItem>
                       {user.profile_img ? (
                         <SearchPic src={user.profile_img}></SearchPic>
                       ) : (
@@ -76,9 +76,9 @@ const DMBar = props => {
                       )}
 
                       {user.email}
-                    </Link>
-                  </UserItem>
-                </UserName>
+                    </UserItem>
+                  </UserName>
+                </Link>
               );
             })}
         </UserList>
@@ -262,6 +262,12 @@ const UserList = styled.div`
   border: none;
   outline: none;
   overflow-y: auto;
+  a {
+    text-decoration: none;
+    color: black;
+    display: flex;
+    align-items: center;
+  }
 `;
 
 const SearchPic = styled.img`
@@ -303,13 +309,6 @@ const UserItem = styled.div`
   &:hover {
     transform: scale(1.03);
     transition: 400ms;
-  }
-
-  a {
-    text-decoration: none;
-    color: black;
-    display: flex;
-    align-items: center;
   }
 `;
 

@@ -46,9 +46,16 @@ export function userReducer(state = initialState, action) {
     case `${SEARCH_USER}_FULFILLED`:
       return { ...state, loading: false, users: payload.data };
     case `${GET_FRIENDS_DATA}_PENDING`:
-      return { ...state, loading: true };
+      return {
+        ...state,
+        loading: true,
+        email: "",
+        nickname: "",
+        bio: "",
+        profilePic: ""
+      };
     case `${GET_FRIENDS_DATA}_FULFILLED`:
-      // console.log(payload.data);
+      console.log(payload.data);
       const { user_id, email, nickname, bio, profile_img } = payload.data[0];
       return {
         ...state,
