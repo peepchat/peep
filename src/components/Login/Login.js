@@ -103,7 +103,7 @@ const ForgotDiv = styled.div`
   }
 `;
 const LoginButton = styled.button`
-  color: #fff;
+  color: black;
   background-color: #4fd1c5;
   font-size: 16px;
   line-height: 24px;
@@ -142,7 +142,6 @@ const LoginDiv = styled.div`
   font-family: inherit;
   font-size: 100%;
   vertical-align: baseline;
-  color: #fff;
   line-height: 24px;
   user-select: none;
   font-family: "Signika", sans-serif;

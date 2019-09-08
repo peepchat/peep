@@ -237,7 +237,7 @@ const Profile = props => {
                           props.getRequests();
                         }}
                       >
-                        Accept Request
+                        Accept
                       </button>
                       <br />
                     </div>
@@ -441,7 +441,7 @@ const PendingDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   .addFriendBtn {
-    color: #fff;
+    color: black;
     background-color: ${props => props.theme.teal1};
     min-height: 32px;
     width: auto;
@@ -475,7 +475,7 @@ const EditDiv = styled.div`
   justify-content: center;
 
   .editButton {
-    color: #fff;
+    color: black;
     background-color: ${props => props.theme.teal1};
     width: 90px;
     height: 32px;
@@ -500,7 +500,7 @@ const EditDiv = styled.div`
     }
   }
   .saveBtn {
-    color: #fff;
+    color: black;
     background-color: ${props => props.theme.teal2};
     width: 90px;
     height: 40px;
@@ -592,7 +592,7 @@ const RequestDiv = styled.div`
     }
 
     .acceptRequestBtn {
-      color: #fff;
+      color: black;
       width: 90px;
       height: 40px;
       box-sizing: border-box;
