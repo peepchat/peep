@@ -179,6 +179,13 @@ const HomeLogo = styled.img`
   font-size: 2rem;
   padding: 0.25rem;
   background-color: ${props => props.theme.teal2};
+  cursor: pointer;
+
+  &:hover {
+    transition: 400ms;
+    background-color: ${props => props.theme.teal3};
+    transform: scale(0.96);
+  }
 `;
 
 const LogoutButtonCont = styled.div`

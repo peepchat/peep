@@ -121,10 +121,13 @@ const DMBar = props => {
           })}
         </DMBarWrapper>
         <UserBar>
-          {props.profilePic !== "" ? (
+          {props.profilePic ? (
             <UserPic src={props.profilePic} />
           ) : (
-            <UserPic src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png" />
+            <UserPic
+              src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+              alt="default"
+            />
           )}
           <UserNickname>{props.nickname}</UserNickname>
         </UserBar>

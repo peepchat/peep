@@ -164,7 +164,12 @@ const Profile = props => {
                 ) : filterUser ? (
                   <button
                     className="deleteFriendBtn"
-                    onClick={() => props.deleteFriend(props.userID)}
+                    onClick={() => {
+                      props.deleteFriend(props.userID);
+                      setTimeout(() => {
+                        props.getFriends();
+                      }, 50);
+                    }}
                   >
                     Remove Friend
                   </button>
@@ -173,7 +178,9 @@ const Profile = props => {
                     className="addFriendBtn"
                     onClick={() => {
                       props.makeFriendRequest(props.userID);
-                      props.getPending();
+                      setTimeout(() => {
+                        props.getPending();
+                      }, 50);
                     }}
                   >
                     Add Friend <FaUserCheck />
@@ -235,6 +242,9 @@ const Profile = props => {
                         onClick={() => {
                           props.addFriend(request.user_id, request.request_id);
                           props.getRequests();
+                          setTimeout(() => {
+                            props.getFriends();
+                          }, 75);
                         }}
                       >
                         Accept
