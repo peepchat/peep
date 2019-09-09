@@ -4,12 +4,14 @@ import { authReducer } from "./AuthReducer/AuthReducer";
 import { userReducer } from "./UserReducer/userReducer";
 import { friendsReducer } from "./FriendsReducer/friendsReducer";
 import { messagesReducer } from "./MessagesReducer/MessagesReducer";
+import { groupReducer } from "./GroupReducer/groupReducer";
 
 const root = combineReducers({
   authReducer,
   userReducer,
   friendsReducer,
-  messagesReducer
+  messagesReducer,
+  groupReducer
 });
 
 export default createStore(root, applyMiddleware(promise));

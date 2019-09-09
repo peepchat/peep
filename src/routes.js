@@ -6,6 +6,8 @@ import Navbar from "./components/Navbar/Navbar";
 import DMBar from "./components/DMBar/DMBar";
 import DMChatBox from "./components/DMChatBox/DMChatBox";
 import Profile from "./components/Profile/Profile";
+import GroupBar from "./components/GroupBar/GroupBar";
+import GroupChatBox from "./components/GroupChatBox/GroupChatBox";
 
 import styled from "styled-components";
 
@@ -30,6 +32,8 @@ export default (
           <Route path="/peep/dm" component={DMBar} />
           <Route exact path="/peep/dm/profile/:email" component={Profile} />
           <Route exact path="/peep/dm/:chat_id" component={DMChatBox} />
+          <Route path="/peep/group" component={GroupBar} />
+          <Route exact path="/peep/group/:group_id" component={GroupChatBox} />
         </FlexWrapper>
       )}
     />

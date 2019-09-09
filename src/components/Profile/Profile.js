@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import * as cloudkey from "../../cloudkey.json";
 import { uploadPic, getFriendsData } from "../../redux/UserReducer/userReducer";
 import {
   getUserInfo,
@@ -36,8 +37,8 @@ const Profile = props => {
   const [editStatus, setEditstatus] = useState(false);
   const widget = window.cloudinary.createUploadWidget(
     {
-      cloudName: "dtkvcgoz6",
-      uploadPreset: "pvstqpgq",
+      cloudName: cloudkey.cloud_name,
+      uploadPreset: cloudkey.upload_preset,
       sources: ["local", "url", "dropbox", "facebook", "instagram"]
     },
     (error, result) => {

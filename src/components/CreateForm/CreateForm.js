@@ -1,8 +1,35 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import * as cloudkey from "../../cloudkey.json";
+import { createGroup } from "../../redux/GroupReducer/groupReducer";
+import { connect } from "react-redux";
 
 const CreateForm = props => {
   const [imageurl, setImageurl] = useState("");
+  const [groupName, setGroupName] = useState("");
+
+  const { createGroup } = props;
+
+  const handleChange = event => {
+    setGroupName(event.target.value);
+  };
+
+  const checkUploadResult = resultEvent => {
+    if (resultEvent.event === "success") {
+      setImageurl(resultEvent.info.secure_url);
+    }
+  };
+
+  const widget = window.cloudinary.createUploadWidget(
+    {
+      cloudName: cloudkey.cloud_name,
+      uploadPreset: cloudkey.upload_preset,
+      sources: ["local", "url", "dropbox", "facebook", "instagram"]
+    },
+    (error, result) => {
+      checkUploadResult(result);
+    }
+  );
 
   return (
     <ModalWrapper>
@@ -17,20 +44,46 @@ const CreateForm = props => {
         <HeadSecondDiv>
           <HeadSecondDivChildren>
             <p>Group Name</p>
-            <input placeholder="Enter a Group Name..."></input>
+            <input
+              placeholder="Enter a Group Name..."
+              onChange={handleChange}
+            ></input>
           </HeadSecondDivChildren>
-          <HeadSecondDivChildren>
-            <div></div>
+          <HeadSecondDivChildren onClick={() => widget.open()}>
+            {imageurl == "" ? (
+              <div></div>
+            ) : (
+              <img src={imageurl} alt="group_picture" />
+            )}
           </HeadSecondDivChildren>
         </HeadSecondDiv>
       </HeadWrapper>
       <FooterWrapper>
         <BackButton onClick={props.viewDefault}>Back</BackButton>
-        <CreateButton>Create</CreateButton>
+        <CreateButton
+          onClick={() => {
+            if (groupName === "" || imageurl === "") {
+              alert("Group name and image required.");
+            } else {
+              createGroup(groupName, imageurl);
+              setImageurl("");
+              setGroupName("");
+              props.setVisible(false);
+              props.setModalView("");
+            }
+          }}
+        >
+          Create
+        </CreateButton>
       </FooterWrapper>
     </ModalWrapper>
   );
 };
+
+export default connect(
+  null,
+  { createGroup }
+)(CreateForm);
 
 const ModalWrapper = styled.div`
   width: 100%;
@@ -173,5 +226,3 @@ const CreateButton = styled.button`
     transform: scale(0.95);
   }
 `;
-
-export default CreateForm;
