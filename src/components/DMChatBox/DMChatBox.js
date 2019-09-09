@@ -7,10 +7,11 @@ import {
   addDirectMessage
 } from "../../redux/MessagesReducer/MessagesReducer";
 import moment from "moment";
-import { FaPlusCircle, FaRegSmile } from "react-icons/fa";
+import { FaPlusCircle, FaRegSmile, FaEllipsisV } from "react-icons/fa";
 
 const ChatBox = props => {
   const [msgInput, setMsgInput] = useState("");
+  const [editToggle, setEditToggle] = useState("false");
 
   const { user_id, getDirectMessages, directMessages } = props;
 
@@ -81,6 +82,9 @@ const ChatBox = props => {
                 </span>
                 <p className="messageText">{dm.message} </p>
               </div>
+              <button className="editHover">
+                <div className='editIcon'><FaEllipsisV /></div>
+              </button>
               <div
                 ref={element => (messageContainerBottomRef = element)}
                 id="messagesContainerBottom"
@@ -141,7 +145,7 @@ export default connect(
   { getDirectMessages, addDirectMessage }
 )(ChatBox);
 
-const ChatBoxWrapper = styled.div`
+export const ChatBoxWrapper = styled.div`
   height: 100%;
   width: 100%;
   margin-left: 26rem;
@@ -153,7 +157,7 @@ const ChatBoxWrapper = styled.div`
   outline: 0;
 `;
 
-const ChatMessagesCont = styled.div`
+export const ChatMessagesCont = styled.div`
   width: 100%;
   height: 90%;
   display: flex;
@@ -177,9 +181,30 @@ const ChatMessagesCont = styled.div`
     text-decoration: none;
     padding: 1em !important;
     color: black;
-    /* border-top: 2px solid hsl(0, 0%, 93%); */
     white-space: pre-line;
     overflow-wrap: break-word;
+    .editHover {
+      display: flex;
+      justify-content: flex-end;
+
+      width: 50%;
+      height: 100%;
+      color: transparent;
+      font-size: 11px;
+      background: transparent;
+      border: none;
+      outline: none;
+      .editIcon {
+        height: 20px;
+        width: 20px;
+
+      }
+      &:hover {
+        transition: 200ms;
+        color: ${props => props.theme.teal3};
+        transform: scale(1.01);
+      }
+    }
     .imgCont {
       width: 40px;
       height: 40px;
@@ -193,7 +218,7 @@ const ChatMessagesCont = styled.div`
       user-select: none;
       border-radius: 50%;
       justify-content: center;
-      margin-right: 0.5rem;
+      margin-right: 0.7rem;
       .defaultPic {
         height: 48px;
         font-size: 1.25rem;
@@ -211,6 +236,7 @@ const ChatMessagesCont = styled.div`
       flex: 1 1 auto;
       min-width: 0;
       color: black !important;
+
       .messageText {
         font-size: 0.875rem;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -226,6 +252,7 @@ const ChatMessagesCont = styled.div`
         line-height: 1.5;
         letter-spacing: 0.00938em;
         margin: 0;
+
         .nicknameCont {
           font-size: 1rem;
           font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -245,7 +272,7 @@ const ChatMessagesCont = styled.div`
   }
 `;
 
-const ChatInputCont = styled.form`
+export const ChatInputCont = styled.form`
   width: 100%;
   height: 10%;
   display: flex;
@@ -258,7 +285,7 @@ const ChatInputCont = styled.form`
   left: 0;
   right: 0;
   .mediaButton {
-    background-color: hsl(0, 0%, 93%);
+    background-color: ${props => props.theme.teal1};
     width: 3rem;
     height: 2rem;
     transition: background-color 0.17s ease, color 0.17s ease;
@@ -273,9 +300,14 @@ const ChatInputCont = styled.form`
     position: relative;
     font-family: "Signika", sans-serif;
     cursor: pointer;
+    &:hover {
+      transition: 400ms;
+      background-color: ${props => props.theme.teal3};
+      transform: scale(0.97);
+    }
   }
   .gifButton {
-    background-color: hsl(0, 0%, 93%);
+    background-color: ${props => props.theme.teal1};
     width: 3rem;
     height: 2rem;
     transition: background-color 0.17s ease, color 0.17s ease;
@@ -290,15 +322,20 @@ const ChatInputCont = styled.form`
     position: relative;
     font-family: "Signika", sans-serif;
     cursor: pointer;
+    &:hover {
+      transition: 400ms;
+      background-color: ${props => props.theme.teal3};
+      transform: scale(0.97);
+    }
   }
 `;
 
-const ChatInput = styled.input`
+export const ChatInput = styled.input`
   width: 80%;
   height: 20%;
   padding: 21px;
   border-radius: 20px;
-  border-color: teal;
+  border-color: ${props => props.theme.teal3};
   outline: none;
 `;
 
