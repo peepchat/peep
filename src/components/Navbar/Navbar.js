@@ -5,6 +5,7 @@ import {
   getUserInfo,
   logoutUser
 } from "../../redux/AuthReducer/AuthReducer";
+import { getGroups } from "../../redux/GroupReducer/groupReducer";
 import { connect } from "react-redux";
 import Modal from "react-awesome-modal";
 import CreateForm from "../CreateForm/CreateForm";
@@ -16,12 +17,21 @@ import Peep from "../../Logo/Peep.svg";
 export const socket = io();
 
 const Navbar = props => {
-  const { getUserInfo, nickname, user_id } = props;
+  const {
+    getUserInfo,
+    nickname,
+    user_id,
+    checkUserLoggedIn,
+    history,
+    getGroups,
+    groups
+  } = props;
 
   useEffect(() => {
-    props.checkUserLoggedIn().catch(() => props.history.push("/"));
+    checkUserLoggedIn().catch(() => history.push("/"));
     getUserInfo();
-  }, [getUserInfo]);
+    getGroups();
+  }, [getUserInfo, checkUserLoggedIn, history, getGroups]);
 
   if (props.nickname) {
     socket.emit("login", {
@@ -56,6 +66,8 @@ const Navbar = props => {
     props.history.push(`/peep/dm/profile/${props.email}`);
   };
 
+  console.log(groups);
+
   return (
     <>
       <Loader></Loader>
@@ -63,9 +75,13 @@ const Navbar = props => {
         <ChannelWrapper>
           <HomeLogo src={Peep} onClick={goToHome}></HomeLogo>
           <Underline />
-          <Channel>B</Channel>
-          <Channel>C</Channel>
-          <Channel>D</Channel>
+          {groups.map((group, index) => {
+            return (
+              <Channel key={index}>
+                <img src={group.group_img} alt="group_img"></img>
+              </Channel>
+            );
+          })}
           <PlusButton onClick={() => setVisible(true)}>+</PlusButton>
         </ChannelWrapper>
         <LogoutButtonCont>
@@ -101,7 +117,11 @@ const Navbar = props => {
             </CardTwo>
           </ModalWrapper>
         ) : modalView === "Create" ? (
-          <CreateForm viewDefault={viewDefault} />
+          <CreateForm
+            viewDefault={viewDefault}
+            setVisible={setVisible}
+            setModalView={setModalView}
+          />
         ) : modalView === "Join" ? (
           <JoinForm viewDefault={viewDefault} />
         ) : null}
@@ -114,7 +134,8 @@ function mapStateToProps(state) {
   return {
     email: state.authReducer.email,
     nickname: state.authReducer.nickname,
-    user_id: state.authReducer.user_id
+    user_id: state.authReducer.user_id,
+    groups: state.groupReducer.groups
   };
 }
 
@@ -123,7 +144,8 @@ export default connect(
   {
     getUserInfo,
     checkUserLoggedIn,
-    logoutUser
+    logoutUser,
+    getGroups
   }
 )(Navbar);
 

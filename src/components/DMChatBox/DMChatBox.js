@@ -63,7 +63,7 @@ const ChatBox = props => {
               ref={element => (messageContainerRef = element)}
             >
               <div className="imgCont">
-                {!props.userPic ? (
+                {!dm.profile_img ? (
                   <img
                     className="defaultPic"
                     src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
