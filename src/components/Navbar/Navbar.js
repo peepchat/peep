@@ -10,6 +10,8 @@ import Modal from "react-awesome-modal";
 import CreateForm from "../CreateForm/CreateForm";
 import JoinForm from "../JoinForm/JoinForm";
 import io from "socket.io-client";
+import Loader from "../Loader/Loader";
+import Peep from "../../Logo/Peep.svg";
 
 export const socket = io();
 
@@ -56,9 +58,10 @@ const Navbar = props => {
 
   return (
     <>
+      <Loader></Loader>
       <NavWrapper>
         <ChannelWrapper>
-          <Channel onClick={goToHome}>A</Channel>
+          <HomeLogo src={Peep} onClick={goToHome}></HomeLogo>
           <Underline />
           <Channel>B</Channel>
           <Channel>C</Channel>
@@ -161,6 +164,28 @@ const Channel = styled.div`
   align-items: center;
   font-size: 2rem;
   padding: 1rem;
+`;
+
+const HomeLogo = styled.img`
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
+  margin: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  padding: 0.25rem;
+  background-color: ${props => props.theme.teal2};
+  cursor: pointer;
+
+  &:hover {
+    transition: 400ms;
+    background-color: ${props => props.theme.teal3};
+    transform: scale(0.96);
+  }
 `;
 
 const LogoutButtonCont = styled.div`
