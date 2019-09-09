@@ -6,7 +6,7 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import { HashRouter as Router } from "react-router-dom";
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css?family=Signika&display=swap');
@@ -17,13 +17,22 @@ const GlobalStyle = createGlobalStyle`
   }
 
 `;
+
+const theme = {
+  teal1: "#81E6D9",
+  teal2: "#4FD1C5",
+  teal3: "#38B2AC"
+};
+
 ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      <App />
-      <GlobalStyle/>
-    </Router>
-  </Provider>,
+  <ThemeProvider theme={theme}>
+    <Provider store={store}>
+      <Router>
+        <App />
+        <GlobalStyle />
+      </Router>
+    </Provider>
+  </ThemeProvider>,
   document.getElementById("root")
 );
 
