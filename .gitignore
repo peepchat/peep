@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 .env
-.cloudkey.json
+src/cloudkey.json
 
 # testing
 /coverage
