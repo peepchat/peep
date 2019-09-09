@@ -22,6 +22,10 @@ const ChatBox = props => {
     setMsgInput(event.target.value);
   };
 
+  let messageContainerBottomRef = document.getElementById(
+    "messagesContainerBottom"
+  );
+  let messageContainerRef = document.getElementById("messagesContainer");
   // console.log(socket);
 
   useEffect(() => {
@@ -31,18 +35,42 @@ const ChatBox = props => {
       }, 65);
     });
     getDirectMessages(chat_id);
-  }, [getDirectMessages, chat_id]);
+    if (messageContainerBottomRef && messageContainerRef) {
+      if (getDirectMessages) {
+        messageContainerRef.scroll(0, 60);
+      } else {
+        messageContainerBottomRef.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [
+    getDirectMessages,
+    chat_id,
+    messageContainerRef,
+    messageContainerBottomRef
+  ]);
 
-  console.log(directMessages);
+  // console.log(directMessages);
 
   return (
     <ChatBoxWrapper>
       <ChatMessagesCont>
         {directMessages.map((dm, index) => {
           return (
-            <div className="keyContainer" key={index}>
+            <div
+              className="keyContainer"
+              key={index}
+              ref={element => (messageContainerRef = element)}
+            >
               <div className="imgCont">
-                <img className="avatar" src={dm.profile_img} alt="profile" />
+                {!props.userPic ? (
+                  <img
+                    className="defaultPic"
+                    src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                    alt="noprofile"
+                  />
+                ) : (
+                  <img className="avatar" src={dm.profile_img} alt="profile" />
+                )}
               </div>
               <div className="messageCont">
                 <span className="messageHeader">
@@ -53,6 +81,10 @@ const ChatBox = props => {
                 </span>
                 <p className="messageText">{dm.message} </p>
               </div>
+              <div
+                ref={element => (messageContainerBottomRef = element)}
+                id="messagesContainerBottom"
+              ></div>
             </div>
           );
         })}
@@ -99,7 +131,8 @@ function mapStateToProps(state) {
     email: state.authReducer.email,
     nickname: state.authReducer.nickname,
     profilePic: state.authReducer.profilePic,
-    directMessages: state.messagesReducer.directMessages
+    directMessages: state.messagesReducer.directMessages,
+    userPic: state.userReducer.profilePic
   };
 }
 
@@ -124,7 +157,7 @@ const ChatMessagesCont = styled.div`
   width: 100%;
   height: 90%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   position: absolute;
@@ -161,6 +194,11 @@ const ChatMessagesCont = styled.div`
       border-radius: 50%;
       justify-content: center;
       margin-right: 0.5rem;
+      .defaultPic {
+        height: 48px;
+        font-size: 1.25rem;
+        user-select: none;
+      }
       .avatar {
         height: 48px;
         font-size: 1.25rem;
