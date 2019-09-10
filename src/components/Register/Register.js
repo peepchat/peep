@@ -76,6 +76,7 @@ const LoginInput = styled.input`
   border-radius: 3px;
   border: none;
   border-bottom: solid 2px #4fd1c5;
+  outline: none;
 `;
 
 const ForgotButton = styled.button`

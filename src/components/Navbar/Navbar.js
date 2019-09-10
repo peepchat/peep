@@ -208,6 +208,11 @@ const Channel = styled.img`
   align-items: center;
   font-size: 2rem;
   cursor: pointer;
+  &:hover {
+    transition: 400ms;
+    transform: scale(0.96);
+    background-color: lightgray;
+  }
 `;
 
 const HomeLogo = styled.img`

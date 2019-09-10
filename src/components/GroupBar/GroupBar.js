@@ -4,7 +4,9 @@ import Modal from "react-awesome-modal";
 import { connect } from "react-redux";
 import {
   getGroupMembers,
-  addUser
+  addUser,
+  removeMember,
+  editGroup
 } from "../../redux/GroupReducer/groupReducer";
 import { searchUser } from "../../redux/UserReducer/userReducer";
 
@@ -12,7 +14,7 @@ const GroupBar = props => {
   const [visible, setVisible] = useState(false);
   const [search, setSearch] = useState("");
 
-  const { getGroupMembers, addUser, groupMembers } = props;
+  const { getGroupMembers, addUser, groupMembers, removeMember } = props;
 
   const id = props.match.params.group_id;
 
@@ -30,6 +32,16 @@ const GroupBar = props => {
   // console.log(groupMembers);
   // console.log(props.match.params);
   // console.log(id);
+
+  const getMember = groupMembers.filter(
+    member => member.user_id === props.user_id
+  );
+
+  let checkAdmin;
+
+  if (getMember.length > 0) {
+    checkAdmin = getMember[0].permission;
+  }
 
   return (
     <>
@@ -89,22 +101,37 @@ const GroupBar = props => {
           <Label>Members</Label>
           {groupMembers.map((member, index) => {
             return (
-              <PicNameCont
-                key={index}
-                onClick={() => {
-                  props.history.push(`/peep/dm/profile/${member.email}`);
-                }}
-              >
-                {!member.profile_img ? (
-                  <UserPic
-                    src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
-                    alt="default"
-                  />
-                ) : (
-                  <UserPic src={member.profile_img} alt="" />
-                )}
-                {member.online ? <Online /> : <Offline />}
-                <UserNickname>{member.nickname}</UserNickname>
+              <PicNameCont key={index}>
+                <PicNameOnlineCont
+                  onClick={() => {
+                    props.history.push(`/peep/dm/profile/${member.email}`);
+                  }}
+                >
+                  {!member.profile_img ? (
+                    <UserPic
+                      src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                      alt="default"
+                    />
+                  ) : (
+                    <UserPic src={member.profile_img} alt="" />
+                  )}
+                  {member.online ? <Online /> : <Offline />}
+                  <UserNickname>{member.nickname}</UserNickname>
+                </PicNameOnlineCont>
+                {checkAdmin && member.user_id !== props.user_id ? (
+                  <UserEditRemove>
+                    <button
+                      onClick={() => {
+                        removeMember(id, member.user_id);
+                        setTimeout(() => {
+                          getGroupMembers(id);
+                        }, 75);
+                      }}
+                    >
+                      <i class="material-icons">remove_circle</i>
+                    </button>
+                  </UserEditRemove>
+                ) : null}
               </PicNameCont>
             );
           })}
@@ -132,13 +159,14 @@ function mapStateToProps(state) {
     groupMembers: state.groupReducer.groupMembers,
     nickname: state.authReducer.nickname,
     profilePic: state.authReducer.profilePic,
-    users: state.userReducer.users
+    users: state.userReducer.users,
+    user_id: state.authReducer.user_id
   };
 }
 
 export default connect(
   mapStateToProps,
-  { getGroupMembers, addUser, searchUser }
+  { getGroupMembers, addUser, searchUser, editGroup, removeMember }
 )(GroupBar);
 
 const DMBarCont = styled.div`
@@ -205,7 +233,7 @@ const Offline = styled.div`
 
 const PicNameCont = styled.div`
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   flex-direction: row;
   align-items: center;
   width: 100%;
@@ -215,6 +243,40 @@ const PicNameCont = styled.div`
     transition: 200ms;
     background-color: lightgray;
   }
+
+  button {
+    display: hidden;
+    border-radius: 50%;
+    background-color: transparent;
+    color: transparent;
+    border: none;
+    outline: none;
+    text-align: center;
+  }
+  &:hover button {
+    display: block;
+    transition: 400ms;
+    color: red;
+    font-size: 1.3rem;
+  }
+`;
+
+const PicNameOnlineCont = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  width: 75%;
+  height: 100%;
+`;
+
+const UserEditRemove = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+  height: 100%;
 `;
 
 const UserPic = styled.img`

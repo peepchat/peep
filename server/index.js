@@ -78,7 +78,7 @@ app.get("/api/group/requests/pending", GC.getPendingGroupRequests);
 app.get("/api/group/requests", GC.getGroupRequests);
 app.post("/api/group/accept", GC.acceptRequest);
 app.delete("/api/group/decline/:request_id", GC.declineRequest);
-app.delete("/api/group/member/:group_id", GC.removeMember);
+app.post("/api/group/remove", GC.removeMember);
 app.get("/api/group/messages/:group_id", GC.getGroupMessages);
 app.put("/api/group/message/:message_id", GC.editGroupMessage);
 app.delete("/api/group/message/:message_id", GC.deleteGroupMessage);
