@@ -32,97 +32,98 @@ const GroupBar = props => {
   // console.log(id);
 
   return (
-    <DMBarCont>
-      <DMBarWrapper>
-        <Label>Members</Label>
-        {groupMembers.map((member, index) => {
-          return (
-            <PicNameCont
-              key={index}
-              onClick={() => {
-                props.history.push(`/peep/dm/profile/${member.email}`);
-              }}
-            >
-              {!member.profile_img ? (
-                <UserPic
-                  src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
-                  alt="default"
-                />
-              ) : (
-                <UserPic src={member.profile_img} alt="" />
-              )}
-              {member.online ? <Online /> : <Offline />}
-              <UserNickname>{member.nickname}</UserNickname>
-            </PicNameCont>
-          );
-        })}
+    <>
+      <Modal
+        visible={visible}
+        width="750"
+        height="550"
+        effect="fadeInDown"
+        onClickAway={() => setVisible(false)}
+      >
+        <SearchInputModalWrap>
+          <SearchInputModal
+            placeholder="Search..."
+            onChange={updateState}
+            value={search}
+            type="text"
+            autoComplete="off"
+          ></SearchInputModal>
+          <SearchInputModalIcon>
+            <i className="material-icons">search</i>
+          </SearchInputModalIcon>
+        </SearchInputModalWrap>
+        <UserList>
+          {search &&
+            props.users
+              .filter(user => !membersEmail.includes(user.email))
+              .map(user => {
+                return (
+                  <>
+                    <UserName
+                      onClick={() => {
+                        addUser(id, user.user_id);
+                        setTimeout(() => {
+                          getGroupMembers(id);
+                        }, 100);
+                        setVisible(false);
+                      }}
+                    >
+                      <UserItem>
+                        {user.profile_img ? (
+                          <SearchPic src={user.profile_img}></SearchPic>
+                        ) : (
+                          <i className="material-icons">person</i>
+                        )}
 
-        <button onClick={() => setVisible(true)}>Add User</button>
+                        {user.email}
+                        <i className="material-icons add-icon">person_add</i>
+                      </UserItem>
+                    </UserName>
+                  </>
+                );
+              })}
+        </UserList>
+      </Modal>
+      <DMBarCont>
+        <DMBarWrapper>
+          <Label>Members</Label>
+          {groupMembers.map((member, index) => {
+            return (
+              <PicNameCont
+                key={index}
+                onClick={() => {
+                  props.history.push(`/peep/dm/profile/${member.email}`);
+                }}
+              >
+                {!member.profile_img ? (
+                  <UserPic
+                    src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                    alt="default"
+                  />
+                ) : (
+                  <UserPic src={member.profile_img} alt="" />
+                )}
+                {member.online ? <Online /> : <Offline />}
+                <UserNickname>{member.nickname}</UserNickname>
+              </PicNameCont>
+            );
+          })}
 
-        <Modal
-          visible={visible}
-          width="750"
-          height="550"
-          effect="fadeInDown"
-          onClickAway={() => setVisible(false)}
-        >
-          <SearchInputModalWrap>
-            <SearchInputModal
-              placeholder="Search..."
-              onChange={updateState}
-              value={search}
-              type="text"
-              autoComplete="off"
-            ></SearchInputModal>
-            <SearchInputModalIcon>
-              <i className="material-icons">search</i>
-            </SearchInputModalIcon>
-          </SearchInputModalWrap>
-          <UserList>
-            {search &&
-              props.users
-                .filter(user => !membersEmail.includes(user.email))
-                .map(user => {
-                  return (
-                    <>
-                      <UserName
-                        onClick={() => {
-                          addUser(id, user.user_id);
-                          setTimeout(() => {
-                            getGroupMembers(id);
-                          }, 100);
-                          setVisible(false);
-                        }}
-                      >
-                        <UserItem>
-                          {user.profile_img ? (
-                            <SearchPic src={user.profile_img}></SearchPic>
-                          ) : (
-                            <i className="material-icons">person</i>
-                          )}
-
-                          {user.email}
-                          <i className="material-icons add-icon">person_add</i>
-                        </UserItem>
-                      </UserName>
-                    </>
-                  );
-                })}
-          </UserList>
-        </Modal>
-      </DMBarWrapper>
-      <UserBar>
-        {props.profilePic ? (
-          <UserPic src={props.profilePic} />
-        ) : (
-          <UserPic
-            src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
-            alt="default"
-          />
-        )}
-        <UserNickname>{props.nickname}</UserNickname>
-      </UserBar>
-    </DMBarCont>
+          <button onClick={() => setVisible(true)}>Add User</button>
+        </DMBarWrapper>
+        <UserBar>
+          {props.profilePic ? (
+            <UserPic src={props.profilePic} />
+          ) : (
+            <UserPic
+              src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+              alt="default"
+            />
+          )}
+          <UserNickname>{props.nickname}</UserNickname>
+        </UserBar>
+      </DMBarCont>
+    </>
   );
 };
 
