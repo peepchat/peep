@@ -4,10 +4,16 @@ import styled from "styled-components";
 import { socket } from "../Navbar/Navbar";
 import {
   getDirectMessages,
-  addDirectMessage
+  addDirectMessage,
+  populateMessage,
+  handleMessageChange,
+  deleteDirectMessage,
+  editDirectMessage
 } from "../../redux/MessagesReducer/MessagesReducer";
 import moment from "moment";
 import { FaPlusCircle, FaRegSmile } from "react-icons/fa";
+import DMPosts from "./Messages";
+import { MdGif, MdMovie, MdImage } from "react-icons/md";
 
 const ChatBox = props => {
   const [msgInput, setMsgInput] = useState("");
@@ -56,36 +62,12 @@ const ChatBox = props => {
       <ChatMessagesCont>
         {directMessages.map((dm, index) => {
           return (
-            <div
-              className="keyContainer"
-              key={index}
-              ref={element => (messageContainerRef = element)}
-            >
-              <div className="imgCont">
-                {!dm.profile_img ? (
-                  <img
-                    className="defaultPic"
-                    src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
-                    alt="noprofile"
-                  />
-                ) : (
-                  <img className="avatar" src={dm.profile_img} alt="profile" />
-                )}
-              </div>
-              <div className="messageCont">
-                <span className="messageHeader">
-                  <div className="nicknameCont">
-                    {dm.nickname}
-                    <div className="dateCont">{moment(dm.date).calendar()}</div>
-                  </div>
-                </span>
-                <p className="messageText">{dm.message} </p>
-              </div>
-              <div
-                ref={element => (messageContainerBottomRef = element)}
-                id="messagesContainerBottom"
-              ></div>
-            </div>
+            <DMPosts
+              dm={dm}
+              index={index}
+              email={props.email}
+              userPic={props.userPic}
+            />
           );
         })}
       </ChatMessagesCont>
@@ -114,12 +96,14 @@ const ChatBox = props => {
           placeholder="Message..."
         />
         <button className="gifButton">
-          <FaRegSmile />
+          <MdGif />
         </button>
-        <button className="mediaButton">
-          <FaPlusCircle />
+        <button className="imageButton">
+          <MdImage />
         </button>
-        {/* <ChatSubmit type="submit">Send</ChatSubmit> */}
+        <button className="videoButton">
+          <MdMovie />
+        </button>
       </ChatInputCont>
     </ChatBoxWrapper>
   );
@@ -138,10 +122,17 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { getDirectMessages, addDirectMessage }
+  {
+    getDirectMessages,
+    addDirectMessage,
+    editDirectMessage,
+    populateMessage,
+    handleMessageChange,
+    deleteDirectMessage
+  }
 )(ChatBox);
 
-const ChatBoxWrapper = styled.div`
+export const ChatBoxWrapper = styled.div`
   height: 100%;
   width: 100%;
   margin-left: 26rem;
@@ -153,7 +144,7 @@ const ChatBoxWrapper = styled.div`
   outline: 0;
 `;
 
-const ChatMessagesCont = styled.div`
+export const ChatMessagesCont = styled.div`
   width: 100%;
   height: 90%;
   display: flex;
@@ -177,9 +168,73 @@ const ChatMessagesCont = styled.div`
     text-decoration: none;
     padding: 1em !important;
     color: black;
-    /* border-top: 2px solid hsl(0, 0%, 93%); */
     white-space: pre-line;
     overflow-wrap: break-word;
+    .editHover {
+      display: flex;
+      justify-content: flex-end;
+
+      width: 50%;
+      height: 100%;
+      color: transparent;
+      font-size: 11px;
+      background: transparent;
+
+      .hiddenDiv {
+        color: black;
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+        .escButton {
+          color: ${props => props.theme.teal2};
+          background: transparent;
+          outline: none;
+          border: none;
+          &:hover {
+            transition: 300ms;
+            background-color: ${props => props.theme.teal1};
+            transform: scale(0.97);
+          }
+        }
+        .hiddenEdit {
+          color: ${props => props.theme.teal1};
+          background: transparent;
+          outline: none;
+          border: none;
+          &:hover {
+            transition: 300ms;
+            background-color: ${props => props.theme.teal3};
+            transform: scale(0.97);
+          }
+        }
+        .hiddenDelete {
+          color: red;
+          background: transparent;
+          outline: none;
+          border: none;
+          &:hover {
+            transition: 300ms;
+            transform: scale(0.97);
+          }
+        }
+      }
+      .editIcon {
+        display: flex;
+        justify-content: flex-end;
+        height: 100%;
+        width: 50%;
+        color: transparent;
+        font-size: 11px;
+        background: transparent;
+        outline: none;
+        border: none;
+        &:hover {
+          transition: 200ms;
+          color: ${props => props.theme.teal3};
+          transform: scale(1.01);
+        }
+      }
+    }
     .imgCont {
       width: 40px;
       height: 40px;
@@ -193,7 +248,7 @@ const ChatMessagesCont = styled.div`
       user-select: none;
       border-radius: 50%;
       justify-content: center;
-      margin-right: 0.5rem;
+      margin-right: 0.7rem;
       .defaultPic {
         height: 48px;
         font-size: 1.25rem;
@@ -211,6 +266,22 @@ const ChatMessagesCont = styled.div`
       flex: 1 1 auto;
       min-width: 0;
       color: black !important;
+      .messageEdit {
+        .messageInput {
+        }
+        .saveEdit {
+          color: ${props => props.theme.teal1};
+          background: transparent;
+          outline: none;
+          border: none;
+          &:hover {
+            transition: 400ms;
+            background-color: ${props => props.theme.teal3};
+            transform: scale(0.97);
+          }
+        }
+      }
+
       .messageText {
         font-size: 0.875rem;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -226,6 +297,7 @@ const ChatMessagesCont = styled.div`
         line-height: 1.5;
         letter-spacing: 0.00938em;
         margin: 0;
+
         .nicknameCont {
           font-size: 1rem;
           font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -245,7 +317,7 @@ const ChatMessagesCont = styled.div`
   }
 `;
 
-const ChatInputCont = styled.form`
+export const ChatInputCont = styled.form`
   width: 100%;
   height: 10%;
   display: flex;
@@ -257,8 +329,8 @@ const ChatInputCont = styled.form`
   bottom: 0;
   left: 0;
   right: 0;
-  .mediaButton {
-    background-color: hsl(0, 0%, 93%);
+  .imageButton {
+    background-color: ${props => props.theme.teal1};
     width: 3rem;
     height: 2rem;
     transition: background-color 0.17s ease, color 0.17s ease;
@@ -272,10 +344,39 @@ const ChatInputCont = styled.form`
     padding: 2px 10px;
     position: relative;
     font-family: "Signika", sans-serif;
+    outline: none;
     cursor: pointer;
+    &:hover {
+      transition: 400ms;
+      background-color: ${props => props.theme.teal3};
+      transform: scale(0.97);
+    }
+  }
+  .videoButton {
+    background-color: ${props => props.theme.teal1};
+    width: 3rem;
+    height: 2rem;
+    transition: background-color 0.17s ease, color 0.17s ease;
+    box-sizing: border-box;
+    background: transparent;
+    border: none;
+    border-radius: 3px;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 16px;
+    padding: 2px 10px;
+    position: relative;
+    font-family: "Signika", sans-serif;
+    outline: none;
+    cursor: pointer;
+    &:hover {
+      transition: 400ms;
+      background-color: ${props => props.theme.teal3};
+      transform: scale(0.97);
+    }
   }
   .gifButton {
-    background-color: hsl(0, 0%, 93%);
+    background-color: ${props => props.theme.teal1};
     width: 3rem;
     height: 2rem;
     transition: background-color 0.17s ease, color 0.17s ease;
@@ -289,16 +390,22 @@ const ChatInputCont = styled.form`
     padding: 2px 10px;
     position: relative;
     font-family: "Signika", sans-serif;
+    outline: none;
     cursor: pointer;
+    &:hover {
+      transition: 400ms;
+      background-color: ${props => props.theme.teal3};
+      transform: scale(0.97);
+    }
   }
 `;
 
-const ChatInput = styled.input`
+export const ChatInput = styled.input`
   width: 80%;
   height: 20%;
   padding: 21px;
   border-radius: 20px;
-  border-color: teal;
+  border-color: ${props => props.theme.teal3};
   outline: none;
 `;
 
