@@ -3,8 +3,104 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { updateState, loginUser } from "../../redux/AuthReducer/AuthReducer";
 import { Link } from "react-router-dom";
+import Peep from "../../Logo/Peep-inverted.svg";
+
+const Login = props => {
+  const [error, setError] = useState(false);
+
+  const handleChange = event => {
+    props.updateState({ [event.target.name]: event.target.value });
+    console.log(props.email);
+  };
+
+  const handleLogin = event => {
+    event.preventDefault();
+    props
+      .loginUser(props.email, props.password)
+      .then(() => {
+        props.history.push(`/peep/dm/profile/${props.email}`);
+      })
+      .catch(() => setError(true));
+  };
+
+  return (
+    <>
+      <Background></Background>
+      <Logo src={Peep} alt="logo"></Logo>
+      <CenterWrapper>
+        <LoginBox>
+          <Title>Welcome Back</Title>
+          <Subtitle>Time to use peep!</Subtitle>
+          <form style={formStyle} type="submit" onSubmit={handleLogin}>
+            <InputBox>
+              <div className="loginMargin">
+                <LoginH5>Email</LoginH5>
+              </div>
+              <LoginInput onChange={handleChange} name="email" />
+            </InputBox>
+            <br />
+            <InputBox>
+              <div className="loginMargin">
+                <LoginH5>Password</LoginH5>
+              </div>
+              <LoginInput
+                onChange={handleChange}
+                name="password"
+                type="password"
+              />
+            </InputBox>
+            <ForgotButton>
+              <ForgotDiv>Forgot your password?</ForgotDiv>
+            </ForgotButton>
+            <LoginButton type="submit" onClick={handleLogin}>
+              <LoginDiv>Login</LoginDiv>
+            </LoginButton>
+            {error ? <WrongInfo>Wrong username & password</WrongInfo> : null}
+            <ForgotButton>
+              <Link to="/register">
+                <ForgotDiv>
+                  <span className="needP">Need an account?</span> Register
+                </ForgotDiv>
+              </Link>
+            </ForgotButton>
+          </form>
+        </LoginBox>
+      </CenterWrapper>
+    </>
+  );
+};
+
+const mapStateToProps = state => {
+  return {
+    email: state.authReducer.email,
+    nickname: state.authReducer.nickname,
+    password: state.authReducer.password
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { updateState, loginUser }
+)(Login);
 
 //---start-styles--
+
+const Background = styled.div`
+  position: fixed;
+  width: 2000px;
+  height: 1500px;
+  transform: skewX(-55deg) translateX(-1450px);
+  background-color: ${props => props.theme.teal2};
+  z-index: -1;
+`;
+
+const Logo = styled.img`
+  position: fixed;
+  height: 15rem;
+  width: auto;
+  left: 40px;
+  top: 40px;
+`;
 
 const CenterWrapper = styled.div`
   width: 100%;
@@ -14,8 +110,6 @@ const CenterWrapper = styled.div`
   justify-content: center;
   align-content: center;
   align-items: center;
-  background: url("https://discordapp.com/assets/fd91131ea693096d6be5e8aa99d18f9e.jpg")
-    no-repeat fixed center;
 `;
 const LoginBox = styled.div`
   width: 20rem;
@@ -151,77 +245,3 @@ const WrongInfo = styled.p`
   color: red;
 `;
 //---end-styles/
-
-const Login = props => {
-  const [error, setError] = useState(false);
-
-  const handleChange = event => {
-    props.updateState({ [event.target.name]: event.target.value });
-    console.log(props.email);
-  };
-
-  const handleLogin = event => {
-    event.preventDefault();
-    props
-      .loginUser(props.email, props.password)
-      .then(() => {
-        props.history.push(`/peep/dm/profile/${props.email}`);
-      })
-      .catch(() => setError(true));
-  };
-
-  return (
-    <CenterWrapper>
-      <LoginBox>
-        <Title>Welcome Back</Title>
-        <Subtitle>Time to use peep!</Subtitle>
-        <form style={formStyle} type="submit" onSubmit={handleLogin}>
-          <InputBox>
-            <div className="loginMargin">
-              <LoginH5>Email</LoginH5>
-            </div>
-            <LoginInput onChange={handleChange} name="email" />
-          </InputBox>
-          <br />
-          <InputBox>
-            <div className="loginMargin">
-              <LoginH5>Password</LoginH5>
-            </div>
-            <LoginInput
-              onChange={handleChange}
-              name="password"
-              type="password"
-            />
-          </InputBox>
-          <ForgotButton>
-            <ForgotDiv>Forgot your password?</ForgotDiv>
-          </ForgotButton>
-          <LoginButton type="submit" onClick={handleLogin}>
-            <LoginDiv>Login</LoginDiv>
-          </LoginButton>
-          {error ? <WrongInfo>Wrong username & password</WrongInfo> : null}
-          <ForgotButton>
-            <Link to="/register">
-              <ForgotDiv>
-                <span className="needP">Need an account?</span> Register
-              </ForgotDiv>
-            </Link>
-          </ForgotButton>
-        </form>
-      </LoginBox>
-    </CenterWrapper>
-  );
-};
-
-const mapStateToProps = state => {
-  return {
-    email: state.authReducer.email,
-    nickname: state.authReducer.nickname,
-    password: state.authReducer.password
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { updateState, loginUser }
-)(Login);
