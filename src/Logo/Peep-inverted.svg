@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#4FD1C5;}
+</style>
+<g id="BG">
+	<circle class="st0" cx="250" cy="250" r="249.5"/>
+</g>
+<g id="Logo">
+	<path class="st1" d="M354.7,98H90v222v82l47-82h217.7c55.9,0,101.3-49.7,101.3-111C456,147.7,410.7,98,354.7,98z"/>
+	<g>
+		<rect x="156.9" y="141.1" class="st0" width="141.5" height="28.4"/>
+		<ellipse class="st0" cx="298.4" cy="155.3" rx="14.2" ry="14.2"/>
+	</g>
+	<g>
+		<rect x="156.9" y="192.7" class="st0" width="216.9" height="28.4"/>
+		<ellipse class="st0" cx="371.8" cy="207" rx="14.2" ry="14.2"/>
+	</g>
+	<g>
+		<rect x="156.9" y="244.4" class="st0" width="181.8" height="28.4"/>
+		<ellipse class="st0" cx="338.7" cy="258.6" rx="14.2" ry="14.2"/>
+	</g>
+</g>
+</svg>

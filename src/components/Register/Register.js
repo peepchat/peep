@@ -7,6 +7,24 @@ import {
   resetFields,
   updateState
 } from "./../../redux/AuthReducer/AuthReducer";
+import Peep from "../../Logo/Peep-inverted.svg";
+
+const Background = styled.div`
+  position: absolute;
+  width: 2000px;
+  height: 1500px;
+  transform: skewX(-55deg) translateX(-1450px);
+  background-color: ${props => props.theme.teal2};
+  z-index: -1;
+`;
+
+const Logo = styled.img`
+  position: absolute;
+  height: 15rem;
+  width: auto;
+  left: 40px;
+  top: 40px;
+`;
 
 const CenterWrapper = styled.div`
   width: 100%;
@@ -16,8 +34,6 @@ const CenterWrapper = styled.div`
   justify-content: center;
   align-content: center;
   align-items: center;
-  background: url("https://discordapp.com/assets/fd91131ea693096d6be5e8aa99d18f9e.jpg")
-    no-repeat fixed center;
 `;
 const LoginBox = styled.div`
   width: 20rem;
@@ -185,50 +201,54 @@ const Register = props => {
   };
 
   return (
-    <CenterWrapper>
-      <LoginBox>
-        <Title>Create an account</Title>
-        <Subtitle>Time to use peep!</Subtitle>
-        <form style={formStyle} type="submit" onSubmit={handleRegister}>
-          <InputBox>
-            <div className="loginMargin">
-              <LoginH5>Email</LoginH5>
-            </div>
-            <LoginInput onChange={handleChange} name="email" />
-          </InputBox>
-          <br />
-          <InputBox>
-            <div className="loginMargin">
-              <LoginH5>Nickname</LoginH5>
-            </div>
-            <LoginInput onChange={handleChange} name="nickname" />
-          </InputBox>
-          <br />
-          <InputBox>
-            <div className="loginMargin">
-              {" "}
-              <LoginH5>Password</LoginH5>
-            </div>
-            <LoginInput
-              onChange={handleChange}
-              name="password"
-              type="password"
-            />
-          </InputBox>
-          <br />
-          <LoginButton type="submit">
-            <LoginDiv>Register</LoginDiv>
-          </LoginButton>
-          <Link to="/">
-            <ForgotButton onClick={clickGoBack}>
-              <ForgotDiv>
-                <span className="needP">Already have an account?</span> Login
-              </ForgotDiv>
-            </ForgotButton>
-          </Link>
-        </form>
-      </LoginBox>
-    </CenterWrapper>
+    <>
+      <Background></Background>
+      <Logo src={Peep} alt="logo"></Logo>
+      <CenterWrapper>
+        <LoginBox>
+          <Title>Create an account</Title>
+          <Subtitle>Time to use peep!</Subtitle>
+          <form style={formStyle} type="submit" onSubmit={handleRegister}>
+            <InputBox>
+              <div className="loginMargin">
+                <LoginH5>Email</LoginH5>
+              </div>
+              <LoginInput onChange={handleChange} name="email" />
+            </InputBox>
+            <br />
+            <InputBox>
+              <div className="loginMargin">
+                <LoginH5>Nickname</LoginH5>
+              </div>
+              <LoginInput onChange={handleChange} name="nickname" />
+            </InputBox>
+            <br />
+            <InputBox>
+              <div className="loginMargin">
+                {" "}
+                <LoginH5>Password</LoginH5>
+              </div>
+              <LoginInput
+                onChange={handleChange}
+                name="password"
+                type="password"
+              />
+            </InputBox>
+            <br />
+            <LoginButton type="submit">
+              <LoginDiv>Register</LoginDiv>
+            </LoginButton>
+            <Link to="/">
+              <ForgotButton onClick={clickGoBack}>
+                <ForgotDiv>
+                  <span className="needP">Already have an account?</span> Login
+                </ForgotDiv>
+              </ForgotButton>
+            </Link>
+          </form>
+        </LoginBox>
+      </CenterWrapper>
+    </>
   );
 };
 
