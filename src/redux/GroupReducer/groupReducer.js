@@ -105,7 +105,7 @@ export const declineRequest = request_id => {
 };
 
 export const removeMember = (group_id, user_id) => {
-  axios.delete(`/api/group/member/${group_id}`, { user_id });
+  axios.post(`/api/group/remove`, { user_id, group_id });
   return {
     type: REMOVE_MEMBER
   };
