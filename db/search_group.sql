@@ -1,2 +1,2 @@
-SELECT * FROM peep_users
+SELECT * FROM peep_groups
 WHERE group_name ILIKE $1;

@@ -107,7 +107,7 @@ const acceptRequest = async (req, res) => {
 
 const declineRequest = async (req, res) => {
   const db = req.app.get("db");
-  const { request_id } = req.body;
+  const { request_id } = req.params;
   db.remove_group_request([request_id]);
   res.sendStatus(200);
 };

@@ -32,7 +32,7 @@ export default (
           <Route path="/peep/dm" component={DMBar} />
           <Route exact path="/peep/dm/profile/:email" component={Profile} />
           <Route exact path="/peep/dm/:chat_id" component={DMChatBox} />
-          <Route path="/peep/group" component={GroupBar} />
+          <Route path="/peep/group/:group_id" component={GroupBar} />
           <Route exact path="/peep/group/:group_id" component={GroupChatBox} />
         </FlexWrapper>
       )}
