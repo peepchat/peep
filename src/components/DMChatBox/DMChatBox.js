@@ -12,7 +12,7 @@ import {
 } from "../../redux/MessagesReducer/MessagesReducer";
 import moment from "moment";
 import { FaPlusCircle, FaRegSmile } from "react-icons/fa";
-import DMPosts from "./DMPosts";
+import DMPosts from "./Messages";
 import { MdGif, MdMovie, MdImage } from "react-icons/md";
 
 const ChatBox = props => {

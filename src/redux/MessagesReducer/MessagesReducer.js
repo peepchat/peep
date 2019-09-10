@@ -36,7 +36,7 @@ export const addDirectMessage = message => {
   };
 };
 export const editDirectMessage = (message_id, message) => {
-  axios.post(`/api/directMessages/${message_id}`, { message });
+  axios.put(`/api/directMessages/${message_id}`, { message });
   return {
     type: EDIT_DIRECT_MESSAGE
   };

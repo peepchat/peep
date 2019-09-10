@@ -18,7 +18,7 @@ import {
   getGroupMessages
 } from "../../redux/MessagesReducer/MessagesReducer";
 
-const DMPosts = props => {
+const Messages = props => {
   const [messageToggle, setMessageToggle] = useState(false);
   const [editStatus, setEditstatus] = useState(false);
 
@@ -36,9 +36,10 @@ const DMPosts = props => {
   const onClickSave = () => {
     setEditstatus(false);
     setMessageToggle(false)
-    props.editDirectMessage(props.edit_Message);
-    getDirectMessages();
-  
+    props.editDirectMessage(props.dm.message_id, props.edit_Message);
+    setTimeout(() => {
+      getDirectMessages(props.dm.chat_id);
+    }, 75)
   };
   const handleMessageChange = event => {
     props.handleMessageChange(event.target.value);
@@ -68,7 +69,7 @@ const DMPosts = props => {
             <input
               className="messageInput"
               onChange={handleMessageChange}
-              value={props.dm.message}
+              value={props.edit_Message}
               type="text"
             ></input>
             <button onClick={onClickSave} className="saveEdit">
@@ -110,21 +111,21 @@ const DMPosts = props => {
     </div>
   );
 };
-// function mapStateToProps(state) {
-//   return {
-   
-//   };
-// }
+function mapStateToProps(state) {
+  return {
+   edit_Message:state.messagesReducer.edit_Message,
+  };
+}
 
 export default connect(
- null,
+ mapStateToProps,
   {
     editDirectMessage,
     populateMessage,
     handleMessageChange,
     deleteDirectMessage
   }
-)(DMPosts);
+)(Messages);
 
 export const ChatMessagesCont = styled.div`
   width: 100%;
