@@ -114,8 +114,7 @@ const declineRequest = async (req, res) => {
 
 const removeMember = async (req, res) => {
   const db = req.app.get("db");
-  const { group_id } = req.params;
-  const { user_id } = req.body;
+  const { user_id, group_id } = req.body;
   db.remove_group_member([user_id, group_id]);
   res.sendStatus(200);
 };
