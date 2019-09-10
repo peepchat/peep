@@ -16,6 +16,11 @@ import {
   addFriend,
   deleteFriend
 } from "../../redux/FriendsReducer/friendsReducer";
+import {
+  getGroupRequests,
+  acceptRequest,
+  declineRequest
+} from "../../redux/GroupReducer/groupReducer";
 import { connect } from "react-redux";
 import {
   FaEdit,
@@ -51,14 +56,23 @@ const Profile = props => {
     setImageurl("");
   };
 
-  const { getUserInfo, getFriendsData, getRequests, editNickname } = props;
+  const {
+    getUserInfo,
+    getFriendsData,
+    getRequests,
+    editNickname,
+    getGroupRequests,
+    acceptRequest,
+    declineRequest
+  } = props;
   const { email } = props.match.params;
 
   useEffect(() => {
     getUserInfo();
     getFriendsData(email);
     getRequests();
-  }, [getUserInfo, getFriendsData, getRequests, email]);
+    getGroupRequests();
+  }, [getUserInfo, getFriendsData, getRequests, email, getGroupRequests]);
 
   const filterFriendsArray = props.friends.filter(
     user => user.email === props.match.params.email
@@ -83,7 +97,7 @@ const Profile = props => {
 
   const onClickSave = () => {
     setEditstatus(false);
-    props.editNickname(props.edit_Nickname);
+    editNickname(props.edit_Nickname);
     getFriendsData(email);
     getUserInfo();
   };
@@ -256,8 +270,59 @@ const Profile = props => {
                 })}
               </RequestDiv>
               <RequestDiv>
-                {" "}
                 <ProfileH2> Group Requests </ProfileH2>
+                {props.groupRequests.map((request, i) => {
+                  return (
+                    <div className="pendingMapDiv" key={i}>
+                      <div className="pendingAlign">
+                        {!request.profile_img ? (
+                          <ProfilePic
+                            src="https://res.cloudinary.com/john-personal-proj/image/upload/v1566234111/mello/dyx1e5pal1vn5nmqmzjs.png"
+                            alt="default"
+                          />
+                        ) : (
+                          <ProfilePic src={request.profile_img} alt="" />
+                        )}
+                        <div className="pendingP">
+                          <p className="nicknameP">
+                            Request from {request.nickname} to join{" "}
+                            {request.group_name}
+                          </p>
+                          <br />
+                          <p>{request.email}</p>
+                        </div>
+                      </div>
+                      <br />
+                      <button
+                        className="acceptRequestBtn"
+                        onClick={() => {
+                          acceptRequest(
+                            request.request_id,
+                            request.user_id,
+                            request.group_id
+                          );
+                          setTimeout(() => {
+                            getGroupRequests();
+                          }, 75);
+                        }}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        className="acceptRequestBtn"
+                        onClick={() => {
+                          declineRequest(request.request_id);
+                          setTimeout(() => {
+                            getGroupRequests();
+                          }, 75);
+                        }}
+                      >
+                        Decline
+                      </button>
+                      <br />
+                    </div>
+                  );
+                })}
               </RequestDiv>
             </RequestsWrapper>
           ) : null}
@@ -283,6 +348,7 @@ function mapStateToProps(state) {
     pending: state.friendsReducer.pending,
     requests: state.friendsReducer.requests,
     edit_Nickname: state.authReducer.edit_Nickname,
+    groupRequests: state.groupReducer.groupRequests,
     loading: state.userReducer.loading
   };
 }
@@ -301,7 +367,10 @@ export default connect(
     deleteFriend,
     editNickname,
     populateNickname,
-    handleNicknameChange
+    handleNicknameChange,
+    getGroupRequests,
+    acceptRequest,
+    declineRequest
   }
 )(Profile);
 

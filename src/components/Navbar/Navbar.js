@@ -5,7 +5,10 @@ import {
   getUserInfo,
   logoutUser
 } from "../../redux/AuthReducer/AuthReducer";
-import { getGroups } from "../../redux/GroupReducer/groupReducer";
+import {
+  getGroups,
+  getGroupPending
+} from "../../redux/GroupReducer/groupReducer";
 import { connect } from "react-redux";
 import Modal from "react-awesome-modal";
 import CreateForm from "../CreateForm/CreateForm";
@@ -24,14 +27,17 @@ const Navbar = props => {
     checkUserLoggedIn,
     history,
     getGroups,
-    groups
+    groups,
+    getGroupPending,
+    groupPending
   } = props;
 
   useEffect(() => {
     checkUserLoggedIn().catch(() => history.push("/"));
     getUserInfo();
     getGroups();
-  }, [getUserInfo, checkUserLoggedIn, history, getGroups]);
+    getGroupPending();
+  }, [getUserInfo, checkUserLoggedIn, history, getGroups, getGroupPending]);
 
   if (props.nickname) {
     socket.emit("login", {
@@ -42,6 +48,11 @@ const Navbar = props => {
 
   const [visible, setVisible] = useState(false);
   const [modalView, setModalView] = useState("");
+
+  const groupNames = groups.map(group => group.group_name.toLowerCase());
+  const pendingGroupRequests = groupPending.map(group =>
+    group.group_name.toLowerCase()
+  );
 
   const viewCreate = () => {
     setModalView("Create");
@@ -66,8 +77,6 @@ const Navbar = props => {
     props.history.push(`/peep/dm/profile/${props.email}`);
   };
 
-  console.log(groups);
-
   return (
     <>
       <Loader></Loader>
@@ -77,9 +86,14 @@ const Navbar = props => {
           <Underline />
           {groups.map((group, index) => {
             return (
-              <Channel key={index}>
-                <img src={group.group_img} alt="group_img"></img>
-              </Channel>
+              <Channel
+                src={group.group_img}
+                alt="group_img"
+                key={index}
+                onClick={() => {
+                  props.history.push(`/peep/group/${group.group_id}`);
+                }}
+              ></Channel>
             );
           })}
           <PlusButton onClick={() => setVisible(true)}>+</PlusButton>
@@ -123,7 +137,13 @@ const Navbar = props => {
             setModalView={setModalView}
           />
         ) : modalView === "Join" ? (
-          <JoinForm viewDefault={viewDefault} />
+          <JoinForm
+            viewDefault={viewDefault}
+            groupNames={groupNames}
+            setModalView={setModalView}
+            setVisible={setVisible}
+            pendingGroupRequests={pendingGroupRequests}
+          />
         ) : null}
       </Modal>
     </>
@@ -135,7 +155,8 @@ function mapStateToProps(state) {
     email: state.authReducer.email,
     nickname: state.authReducer.nickname,
     user_id: state.authReducer.user_id,
-    groups: state.groupReducer.groups
+    groups: state.groupReducer.groups,
+    groupPending: state.groupReducer.groupPending
   };
 }
 
@@ -145,7 +166,8 @@ export default connect(
     getUserInfo,
     checkUserLoggedIn,
     logoutUser,
-    getGroups
+    getGroups,
+    getGroupPending
   }
 )(Navbar);
 
@@ -174,7 +196,7 @@ const ChannelWrapper = styled.div`
   flex-direction: column;
 `;
 
-const Channel = styled.div`
+const Channel = styled.img`
   height: 60px;
   width: 60px;
   border-radius: 50%;
@@ -185,7 +207,7 @@ const Channel = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 2rem;
-  padding: 1rem;
+  cursor: pointer;
 `;
 
 const HomeLogo = styled.img`
@@ -231,6 +253,7 @@ const LogoutButton = styled.button`
   bottom: 0;
   left: 0;
   border: none;
+  cursor: pointer;
   i {
     font-size: 2rem;
     text-align: center;
@@ -257,6 +280,7 @@ const PlusButton = styled.div`
   font-size: 2rem;
   padding: 1rem;
   background-color: #81e6d9;
+  cursor: pointer;
   color: grey;
   &:hover {
     transition: 400ms;

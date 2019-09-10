@@ -315,7 +315,7 @@ const UserItem = styled.div`
   }
 `;
 
-const Online = styled.div`
+export const Online = styled.div`
   width: 12px;
   height: 12px;
   border: solid 1px lightgray;
@@ -324,7 +324,7 @@ const Online = styled.div`
   margin-right: 0.5rem;
 `;
 
-const Offline = styled.div`
+export const Offline = styled.div`
   width: 12px;
   height: 12px;
   border: solid 1px lightgray;

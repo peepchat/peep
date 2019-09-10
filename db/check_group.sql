@@ -1,0 +1,1 @@
+select * from peep_groups where group_name = $1;

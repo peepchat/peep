@@ -91,14 +91,14 @@ export const getGroupRequests = () => {
 };
 
 export const acceptRequest = (request_id, user_id, group_id) => {
-  axios.post("/api/group/request/accept", { request_id, user_id, group_id });
+  axios.post("/api/group/accept/", { request_id, user_id, group_id });
   return {
     type: ACCEPT_REQUEST
   };
 };
 
 export const declineRequest = request_id => {
-  axios.delete(`/api/group/request/decline`, { request_id });
+  axios.delete(`/api/group/decline/${request_id}`);
   return {
     type: DECLINE_REQUEST
   };
@@ -159,6 +159,8 @@ export function groupReducer(state = initialState, action) {
       return { ...state, loading: true };
     case `${GET_GROUP_MESSAGES}_FULFILLED`:
       return { ...state, loading: false, groupMessages: payload.data };
+    case `${SEARCH_GROUPS}_FULFILLED`:
+      return { ...state, loading: false, searchGroups: payload.data };
     default:
       return state;
   }
