@@ -90,7 +90,6 @@ const Profile = props => {
     filterPendingUser = filterPending[0];
   }
   const onClickEdit = nickname => {
-    console.log(nickname);
     setEditstatus(true);
     props.populateNickname(nickname);
   };

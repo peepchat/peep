@@ -4,6 +4,9 @@ const initialState = {
   loading: false,
   searchGroups: [],
   groups: [],
+  groupName: "",
+  groupPic: "",
+  editGroupName: "",
   groupMembers: [],
   groupPending: [],
   groupRequests: [],
@@ -26,6 +29,9 @@ const GET_GROUP_MESSAGES = "GET_GROUP_MESSAGES";
 const EDIT_GROUP_MESSAGE = "EDIT_GROUP_MESSAGE";
 const DELETE_GROUP_MESSAGE = "DELETE_GROUP_MESSAGE";
 const DELETE_GROUP = "DELETE_GROUP";
+const GET_GROUP_NAME = "GET_GROUP_NAME";
+const HANDLE_GROUP_NAME_CHANGE = "HANDLE_GROUP_NAME_CHANGE";
+const POPULATE_GROUP_NAME = "POPULATE_GROUP_NAME";
 
 export const createGroup = (group_name, group_img) => {
   axios.post("/api/group", { group_name, group_img });
@@ -35,7 +41,7 @@ export const createGroup = (group_name, group_img) => {
 };
 
 export const editGroup = (group_id, group_name, group_img) => {
-  axios.post(`/api/group/${group_id}`, { group_name, group_img });
+  axios.put(`/api/group/${group_id}`, { group_name, group_img });
   return {
     type: EDIT_GROUP
   };
@@ -139,6 +145,27 @@ export const deleteGroup = group_id => {
   };
 };
 
+export const getGroupName = group_id => {
+  return {
+    type: GET_GROUP_NAME,
+    payload: axios.get(`/api/groupname/${group_id}`)
+  };
+};
+
+export const handleGroupNameChange = event => {
+  return {
+    type: HANDLE_GROUP_NAME_CHANGE,
+    payload: event.target.value
+  };
+};
+
+export const populateGroupName = groupname => {
+  return {
+    type: POPULATE_GROUP_NAME,
+    payload: groupname
+  };
+};
+
 export function groupReducer(state = initialState, action) {
   const { type, payload } = action;
 
@@ -161,6 +188,20 @@ export function groupReducer(state = initialState, action) {
       return { ...state, loading: false, groupMessages: payload.data };
     case `${SEARCH_GROUPS}_FULFILLED`:
       return { ...state, loading: false, searchGroups: payload.data };
+    case `${GET_GROUP_NAME}_PENDING`:
+      return { ...state, loading: true };
+    case `${GET_GROUP_NAME}_FULFILLED`:
+      console.log(payload.data);
+      return {
+        ...state,
+        loading: false,
+        groupName: payload.data[0].group_name,
+        groupPic: payload.data[0].group_img
+      };
+    case HANDLE_GROUP_NAME_CHANGE:
+      return { ...state, editGroupName: payload };
+    case POPULATE_GROUP_NAME:
+      return { ...state, editGroupName: payload };
     default:
       return state;
   }

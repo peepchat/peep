@@ -165,6 +165,14 @@ const deleteGroup = (req, res) => {
   res.sendStatus(200);
 };
 
+const getGroupName = async (req, res) => {
+  const db = req.app.get("db");
+  const { group_id } = req.params;
+
+  const results = await db.get_group_name([group_id]);
+  res.status(200).send(results);
+};
+
 module.exports = {
   createGroup,
   editGroup,
@@ -181,5 +189,6 @@ module.exports = {
   getGroupMessages,
   deleteGroupMessage,
   deleteGroup,
-  editGroupMessage
+  editGroupMessage,
+  getGroupName
 };

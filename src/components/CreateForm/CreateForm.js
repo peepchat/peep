@@ -158,8 +158,8 @@ const HeadSecondDivChildren = styled.div`
   }
 
   img {
-    width: 80px;
-    height: 80px;
+    width: 128px;
+    height: 128px;
     border-radius: 50%;
     border: solid 1px lightgray;
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
