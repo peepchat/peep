@@ -14,8 +14,7 @@ import {
   populateMessage,
   handleMessageChange,
   deleteDirectMessage,
-  getDirectMessages,
-  getGroupMessages
+  getDirectMessages
 } from "../../redux/MessagesReducer/MessagesReducer";
 
 const Messages = props => {
@@ -27,7 +26,7 @@ const Messages = props => {
   };
   const closeMessageToggle = () => {
     setMessageToggle(false);
-    setEditstatus(false)
+    setEditstatus(false);
   };
 
   const onClickEdit = message => {
@@ -36,11 +35,11 @@ const Messages = props => {
   };
   const onClickSave = () => {
     setEditstatus(false);
-    setMessageToggle(false)
+    setMessageToggle(false);
     props.editDirectMessage(props.dm.message_id, props.edit_Message);
     setTimeout(() => {
       getDirectMessages(props.dm.chat_id);
-    }, 75)
+    }, 75);
   };
   const handleMessageChange = event => {
     props.handleMessageChange(event.target.value);
@@ -74,7 +73,7 @@ const Messages = props => {
               type="text"
             ></input>
             <button onClick={onClickSave} className="saveEdit">
-              <FaCheck /> 
+              <FaCheck />
             </button>
           </div>
         ) : (
@@ -84,29 +83,31 @@ const Messages = props => {
       {props.email === props.dm.email ? (
         <div className="editHover">
           <button className="editIcon" onClick={openMessageToggle}>
-            <FaEllipsisV /> 
+            <FaEllipsisV />
           </button>
           {messageToggle === true ? (
             <div className="hiddenDiv">
               <button onClick={closeMessageToggle} className="escButton">
-                <FaEllipsisH /> 
+                <FaEllipsisH />
               </button>
 
               <button
                 onClick={() => onClickEdit(props.dm.message)}
                 className="hiddenEdit"
               >
-                <FaRegEdit /> 
+                <FaRegEdit />
               </button>
 
-              <button onClick={() => {
-                      props.deleteDirectMessage(props.dm.message_id);
-                      setTimeout(() => {
-                        getDirectMessages(props.dm.chat_id);
-                      }, 75)
-                      
-                    }} className="hiddenDelete">
-                <FaRegWindowClose /> 
+              <button
+                onClick={() => {
+                  props.deleteDirectMessage(props.dm.message_id);
+                  setTimeout(() => {
+                    getDirectMessages(props.dm.chat_id);
+                  }, 75);
+                }}
+                className="hiddenDelete"
+              >
+                <FaRegWindowClose />
               </button>
             </div>
           ) : null}
@@ -117,12 +118,12 @@ const Messages = props => {
 };
 function mapStateToProps(state) {
   return {
-   edit_Message:state.messagesReducer.edit_Message,
+    edit_Message: state.messagesReducer.edit_Message
   };
 }
 
 export default connect(
- mapStateToProps,
+  mapStateToProps,
   {
     editDirectMessage,
     populateMessage,
