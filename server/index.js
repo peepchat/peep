@@ -131,6 +131,10 @@ io.on("connection", socket => {
     await io.to(room).emit("refresh-chat-message");
   });
 
+  socket.on("refresh", () => {
+    io.to(room).emit("refresh-chat-message");
+  });
+
   socket.on("group-message", async data => {
     const { message, group_id, user_id, gif_url, img_url, video_url } = data;
     await database.add_group_message([
