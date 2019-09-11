@@ -54,7 +54,7 @@ export const handleMessageChange = message => {
   };
 };
 export const deleteDirectMessage = message_id => {
-  axios.delete(`"/api/directMessages/${message_id}`);
+  axios.delete(`/api/directMessage/${message_id}`);
   return {
     type: DELETE_DIRECT_MESSAGE
   };

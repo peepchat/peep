@@ -289,36 +289,39 @@ const Profile = props => {
                             {request.group_name}
                           </p>
                           <br />
-                          <p>{request.email}</p>
+                          <p className='emailP'>{request.email}</p>
                         </div>
                       </div>
                       <br />
-                      <button
-                        className="acceptRequestBtn"
-                        onClick={() => {
-                          acceptRequest(
-                            request.request_id,
-                            request.user_id,
-                            request.group_id
-                          );
-                          setTimeout(() => {
-                            getGroupRequests();
-                          }, 75);
-                        }}
-                      >
-                        Accept
-                      </button>
-                      <button
-                        className="acceptRequestBtn"
-                        onClick={() => {
-                          declineRequest(request.request_id);
-                          setTimeout(() => {
-                            getGroupRequests();
-                          }, 75);
-                        }}
-                      >
-                        Decline
-                      </button>
+                      <div className="groupBtnCont">
+                        <button
+                          className="acceptRequestBtn"
+                          onClick={() => {
+                            acceptRequest(
+                              request.request_id,
+                              request.user_id,
+                              request.group_id
+                            );
+                            setTimeout(() => {
+                              getGroupRequests();
+                            }, 75);
+                          }}
+                        >
+                          Accept
+                        </button>
+                        
+                        <button
+                          className="acceptRequestBtn"
+                          onClick={() => {
+                            declineRequest(request.request_id);
+                            setTimeout(() => {
+                              getGroupRequests();
+                            }, 75);
+                          }}
+                        >
+                          Decline
+                        </button>
+                      </div>
                       <br />
                     </div>
                   );
@@ -390,12 +393,12 @@ const ProfileWrapper = styled.div`
 
 const ChatBox = styled.div`
   width: 100%;
-  height: 90%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center;
   align-items: center;
-  align-content: center;
+  align-content: center; */
 `;
 
 const WidgetButton = styled.button`
@@ -423,8 +426,8 @@ const WidgetButton = styled.button`
 `;
 
 const ProfileBox = styled.div`
-  height: 100vh;
-  width: 60vw;
+  height: 100%;
+  width: 70vw;
   border-radius: 10px;
   box-sizing: border-box;
   background: #f5f5f5;
@@ -478,7 +481,7 @@ const ProfileH3 = styled.h3`
   margin-bottom: 20px;
   margin-left: 10px;
   font-weight: 600;
-  color: #b9bbbe;
+
   display: flex;
   .inputSpan {
     font-size: 1rem;
@@ -633,13 +636,14 @@ const EditDiv = styled.div`
 const RequestDiv = styled.div`
   background: hsl(0, 0%, 93%);
   width: 49%;
-
+  height: 100%;
   border-radius: 5px;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-content: center;
   align-items: center;
+  
   .pendingMapDiv {
     display: flex;
     flex-direction: column;
@@ -648,6 +652,13 @@ const RequestDiv = styled.div`
     align-content: center;
     align-items: center;
     width: 95%;
+    .groupBtnCont {
+      display: flex;
+      justify-content: space-evenly;
+      width: 50%;
+      
+     
+    }
 
     .pendingAlign {
       display: flex;
@@ -655,8 +666,15 @@ const RequestDiv = styled.div`
       background: hsl(24, 9%, 82%);
       box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
       .pendingP {
+        .emailP{
+          width: 70%;
+          margin-right: 2px;
+          font-size: 14px;
+          color: hsl(214, 7%, 47%);
+        }
         .nicknameP {
-          margin-right: 5px;
+          width: 80%;
+          margin-right: 2px;
           font-size: 18px;
           font-weight: bold;
           color: hsl(214, 7%, 47%);
@@ -664,10 +682,9 @@ const RequestDiv = styled.div`
         font-size: 14px;
         color: hsl(214, 7%, 47%);
         display: flex;
-        justify-content: center;
+        margin-top: 5%;
         flex-direction: column;
-        align-content: center;
-        align-items: center;
+       
       }
     }
 
