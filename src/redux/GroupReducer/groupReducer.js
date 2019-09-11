@@ -10,7 +10,8 @@ const initialState = {
   groupMembers: [],
   groupPending: [],
   groupRequests: [],
-  groupMessages: []
+  groupMessages: [],
+  edit_GroupMessage: ""
 };
 
 const CREATE_GROUP = "CREATE_GROUP";
@@ -32,6 +33,8 @@ const DELETE_GROUP = "DELETE_GROUP";
 const GET_GROUP_NAME = "GET_GROUP_NAME";
 const HANDLE_GROUP_NAME_CHANGE = "HANDLE_GROUP_NAME_CHANGE";
 const POPULATE_GROUP_NAME = "POPULATE_GROUP_NAME";
+const HANDLE_GROUP_MESSAGE = "HANDLE_GROUP_MESSAGE";
+const POPULATE_GROUP_MESSAGE = "POPULATE_GROUP_MESSAGE";
 
 export const createGroup = (group_name, group_img) => {
   axios.post("/api/group", { group_name, group_img });
@@ -166,6 +169,19 @@ export const populateGroupName = groupname => {
   };
 };
 
+export const handleGroupMessage = message => {
+  return {
+    type: HANDLE_GROUP_MESSAGE,
+    payload: message
+  };
+};
+export const populateGroupMessage = message => {
+  return {
+    type: POPULATE_GROUP_MESSAGE,
+    payload: message
+  };
+};
+
 export function groupReducer(state = initialState, action) {
   const { type, payload } = action;
 
@@ -202,6 +218,10 @@ export function groupReducer(state = initialState, action) {
       return { ...state, editGroupName: payload };
     case POPULATE_GROUP_NAME:
       return { ...state, editGroupName: payload };
+    case HANDLE_GROUP_MESSAGE:
+      return { ...state, edit_GroupMessage: payload };
+    case POPULATE_GROUP_MESSAGE:
+      return { ...state, edit_GroupMessage: payload };
     default:
       return state;
   }
