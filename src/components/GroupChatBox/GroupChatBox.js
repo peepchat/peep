@@ -6,13 +6,13 @@ import { getGroupMessages } from "../../redux/GroupReducer/groupReducer";
 import Message from "./Messages";
 import { MdGif, MdMovie, MdImage } from "react-icons/md";
 import Modal from "react-awesome-modal";
-import * as cloudkey from "../../cloudkey.json";
 import axios from "axios";
 import firebase from "firebase";
+require("dotenv").config();
 
 firebase.initializeApp({
-  apiKey: cloudkey.api_key,
-  authDomain: `${cloudkey.project_id}.firebaseapp.com`,
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: `${process.env.REACT_APP_PROJECT_ID}.firebaseapp.com`,
   databaseURL: "https://personal-project-devmtn.firebaseio.com",
   storageBucket: "personal-project-devmtn.appspot.com"
 });
@@ -20,6 +20,8 @@ firebase.initializeApp({
 const storage = firebase.storage();
 const imagesRef = storage.ref("images");
 const videosRef = storage.ref("videos");
+
+const giphyKey = process.env.REACT_APP_GIPHY_KEY;
 
 const GroupChatBox = props => {
   const [msgInput, setMsgInput] = useState("");
@@ -93,12 +95,14 @@ const GroupChatBox = props => {
 
   useEffect(() => {
     socket.on("refresh-chat-message", () => {
-      setTimeout(() => {
-        getGroupMessages(group_id);
-        setTimeout(() => {
+      setTimeout(async () => {
+        await setTimeout(() => {
+          getGroupMessages(group_id);
+        }, 75);
+        await setTimeout(() => {
           scrollToBottom();
         }, 50);
-      }, 75);
+      }, 25);
     });
     getGroupMessages(group_id);
     setTimeout(() => {
@@ -146,7 +150,7 @@ const GroupChatBox = props => {
             event.preventDefault();
             axios
               .get(
-                `https://api.giphy.com/v1/gifs/search?api_key=${cloudkey.giphy_key}&q=${gifInput}&limit=20&offset=0&rating=PG-13&lang=en`
+                `https://api.giphy.com/v1/gifs/search?api_key=${giphyKey}&q=${gifInput}&limit=20&offset=0&rating=PG-13&lang=en`
               )
               .then(res => {
                 setGifs(res.data.data);
