@@ -217,7 +217,8 @@ export const ChatMessagesCont = styled.div`
         display: flex;
         justify-content: flex-end;
         height: 100%;
-        width: 50%;
+        width: auto;
+        flex-grow: 2;
         color: transparent;
         font-size: 11px;
         background: transparent;
