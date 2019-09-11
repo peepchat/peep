@@ -2,14 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
-function Loader({
-  authLoading = false,
-  friendsLoading = false,
-  messagesLoading = false
-}) {
+function Loader({ authLoading = false, friendsLoading = false }) {
   console.log(authLoading);
   return (
-    <StyledLoader derping={authLoading || friendsLoading || messagesLoading}>
+    <StyledLoader derping={authLoading || friendsLoading}>
       Loading...
     </StyledLoader>
   );
@@ -18,8 +14,7 @@ function Loader({
 const mapStateToProps = state => {
   return {
     authLoading: state.authReducer.loading,
-    friendsLoading: state.friendsReducer.loading,
-    messagesLoading: state.messagesReducer.loading
+    friendsLoading: state.friendsReducer.loading
   };
 };
 

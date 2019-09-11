@@ -94,7 +94,9 @@ io.on("connection", socket => {
   socket.on("login", data => {
     console.log(data.msg);
     user_id = data.user_id;
-    database.edit_online_status([user_id, true]);
+    if (user_id !== null || user_id !== undefined) {
+      database.edit_online_status([user_id, true]);
+    }
     setTimeout(() => {
       io.emit("refresh-friends");
     }, 250);
@@ -108,9 +110,37 @@ io.on("connection", socket => {
     socket.join(room);
   });
 
+  socket.on("group-join", data => {
+    const { group_id } = data;
+    //leave previous room
+    socket.leave(room);
+    room = `gp-${group_id}`;
+    socket.join(room);
+  });
+
   socket.on("chat-message", async data => {
-    const { message, chat_id, user_id, gif_url } = data;
-    await database.add_direct_message([user_id, chat_id, message, gif_url]);
+    const { message, chat_id, user_id, gif_url, img_url, video_url } = data;
+    await database.add_direct_message([
+      user_id,
+      chat_id,
+      message,
+      gif_url,
+      img_url,
+      video_url
+    ]);
+    await io.to(room).emit("refresh-chat-message");
+  });
+
+  socket.on("group-message", async data => {
+    const { message, group_id, user_id, gif_url, img_url, video_url } = data;
+    await database.add_group_message([
+      user_id,
+      group_id,
+      message,
+      gif_url,
+      img_url,
+      video_url
+    ]);
     await io.to(room).emit("refresh-chat-message");
   });
 
