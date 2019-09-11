@@ -345,6 +345,11 @@ export const ChatMessagesCont = styled.div`
     color: black;
     white-space: pre-line;
     overflow-wrap: break-word;
+
+    &:hover {
+      
+    } 
+    
     .editHover {
       display: flex;
       justify-content: flex-end;
@@ -359,8 +364,6 @@ export const ChatMessagesCont = styled.div`
         background: transparent;
         display: flex;
         flex-direction: row-reverse;
-
-        width: 50%;
         height: 80%;
         .escButton {
           color: ${props => props.theme.teal2};
@@ -368,12 +371,12 @@ export const ChatMessagesCont = styled.div`
           outline: none;
           border: none;
           font-size: 1.3rem;
-          &:hover {
+          /* &:hover {
             border-radius: 10px;
             transition: 300ms;
             background-color: ${props => props.theme.teal1};
             transform: scale(0.97);
-          }
+          } */
         }
         .hiddenEdit {
           color: ${props => props.theme.teal1};
@@ -406,7 +409,6 @@ export const ChatMessagesCont = styled.div`
         display: flex;
         justify-content: flex-end;
         height: 100%;
-        width: 50%;
         color: transparent;
         font-size: 1.3rem;
         background: transparent;
@@ -446,10 +448,13 @@ export const ChatMessagesCont = styled.div`
       }
     }
     .messageCont {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       margin-top: 6px;
       margin-bottom: 6px;
-      flex: 1 1 auto;
-      min-width: 0;
+      height: auto;
+      width: auto;
       color: black !important;
       .messageEdit {
         .messageInput {
@@ -486,6 +491,7 @@ export const ChatMessagesCont = styled.div`
         letter-spacing: 0.01071em;
         color: black;
       }
+
       .messageHeader {
         font-size: 1rem;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
