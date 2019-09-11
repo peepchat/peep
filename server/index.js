@@ -83,6 +83,7 @@ app.get("/api/group/messages/:group_id", GC.getGroupMessages);
 app.put("/api/group/message/:message_id", GC.editGroupMessage);
 app.delete("/api/group/message/:message_id", GC.deleteGroupMessage);
 app.delete("/api/group/:group_id", GC.deleteGroup);
+app.get("/api/groupname/:group_id", GC.getGroupName);
 
 io.on("connection", socket => {
   console.log("User connected");

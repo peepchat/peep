@@ -50,9 +50,12 @@ const Navbar = props => {
   const [modalView, setModalView] = useState("");
 
   const groupNames = groups.map(group => group.group_name.toLowerCase());
-  const pendingGroupRequests = groupPending.map(group =>
-    group.group_name.toLowerCase()
-  );
+
+  const pendingGroupRequests = groupPending.map(group => {
+    if (group.group_name) {
+      return group.group_name.toLowerCase();
+    }
+  });
 
   const viewCreate = () => {
     setModalView("Create");
