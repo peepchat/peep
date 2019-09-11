@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import moment from "moment";
+import ReactPlayer from "react-player";
 import {
   FaEllipsisV,
   FaRegWindowClose,
@@ -76,6 +77,18 @@ const Messages = props => {
               <FaCheck />
             </button>
           </div>
+        ) : props.dm.gif_url ? (
+          <img src={props.dm.gif_url} alt="gif " />
+        ) : props.dm.img_url ? (
+          <ChatImage src={props.dm.img_url} alt="gif" className="image" />
+        ) : props.dm.video_url ? (
+          <ReactPlayer
+            controls
+            playing={false}
+            url={props.dm.video_url}
+            width="auto"
+            height="400px"
+          />
         ) : (
           <p className="messageText">{props.dm.message} </p>
         )}
@@ -131,6 +144,11 @@ export default connect(
     deleteDirectMessage
   }
 )(Messages);
+
+const ChatImage = styled.img`
+  height: 400px;
+  width: auto;
+`;
 
 export const ChatMessagesCont = styled.div`
   width: 100%;
