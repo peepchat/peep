@@ -14,7 +14,9 @@ import {
 import {
   getGroupMessages,
   editGroupMessage,
-  deleteGroupMessage
+  deleteGroupMessage,
+  handleGroupMessage,
+  populateGroupMessage,
 } from "../../redux/GroupReducer/groupReducer";
 
 const Messages = props => {
@@ -30,18 +32,18 @@ const Messages = props => {
 
   const onClickEdit = message => {
     setEditstatus(true);
-    props.populateMessage(props.dm.message);
+    props.populateGroupMessage(props.dm.message);
   };
   const onClickSave = () => {
     setEditstatus(false);
     setMessageToggle(false);
-    props.editGroupMessage(props.dm.message_id, props.edit_Message);
+    props.editGroupMessage(props.dm.message_id, props.edit_GroupMessage);
     setTimeout(() => {
       getGroupMessages(props.dm.group_id);
     }, 75);
   };
-  const handleMessageChange = event => {
-    props.handleMessageChange(event.target.value);
+  const handleGroupMessage = event => {
+    props.handleGroupMessage(event.target.value);
   };
   return (
     <div className="keyContainer" key={props.index}>
@@ -67,8 +69,8 @@ const Messages = props => {
           <div className="messageEdit">
             <input
               className="messageInput"
-              onChange={handleMessageChange}
-              value={props.edit_Message}
+              onChange={handleGroupMessage}
+              value={props.edit_GroupMessage}
               type="text"
             ></input>
             <button onClick={onClickSave} className="saveEdit">
@@ -111,7 +113,7 @@ const Messages = props => {
 
               <button
                 onClick={() => {
-                  props.deleteDirectMessage(props.dm.index);
+                  props.deleteGroupMessage(props.dm.message_id);
                 }}
                 className="hiddenDelete"
               >
@@ -126,7 +128,7 @@ const Messages = props => {
 };
 function mapStateToProps(state) {
   return {
-    edit_Message: state.messagesReducer.edit_Message
+    edit_GroupMessage: state.groupReducer.edit_GroupMessage
   };
 }
 
@@ -135,7 +137,9 @@ export default connect(
   {
     getGroupMessages,
     editGroupMessage,
-    deleteGroupMessage
+    deleteGroupMessage,
+    handleGroupMessage,
+    populateGroupMessage
   }
 )(Messages);
 

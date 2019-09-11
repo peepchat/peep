@@ -332,16 +332,20 @@ export const ChatMessagesCont = styled.div`
       background: transparent;
 
       .hiddenDiv {
-        color: black;
         background: transparent;
         display: flex;
-        flex-direction: column;
+        flex-direction: row-reverse;
+
+        width: 50%;
+        height: 80%;
         .escButton {
           color: ${props => props.theme.teal2};
           background: transparent;
           outline: none;
           border: none;
+          font-size: 1.3rem;
           &:hover {
+            border-radius: 10px;
             transition: 300ms;
             background-color: ${props => props.theme.teal1};
             transform: scale(0.97);
@@ -352,7 +356,9 @@ export const ChatMessagesCont = styled.div`
           background: transparent;
           outline: none;
           border: none;
+          font-size: 1.3rem;
           &:hover {
+            border-radius: 10px;
             transition: 300ms;
             background-color: ${props => props.theme.teal3};
             transform: scale(0.97);
@@ -363,7 +369,10 @@ export const ChatMessagesCont = styled.div`
           background: transparent;
           outline: none;
           border: none;
+          font-size: 1.3rem;
           &:hover {
+            border-radius: 10px;
+            background-color: hsl(0, 0%, 96%);
             transition: 300ms;
             transform: scale(0.97);
           }
@@ -375,11 +384,12 @@ export const ChatMessagesCont = styled.div`
         height: 100%;
         width: 50%;
         color: transparent;
-        font-size: 11px;
+        font-size: 1.3rem;
         background: transparent;
         outline: none;
         border: none;
         &:hover {
+          border-radius: 10px;
           transition: 200ms;
           color: ${props => props.theme.teal3};
           transform: scale(1.01);
@@ -419,14 +429,25 @@ export const ChatMessagesCont = styled.div`
       color: black !important;
       .messageEdit {
         .messageInput {
+          border-radius: 4px;
+          position: relative;
+          background-color: rgba(255, 255, 255, 0.3);
+          transition: 0.3s all;
+          outline: none;
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.45);
+            box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+          }
         }
         .saveEdit {
           color: ${props => props.theme.teal1};
           background: transparent;
           outline: none;
           border: none;
+          font-size: 1.3rem;
           &:hover {
-            transition: 400ms;
+            border-radius: 10px;
+            transition: 300ms;
             background-color: ${props => props.theme.teal3};
             transform: scale(0.97);
           }
@@ -531,9 +552,6 @@ export const ChatInputCont = styled.form`
       background-color: ${props => props.theme.teal3};
       transform: scale(0.97);
     }
-    input {
-      display: hidden;
-    }
   }
   .gifButton {
     background-color: ${props => props.theme.teal1};
@@ -568,21 +586,3 @@ export const ChatInput = styled.input`
   border-color: ${props => props.theme.teal3};
   outline: none;
 `;
-
-// const ChatSubmit = styled.button`
-//   color: #fff;
-//   width: 3rem;
-//   height: 2rem;
-//   transition: background-color 0.17s ease, color 0.17s ease;
-//   box-sizing: border-box;
-//   background: transparent;
-//   border: none;
-//   border-radius: 3px;
-//   font-size: 25px;
-//   font-weight: 500;
-//   line-height: 16px;
-//   padding: 2px 10px;
-//   position: relative;
-//   font-family: "Signika", sans-serif;
-//   cursor: pointer;
-// `;
