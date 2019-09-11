@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import * as cloudkey from "../../cloudkey.json";
 import { uploadPic, getFriendsData } from "../../redux/UserReducer/userReducer";
 import {
   getUserInfo,
@@ -29,6 +28,7 @@ import {
   FaUserCheck,
   FaRegWindowClose
 } from "react-icons/fa";
+require("dotenv").config();
 
 const Profile = props => {
   const checkUploadResult = async (error, resultEvent) => {
@@ -42,8 +42,8 @@ const Profile = props => {
   const [editStatus, setEditstatus] = useState(false);
   const widget = window.cloudinary.createUploadWidget(
     {
-      cloudName: cloudkey.cloud_name,
-      uploadPreset: cloudkey.upload_preset,
+      cloudName: process.env.REACT_APP_CLOUD_NAME,
+      uploadPreset: process.env.REACT_APP_UPLOAD_PRESET,
       sources: ["local", "url", "dropbox", "facebook", "instagram"]
     },
     (error, result) => {
@@ -288,7 +288,7 @@ const Profile = props => {
                             {request.group_name}
                           </p>
                           <br />
-                          <p className='emailP'>{request.email}</p>
+                          <p className="emailP">{request.email}</p>
                         </div>
                       </div>
                       <br />
@@ -308,7 +308,7 @@ const Profile = props => {
                         >
                           Accept
                         </button>
-                        
+
                         <button
                           className="acceptRequestBtn"
                           onClick={() => {
@@ -666,7 +666,7 @@ const RequestDiv = styled.div`
   flex-direction: column;
   align-content: center;
   align-items: center;
-  
+
   .pendingMapDiv {
     display: flex;
     flex-direction: column;
@@ -679,8 +679,6 @@ const RequestDiv = styled.div`
       display: flex;
       justify-content: space-evenly;
       width: 50%;
-      
-     
     }
 
     .pendingAlign {
@@ -689,7 +687,7 @@ const RequestDiv = styled.div`
       background: hsl(24, 9%, 82%);
       box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
       .pendingP {
-        .emailP{
+        .emailP {
           width: 70%;
           margin-right: 2px;
           font-size: 14px;
@@ -707,7 +705,6 @@ const RequestDiv = styled.div`
         display: flex;
         margin-top: 5%;
         flex-direction: column;
-       
       }
     }
 
