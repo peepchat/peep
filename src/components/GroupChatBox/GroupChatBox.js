@@ -10,13 +10,6 @@ import axios from "axios";
 import firebase from "firebase";
 require("dotenv").config();
 
-firebase.initializeApp({
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: `${process.env.REACT_APP_PROJECT_ID}.firebaseapp.com`,
-  databaseURL: "https://personal-project-devmtn.firebaseio.com",
-  storageBucket: "personal-project-devmtn.appspot.com"
-});
-
 const storage = firebase.storage();
 const imagesRef = storage.ref("images");
 const videosRef = storage.ref("videos");
@@ -40,20 +33,27 @@ const GroupChatBox = props => {
   const handleChange = event => {
     setMsgInput(event.target.value);
   };
-  // console.log(socket);
 
   const handleGifSearch = event => {
     setGifInput(event.target.value);
   };
 
+  const scrollToBottom = () => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "auto" });
+    }
+  };
+
   const handleImage = event => {
     const file = event.target.files[0];
     const uploadTask = imagesRef.child(file.name).put(file);
+    console.log(uploadTask);
     uploadTask.then(() => {
       imagesRef
         .child(file.name)
         .getDownloadURL()
         .then(url => {
+          console.log(url);
           socket.emit("group-message", { group_id, user_id, img_url: url });
           setTimeout(async () => {
             await getGroupMessages(group_id);
@@ -78,12 +78,6 @@ const GroupChatBox = props => {
           }, 100);
         });
     });
-  };
-
-  const scrollToBottom = () => {
-    if (messageEndRef.current) {
-      messageEndRef.current.scrollIntoView({ behavior: "auto" });
-    }
   };
 
   const getMessages = () => {
@@ -173,9 +167,9 @@ const GroupChatBox = props => {
           return (
             <Message
               dm={msg}
-              index={index}
               email={props.email}
               userPic={props.userPic}
+              key={index}
             />
           );
         })}

@@ -153,7 +153,7 @@ const GroupBar = props => {
             {props.groupName}{" "}
             {checkAdmin ? (
               <button onClick={() => onClickEdit(props.groupName)}>
-                <i class="material-icons">edit</i>
+                <i className="material-icons">edit</i>
               </button>
             ) : null}
           </GroupLabel>
@@ -188,7 +188,7 @@ const GroupBar = props => {
                         }, 75);
                       }}
                     >
-                      <i class="material-icons">remove_circle</i>
+                      <i className="material-icons">remove_circle</i>
                     </button>
                   </UserEditRemove>
                 ) : null}
@@ -199,7 +199,7 @@ const GroupBar = props => {
         <AddUserCont>
           {checkAdmin ? (
             <AddUser onClick={() => setVisible(true)}>
-              <i class="material-icons">person_add</i>
+              <i className="material-icons">person_add</i>
             </AddUser>
           ) : null}
         </AddUserCont>
