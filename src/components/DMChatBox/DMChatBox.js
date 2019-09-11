@@ -10,17 +10,39 @@ import {
   deleteDirectMessage,
   editDirectMessage
 } from "../../redux/MessagesReducer/MessagesReducer";
-import moment from "moment";
 import { FaPlusCircle, FaRegSmile } from "react-icons/fa";
 import DMPosts from "./Messages";
 import { MdGif, MdMovie, MdImage } from "react-icons/md";
+import axios from "axios";
+import Modal from "react-awesome-modal";
+import firebase from "firebase";
+require("dotenv").config();
+
+firebase.initializeApp({
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: "peep-chat-devmtn.firebaseapp.com",
+  databaseURL: "https://peep-chat-devmtn.firebaseio.com",
+  projectId: "peep-chat-devmtn",
+  storageBucket: "gs://peep-chat-devmtn.appspot.com/"
+});
+
+const storage = firebase.storage();
+const imagesRef = storage.ref("images");
+const videosRef = storage.ref("videos");
+
+const giphyKey = process.env.REACT_APP_GIPHY_KEY;
 
 const ChatBox = props => {
   const [msgInput, setMsgInput] = useState("");
+  const [gifStatus, setGifStatus] = useState(false);
+  const [gifInput, setGifInput] = useState("");
+  const [gifs, setGifs] = useState([]);
 
   const { user_id, getDirectMessages, directMessages } = props;
 
   const { chat_id } = props.match.params;
+
+  const messageEndRef = useRef(null);
 
   socket.emit("dm-join", { chat_id });
 
@@ -28,45 +50,145 @@ const ChatBox = props => {
     setMsgInput(event.target.value);
   };
 
-  let messageContainerBottomRef = document.getElementById(
-    "messagesContainerBottom"
-  );
-  let messageContainerRef = document.getElementById("messagesContainer");
-  // console.log(socket);
+  const handleGifSearch = event => {
+    setGifInput(event.target.value);
+  };
+
+  const scrollToBottom = () => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "auto" });
+    }
+  };
+
+  const handleImage = event => {
+    const file = event.target.files[0];
+    const uploadTask = imagesRef.child(file.name).put(file);
+    console.log(uploadTask);
+    uploadTask.then(() => {
+      imagesRef
+        .child(file.name)
+        .getDownloadURL()
+        .then(url => {
+          console.log(url);
+          socket.emit("chat-message", { chat_id, user_id, img_url: url });
+          setTimeout(async () => {
+            await getDirectMessages(chat_id);
+            await scrollToBottom();
+          }, 100);
+        });
+    });
+  };
+
+  const handleVideo = event => {
+    const file = event.target.files[0];
+    const uploadTask = videosRef.child(file.name).put(file);
+    uploadTask.then(() => {
+      videosRef
+        .child(file.name)
+        .getDownloadURL()
+        .then(url => {
+          socket.emit("chat-message", { chat_id, user_id, video_url: url });
+          setTimeout(async () => {
+            await getDirectMessages(chat_id);
+            await scrollToBottom();
+          }, 100);
+        });
+    });
+  };
+
+  const getMessages = () => {
+    getDirectMessages(chat_id);
+    setTimeout(() => {
+      scrollToBottom();
+    }, 100);
+  };
 
   useEffect(() => {
     socket.on("refresh-chat-message", () => {
-      setTimeout(() => {
-        getDirectMessages(chat_id);
-      }, 65);
+      setTimeout(async () => {
+        await setTimeout(() => {
+          getDirectMessages(chat_id);
+        }, 75);
+        await setTimeout(() => {
+          scrollToBottom();
+        }, 50);
+      }, 25);
     });
     getDirectMessages(chat_id);
-    if (messageContainerBottomRef && messageContainerRef) {
-      if (getDirectMessages) {
-        messageContainerRef.scroll(0, 60);
-      } else {
-        messageContainerBottomRef.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [
-    getDirectMessages,
-    chat_id,
-    messageContainerRef,
-    messageContainerBottomRef
-  ]);
+    setTimeout(() => {
+      scrollToBottom();
+    }, 75);
+  }, [getDirectMessages, chat_id]);
 
   // console.log(directMessages);
 
   return (
     <ChatBoxWrapper>
+      <Modal
+        visible={gifStatus}
+        width="750"
+        height="300"
+        effect="fadeInDown"
+        onClickAway={() => setGifStatus(false)}
+      >
+        {gifs.length > 0 ? (
+          <GIFSArray>
+            {gifs.map(gif => {
+              return (
+                <img
+                  src={gif.images.fixed_height.url}
+                  alt={gif.title}
+                  key={gif.id}
+                  onClick={() => {
+                    socket.emit("chat-message", {
+                      gif_url: gif.images.fixed_height.url,
+                      chat_id,
+                      user_id
+                    });
+                    setGifStatus(false);
+                    setGifs([]);
+                    setGifInput("");
+                    setTimeout(() => {
+                      getMessages();
+                    }, 50);
+                  }}
+                />
+              );
+            })}
+          </GIFSArray>
+        ) : null}
+        <GIFForm
+          onSubmit={event => {
+            event.preventDefault();
+            axios
+              .get(
+                `https://api.giphy.com/v1/gifs/search?api_key=${giphyKey}&q=${gifInput}&limit=20&offset=0&rating=PG-13&lang=en`
+              )
+              .then(res => {
+                setGifs(res.data.data);
+                console.log(res.data.data);
+              })
+              .catch(error => console.log(error));
+          }}
+        >
+          <input
+            type="text"
+            value={gifInput}
+            placeholder="Search GIPHY"
+            onChange={handleGifSearch}
+          />
+          <button type="submit">Search</button>
+        </GIFForm>
+      </Modal>
+
       <ChatMessagesCont>
         {directMessages.map((dm, index) => {
           return (
             <DMPosts
               dm={dm}
-              index={index}
               email={props.email}
               userPic={props.userPic}
+              key={index}
             />
           );
         })}
@@ -85,8 +207,8 @@ const ChatBox = props => {
             });
             await setMsgInput("");
             await setTimeout(() => {
-              getDirectMessages(chat_id);
-            }, 75);
+              getMessages();
+            }, 50);
           }
         }}
       >
@@ -95,15 +217,33 @@ const ChatBox = props => {
           value={msgInput}
           placeholder="Message..."
         />
-        <button className="gifButton">
+        <button
+          className="gifButton"
+          type="button"
+          onClick={() => {
+            setGifStatus(true);
+          }}
+        >
           <MdGif />
         </button>
-        <button className="imageButton">
+        <label className="imageButton">
           <MdImage />
-        </button>
-        <button className="videoButton">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImage}
+            className="fileInput"
+          />
+        </label>
+        <label className="videoButton">
           <MdMovie />
-        </button>
+          <input
+            type="file"
+            accept="video/*"
+            onChange={handleVideo}
+            className="fileInput"
+          />
+        </label>
       </ChatInputCont>
     </ChatBoxWrapper>
   );
@@ -131,6 +271,41 @@ export default connect(
     deleteDirectMessage
   }
 )(ChatBox);
+
+export const GIFForm = styled.form`
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+
+  input {
+    padding: (3px 5px);
+    margin-right: 1rem;
+    border-radius: 5px;
+  }
+
+  button {
+    border-radius: 5px;
+    background-color: ${props => props.theme.teal1};
+  }
+`;
+
+export const GIFSArray = styled.div`
+  width: 100%;
+  height: auto;
+  margin-top: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: row;
+
+  img {
+    cursor: pointer;
+  }
+`;
 
 export const ChatBoxWrapper = styled.div`
   height: 100%;
@@ -184,7 +359,7 @@ export const ChatMessagesCont = styled.div`
         background: transparent;
         display: flex;
         flex-direction: row-reverse;
-        
+
         width: 50%;
         height: 80%;
         .escButton {
@@ -350,6 +525,12 @@ export const ChatInputCont = styled.form`
   bottom: 0;
   left: 0;
   right: 0;
+
+  .fileInput {
+    display: none;
+    visibility: hidden;
+  }
+
   .imageButton {
     background-color: ${props => props.theme.teal1};
     width: 3rem;

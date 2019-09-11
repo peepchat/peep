@@ -10,14 +10,6 @@ import axios from "axios";
 import firebase from "firebase";
 require("dotenv").config();
 
-firebase.initializeApp({
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: "peep-chat-devmtn.firebaseapp.com",
-  databaseURL: "https://peep-chat-devmtn.firebaseio.com",
-  projectId: "peep-chat-devmtn",
-  storageBucket: "gs://peep-chat-devmtn.appspot.com/"
-});
-
 const storage = firebase.storage();
 const imagesRef = storage.ref("images");
 const videosRef = storage.ref("videos");
@@ -41,10 +33,15 @@ const GroupChatBox = props => {
   const handleChange = event => {
     setMsgInput(event.target.value);
   };
-  // console.log(socket);
 
   const handleGifSearch = event => {
     setGifInput(event.target.value);
+  };
+
+  const scrollToBottom = () => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "auto" });
+    }
   };
 
   const handleImage = event => {
@@ -83,12 +80,6 @@ const GroupChatBox = props => {
     });
   };
 
-  const scrollToBottom = () => {
-    if (messageEndRef.current) {
-      messageEndRef.current.scrollIntoView({ behavior: "auto" });
-    }
-  };
-
   const getMessages = () => {
     getGroupMessages(group_id);
     setTimeout(() => {
@@ -124,12 +115,12 @@ const GroupChatBox = props => {
       >
         {gifs.length > 0 ? (
           <GIFSArray>
-            {gifs.map((gif, index) => {
+            {gifs.map(gif => {
               return (
                 <img
                   src={gif.images.fixed_height.url}
                   alt={gif.title}
-                  key={index}
+                  key={gif.id}
                   onClick={() => {
                     socket.emit("group-message", {
                       gif_url: gif.images.fixed_height.url,
@@ -176,7 +167,6 @@ const GroupChatBox = props => {
           return (
             <Message
               dm={msg}
-              index={index}
               email={props.email}
               userPic={props.userPic}
               key={index}
