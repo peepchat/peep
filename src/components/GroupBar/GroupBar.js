@@ -6,15 +6,27 @@ import {
   getGroupMembers,
   addUser,
   removeMember,
-  editGroup
+  editGroup,
+  getGroupName,
+  handleGroupNameChange,
+  populateGroupName
 } from "../../redux/GroupReducer/groupReducer";
 import { searchUser } from "../../redux/UserReducer/userReducer";
+import EditGroupModal from "../EditGroupModal/EditGroupModal";
 
 const GroupBar = props => {
   const [visible, setVisible] = useState(false);
   const [search, setSearch] = useState("");
+  const [editStatus, setEditStatus] = useState(false);
 
-  const { getGroupMembers, addUser, groupMembers, removeMember } = props;
+  const {
+    getGroupMembers,
+    addUser,
+    groupMembers,
+    removeMember,
+    getGroupName,
+    editGroup
+  } = props;
 
   const id = props.match.params.group_id;
 
@@ -25,9 +37,27 @@ const GroupBar = props => {
     props.searchUser(event.target.value);
   };
 
+  const onClickEdit = groupname => {
+    setEditStatus(true);
+    console.log(groupname);
+    props.populateGroupName(groupname);
+  };
+
+  const onClickSave = () => {
+    setEditStatus(false);
+    editGroup(props.editGroupName);
+    getGroupName(id);
+  };
+
+  const handleGroupNameChange = event => {
+    console.log(event);
+    props.handleGroupNameChange(event.target.value);
+  };
+
   useEffect(() => {
     getGroupMembers(id);
-  }, [getGroupMembers, id]);
+    getGroupName(id);
+  }, [getGroupMembers, getGroupName, id]);
 
   // console.log(groupMembers);
   // console.log(props.match.params);
@@ -43,8 +73,29 @@ const GroupBar = props => {
     checkAdmin = getMember[0].permission;
   }
 
+  console.log(props.groupName);
+
   return (
     <>
+      <Modal
+        visible={editStatus}
+        width="750"
+        height="400"
+        effect="fadeInDown"
+        onClickAway={() => setEditStatus(false)}
+      >
+        <EditGroupModal
+          onClickEdit={onClickEdit}
+          onClickSave={onClickSave}
+          setEditStatus={setEditStatus}
+          handleGroupNameChange={handleGroupNameChange}
+          groupName={props.groupName}
+          editGroupName={props.editGroupName}
+          getGroupName={getGroupName}
+          groupPic={props.groupPic}
+          id={id}
+        />
+      </Modal>
       <Modal
         visible={visible}
         width="750"
@@ -98,6 +149,15 @@ const GroupBar = props => {
       </Modal>
       <DMBarCont>
         <DMBarWrapper>
+          <GroupLabel>
+            {props.groupName}{" "}
+            {checkAdmin ? (
+              <button onClick={() => onClickEdit(props.groupName)}>
+                <i class="material-icons">edit</i>
+              </button>
+            ) : null}
+          </GroupLabel>
+
           <Label>Members</Label>
           {groupMembers.map((member, index) => {
             return (
@@ -135,11 +195,14 @@ const GroupBar = props => {
               </PicNameCont>
             );
           })}
-
-          <AddUser onClick={() => setVisible(true)}>
-            <i class="material-icons">person_add</i>
-          </AddUser>
         </DMBarWrapper>
+        <AddUserCont>
+          {checkAdmin ? (
+            <AddUser onClick={() => setVisible(true)}>
+              <i class="material-icons">person_add</i>
+            </AddUser>
+          ) : null}
+        </AddUserCont>
         <UserBar>
           {props.profilePic ? (
             <UserPic src={props.profilePic} />
@@ -162,13 +225,25 @@ function mapStateToProps(state) {
     nickname: state.authReducer.nickname,
     profilePic: state.authReducer.profilePic,
     users: state.userReducer.users,
-    user_id: state.authReducer.user_id
+    user_id: state.authReducer.user_id,
+    groupName: state.groupReducer.groupName,
+    editGroupName: state.groupReducer.editGroupName,
+    groupPic: state.groupReducer.groupPic
   };
 }
 
 export default connect(
   mapStateToProps,
-  { getGroupMembers, addUser, searchUser, editGroup, removeMember }
+  {
+    getGroupMembers,
+    addUser,
+    searchUser,
+    editGroup,
+    removeMember,
+    getGroupName,
+    populateGroupName,
+    handleGroupNameChange
+  }
 )(GroupBar);
 
 const DMBarCont = styled.div`
@@ -191,16 +266,41 @@ const DMBarWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   border: 1px solid lightgrey;
+  border-bottom: none;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
     0 2px 4px 0 rgba(14, 30, 37, 0.12);
   left: 6rem;
   width: 100%;
-  height: 90%;
+  height: 80%;
   background-color: #f5f5f5;
 
   /* henry why */
   div + div > div > div {
     border-radius: 0 !important;
+  }
+`;
+
+const GroupLabel = styled.div`
+  font-size: 1.5rem;
+  text-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
+  margin: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  button {
+    outline: none;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    margin-left: 1rem;
+    &:hover {
+      transition: 400ms;
+      transform: scale(0.95);
+      background-color: ${props => props.theme.teal2};
+      color: white;
+    }
   }
 `;
 
@@ -215,12 +315,20 @@ const Label = styled.div`
   align-items: center;
 `;
 
+const LabelInput = styled.input`
+  padding: 1rem;
+  border: none;
+  background-color: white;
+  font-size: 1rem;
+  width: 80%;
+`;
+
 const Online = styled.div`
   width: 12px;
   height: 12px;
   border: solid 1px lightgray;
   background-color: #68d391;
-  border-radius: 50%;
+  border-radius: 50% !important;
   margin-right: 0.5rem;
 `;
 
@@ -229,7 +337,7 @@ const Offline = styled.div`
   height: 12px;
   border: solid 1px lightgray;
   background-color: gray;
-  border-radius: 50%;
+  border-radius: 50% !important;
   margin-right: 0.5rem;
 `;
 
@@ -429,6 +537,18 @@ const UserItem = styled.div`
   }
 `;
 
+const AddUserCont = styled.div`
+  width: 100%;
+  height: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid lightgray;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 2px 4px 0 rgba(14, 30, 37, 0.12);
+`;
+
 const AddUser = styled.button`
   display: flex;
   justify-content: center;
@@ -441,4 +561,11 @@ const AddUser = styled.button`
     0 2px 4px 0 rgba(14, 30, 37, 0.12);
   border-radius: 5px;
   font-size: 2rem;
+
+  &:hover {
+    transition: 400ms;
+    transform: scale(0.96);
+    background-color: ${props => props.theme.teal1};
+    color: white;
+  }
 `;
