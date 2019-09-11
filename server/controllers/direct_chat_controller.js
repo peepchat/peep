@@ -25,7 +25,7 @@ const deleteMessage = (req, res) => {
 
   db.delete_direct_message([message_id])
     .then(() => {
-      res.sendStatus(500);
+      res.sendStatus(200);
     })
     .catch(error => {
       console.log(error);

@@ -27,6 +27,7 @@ const Messages = props => {
   };
   const closeMessageToggle = () => {
     setMessageToggle(false);
+    setEditstatus(false)
   };
 
   const onClickEdit = message => {
@@ -73,7 +74,7 @@ const Messages = props => {
               type="text"
             ></input>
             <button onClick={onClickSave} className="saveEdit">
-              <FaCheck />
+              <FaCheck /> 
             </button>
           </div>
         ) : (
@@ -83,26 +84,29 @@ const Messages = props => {
       {props.email === props.dm.email ? (
         <div className="editHover">
           <button className="editIcon" onClick={openMessageToggle}>
-            <FaEllipsisV />
+            <FaEllipsisV /> 
           </button>
           {messageToggle === true ? (
             <div className="hiddenDiv">
               <button onClick={closeMessageToggle} className="escButton">
-                <FaEllipsisH />
+                <FaEllipsisH /> 
               </button>
 
               <button
                 onClick={() => onClickEdit(props.dm.message)}
                 className="hiddenEdit"
               >
-                <FaRegEdit />
+                <FaRegEdit /> 
               </button>
 
               <button onClick={() => {
-                      props.deleteDirectMessage(props.dm.index);
+                      props.deleteDirectMessage(props.dm.message_id);
+                      setTimeout(() => {
+                        getDirectMessages(props.dm.chat_id);
+                      }, 75)
                       
                     }} className="hiddenDelete">
-                <FaRegWindowClose />
+                <FaRegWindowClose /> 
               </button>
             </div>
           ) : null}
