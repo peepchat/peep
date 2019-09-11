@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 .env
-src/cloudkey.json
+
 
 # testing
 /coverage
@@ -23,3 +23,5 @@ src/cloudkey.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+src/cloudkey.json

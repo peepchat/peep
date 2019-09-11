@@ -49,7 +49,7 @@ export const populateMessage = message => {
 };
 export const handleMessageChange = message => {
   return {
-    type: POPULATE_MESSAGE,
+    type: HANDLE_MESSAGE,
     payload: message
   };
 };
