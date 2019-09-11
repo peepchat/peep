@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import * as cloudkey from "../../cloudkey.json";
 import { createGroup } from "../../redux/GroupReducer/groupReducer";
 import { connect } from "react-redux";
+require("dotenv").config();
 
 const CreateForm = props => {
   const [imageurl, setImageurl] = useState("");
@@ -22,8 +22,8 @@ const CreateForm = props => {
 
   const widget = window.cloudinary.createUploadWidget(
     {
-      cloudName: cloudkey.cloud_name,
-      uploadPreset: cloudkey.upload_preset,
+      cloudName: process.env.REACT_APP_CLOUD_NAME,
+      uploadPreset: process.env.REACT_APP_UPLOAD_PRESET,
       sources: ["local", "url", "dropbox", "facebook", "instagram"]
     },
     (error, result) => {
