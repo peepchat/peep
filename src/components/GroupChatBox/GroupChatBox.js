@@ -12,9 +12,10 @@ require("dotenv").config();
 
 firebase.initializeApp({
   apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: `${process.env.REACT_APP_PROJECT_ID}.firebaseapp.com`,
-  databaseURL: "https://personal-project-devmtn.firebaseio.com",
-  storageBucket: "personal-project-devmtn.appspot.com"
+  authDomain: "peep-chat-devmtn.firebaseapp.com",
+  databaseURL: "https://peep-chat-devmtn.firebaseio.com",
+  projectId: "peep-chat-devmtn",
+  storageBucket: "gs://peep-chat-devmtn.appspot.com/"
 });
 
 const storage = firebase.storage();
@@ -49,11 +50,13 @@ const GroupChatBox = props => {
   const handleImage = event => {
     const file = event.target.files[0];
     const uploadTask = imagesRef.child(file.name).put(file);
+    console.log(uploadTask);
     uploadTask.then(() => {
       imagesRef
         .child(file.name)
         .getDownloadURL()
         .then(url => {
+          console.log(url);
           socket.emit("group-message", { group_id, user_id, img_url: url });
           setTimeout(async () => {
             await getGroupMessages(group_id);
@@ -121,12 +124,12 @@ const GroupChatBox = props => {
       >
         {gifs.length > 0 ? (
           <GIFSArray>
-            {gifs.map(gif => {
+            {gifs.map((gif, index) => {
               return (
                 <img
                   src={gif.images.fixed_height.url}
                   alt={gif.title}
-                  key={gif.id}
+                  key={index}
                   onClick={() => {
                     socket.emit("group-message", {
                       gif_url: gif.images.fixed_height.url,
@@ -176,6 +179,7 @@ const GroupChatBox = props => {
               index={index}
               email={props.email}
               userPic={props.userPic}
+              key={index}
             />
           );
         })}

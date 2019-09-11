@@ -103,7 +103,7 @@ const Navbar = props => {
         </ChannelWrapper>
         <LogoutButtonCont>
           <LogoutButton onClick={handleLogout}>
-            <i class="material-icons">exit_to_app</i>
+            <i className="material-icons">exit_to_app</i>
           </LogoutButton>
         </LogoutButtonCont>
       </NavWrapper>
