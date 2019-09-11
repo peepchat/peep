@@ -7,8 +7,7 @@ import {
   handleGroupNameChange,
   getGroupName
 } from "../../redux/GroupReducer/groupReducer";
-
-import * as cloudkey from "../../cloudkey.json";
+require("dotenv").config();
 
 const EditGroupModal = props => {
   const [imageurl, setImageurl] = useState("");
@@ -29,8 +28,8 @@ const EditGroupModal = props => {
 
   const widget = window.cloudinary.createUploadWidget(
     {
-      cloudName: cloudkey.cloud_name,
-      uploadPreset: cloudkey.upload_preset,
+      cloudName: process.env.REACT_APP_CLOUD_NAME,
+      uploadPreset: process.env.REACT_APP_UPLOAD_PRESET,
       sources: ["local", "url", "dropbox", "facebook", "instagram"]
     },
     (error, result) => {

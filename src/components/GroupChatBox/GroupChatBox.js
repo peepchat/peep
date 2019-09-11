@@ -6,8 +6,22 @@ import { getGroupMessages } from "../../redux/GroupReducer/groupReducer";
 import Message from "./Messages";
 import { MdGif, MdMovie, MdImage } from "react-icons/md";
 import Modal from "react-awesome-modal";
-import * as cloudkey from "../../cloudkey.json";
 import axios from "axios";
+import firebase from "firebase";
+require("dotenv").config();
+
+firebase.initializeApp({
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: `${process.env.REACT_APP_PROJECT_ID}.firebaseapp.com`,
+  databaseURL: "https://personal-project-devmtn.firebaseio.com",
+  storageBucket: "personal-project-devmtn.appspot.com"
+});
+
+const storage = firebase.storage();
+const imagesRef = storage.ref("images");
+const videosRef = storage.ref("videos");
+
+const giphyKey = process.env.REACT_APP_GIPHY_KEY;
 
 const GroupChatBox = props => {
   const [msgInput, setMsgInput] = useState("");
@@ -32,6 +46,40 @@ const GroupChatBox = props => {
     setGifInput(event.target.value);
   };
 
+  const handleImage = event => {
+    const file = event.target.files[0];
+    const uploadTask = imagesRef.child(file.name).put(file);
+    uploadTask.then(() => {
+      imagesRef
+        .child(file.name)
+        .getDownloadURL()
+        .then(url => {
+          socket.emit("group-message", { group_id, user_id, img_url: url });
+          setTimeout(async () => {
+            await getGroupMessages(group_id);
+            await scrollToBottom();
+          }, 100);
+        });
+    });
+  };
+
+  const handleVideo = event => {
+    const file = event.target.files[0];
+    const uploadTask = videosRef.child(file.name).put(file);
+    uploadTask.then(() => {
+      videosRef
+        .child(file.name)
+        .getDownloadURL()
+        .then(url => {
+          socket.emit("group-message", { group_id, user_id, video_url: url });
+          setTimeout(async () => {
+            await getGroupMessages(group_id);
+            await scrollToBottom();
+          }, 100);
+        });
+    });
+  };
+
   const scrollToBottom = () => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: "auto" });
@@ -47,10 +95,14 @@ const GroupChatBox = props => {
 
   useEffect(() => {
     socket.on("refresh-chat-message", () => {
-      setTimeout(() => {
-        getGroupMessages(group_id);
-        getMessages();
-      }, 75);
+      setTimeout(async () => {
+        await setTimeout(() => {
+          getGroupMessages(group_id);
+        }, 75);
+        await setTimeout(() => {
+          scrollToBottom();
+        }, 50);
+      }, 25);
     });
     getGroupMessages(group_id);
     setTimeout(() => {
@@ -98,7 +150,7 @@ const GroupChatBox = props => {
             event.preventDefault();
             axios
               .get(
-                `https://api.giphy.com/v1/gifs/search?api_key=${cloudkey.giphy_key}&q=${gifInput}&limit=20&offset=0&rating=PG-13&lang=en`
+                `https://api.giphy.com/v1/gifs/search?api_key=${giphyKey}&q=${gifInput}&limit=20&offset=0&rating=PG-13&lang=en`
               )
               .then(res => {
                 setGifs(res.data.data);
@@ -161,12 +213,24 @@ const GroupChatBox = props => {
         >
           <MdGif />
         </button>
-        <button className="imageButton">
+        <label className="imageButton">
           <MdImage />
-        </button>
-        <button className="videoButton">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImage}
+            className="fileInput"
+          />
+        </label>
+        <label className="videoButton">
           <MdMovie />
-        </button>
+          <input
+            type="file"
+            accept="video/*"
+            onChange={handleVideo}
+            className="fileInput"
+          />
+        </label>
       </ChatInputCont>
     </ChatBoxWrapper>
   );
@@ -422,6 +486,12 @@ export const ChatInputCont = styled.form`
   bottom: 0;
   left: 0;
   right: 0;
+
+  .fileInput {
+    display: none;
+    visibility: hidden;
+  }
+
   .imageButton {
     background-color: ${props => props.theme.teal1};
     width: 3rem;
@@ -466,6 +536,9 @@ export const ChatInputCont = styled.form`
       transition: 400ms;
       background-color: ${props => props.theme.teal3};
       transform: scale(0.97);
+    }
+    input {
+      display: hidden;
     }
   }
   .gifButton {
