@@ -11,7 +11,7 @@ import {
   editDirectMessage
 } from "../../redux/MessagesReducer/MessagesReducer";
 import { FaPlusCircle, FaRegSmile } from "react-icons/fa";
-import DMPosts from "./Messages";
+import Messages from "./Messages";
 import { MdGif, MdMovie, MdImage } from "react-icons/md";
 import axios from "axios";
 import Modal from "react-awesome-modal";
@@ -184,11 +184,12 @@ const ChatBox = props => {
       <ChatMessagesCont>
         {directMessages.map((dm, index) => {
           return (
-            <DMPosts
+            <Messages
               dm={dm}
               email={props.email}
               userPic={props.userPic}
               key={index}
+              getMessages={getMessages}
             />
           );
         })}
@@ -216,6 +217,7 @@ const ChatBox = props => {
           onChange={handleChange}
           value={msgInput}
           placeholder="Message..."
+          className="chat-input"
         />
         <button
           className="gifButton"

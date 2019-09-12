@@ -14,7 +14,6 @@ import Modal from "react-awesome-modal";
 import CreateForm from "../CreateForm/CreateForm";
 import JoinForm from "../JoinForm/JoinForm";
 import io from "socket.io-client";
-import Loader from "../Loader/Loader";
 import Peep from "../../Logo/Peep.svg";
 
 export const socket = io();
@@ -73,7 +72,10 @@ const Navbar = props => {
     props.logoutUser().then(() => props.history.push("/"));
     setVisible(false);
     setModalView("");
-    // socket.emit("disconnect");
+    socket.emit("logout", {
+      user_id,
+      msg: `${nickname} logged out.`
+    });
   };
 
   const goToHome = () => {
@@ -82,7 +84,6 @@ const Navbar = props => {
 
   return (
     <>
-      <Loader></Loader>
       <NavWrapper>
         <ChannelWrapper>
           <HomeLogo src={Peep} onClick={goToHome}></HomeLogo>
@@ -99,10 +100,12 @@ const Navbar = props => {
               ></Channel>
             );
           })}
-          <PlusButton onClick={() => setVisible(true)}>+</PlusButton>
+          <PlusButton className="plus-btn" onClick={() => setVisible(true)}>
+            +
+          </PlusButton>
         </ChannelWrapper>
         <LogoutButtonCont>
-          <LogoutButton onClick={handleLogout}>
+          <LogoutButton onClick={handleLogout} className="logout-btn">
             <i className="material-icons">exit_to_app</i>
           </LogoutButton>
         </LogoutButtonCont>

@@ -48,6 +48,7 @@ const DMBar = props => {
             value={search}
             type="text"
             autoComplete="off"
+            className="search-input"
           ></SearchInputModal>
           <SearchInputModalIcon>
             <i className="material-icons">search</i>
@@ -68,7 +69,7 @@ const DMBar = props => {
                   }}
                 >
                   <UserName>
-                    <UserItem>
+                    <UserItem className="user-item">
                       {user.profile_img ? (
                         <SearchPic src={user.profile_img}></SearchPic>
                       ) : (
@@ -91,7 +92,7 @@ const DMBar = props => {
               readonly
               placeholder="Search..."
             ></SearchInput>
-            <SearchButton>
+            <SearchButton className="search-btn">
               <i className="material-icons">search</i>
             </SearchButton>
           </SearchWrapper>
@@ -105,6 +106,7 @@ const DMBar = props => {
                   props.history.push(`/peep/dm/${friend.chat_id}`);
                   props.getDirectMessages(friend.chat_id);
                 }}
+                className="friend-btn"
               >
                 {!friend.profile_img ? (
                   <UserPic
