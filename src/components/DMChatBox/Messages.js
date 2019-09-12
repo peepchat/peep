@@ -95,9 +95,12 @@ const Messages = props => {
       </div>
       {props.email === props.dm.email ? (
         <div className="editHover">
-          <button className="editIcon" onClick={openMessageToggle}>
-            <FaEllipsisV />
-          </button>
+          {messageToggle === false ? (
+            <button className="editIcon" onClick={openMessageToggle}>
+              <FaEllipsisV />
+            </button>
+          ) : null}
+
           {messageToggle === true ? (
             <div className="hiddenDiv">
               <button onClick={closeMessageToggle} className="escButton">

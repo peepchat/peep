@@ -276,7 +276,7 @@ const DMBarWrapper = styled.div`
 
   /* henry why */
   div + div > div > div {
-    border-radius: 0 !important;
+    border-radius: 0;
   }
 `;
 

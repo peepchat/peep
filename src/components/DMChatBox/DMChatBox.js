@@ -346,15 +346,29 @@ export const ChatMessagesCont = styled.div`
     white-space: pre-line;
     overflow-wrap: break-word;
 
-    &:hover {
-      
+    .editIcon {
+        display: flex;
+        justify-content: flex-end;
+        height: 100%;
+        color: transparent;
+        font-size: 1.3rem;
+        background: transparent;
+        outline: none;
+        border: none;
+        width: 50px;
+    }
+    &:hover .editIcon {
+      border-radius: 10px;
+      transition: 200ms;
+      color: ${props => props.theme.teal3};
+      transform: scale(1.01);
     } 
+    
     
     .editHover {
       display: flex;
       justify-content: flex-end;
-
-      width: 50%;
+      margin-left: auto;
       height: 100%;
       color: transparent;
       font-size: 11px;
@@ -405,22 +419,7 @@ export const ChatMessagesCont = styled.div`
           }
         }
       }
-      .editIcon {
-        display: flex;
-        justify-content: flex-end;
-        height: 100%;
-        color: transparent;
-        font-size: 1.3rem;
-        background: transparent;
-        outline: none;
-        border: none;
-        &:hover {
-          border-radius: 10px;
-          transition: 200ms;
-          color: ${props => props.theme.teal3};
-          transform: scale(1.01);
-        }
-      }
+      
     }
     .imgCont {
       width: 40px;
