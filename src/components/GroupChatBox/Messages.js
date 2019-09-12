@@ -16,7 +16,7 @@ import {
   editGroupMessage,
   deleteGroupMessage,
   handleGroupMessage,
-  populateGroupMessage,
+  populateGroupMessage
 } from "../../redux/GroupReducer/groupReducer";
 
 const Messages = props => {
@@ -95,9 +95,12 @@ const Messages = props => {
       </div>
       {props.email === props.dm.email ? (
         <div className="editHover">
-          <button className="editIcon" onClick={openMessageToggle}>
-            <FaEllipsisV />
-          </button>
+          {messageToggle === false ? (
+            <button className="editIcon" onClick={openMessageToggle}>
+              <FaEllipsisV />
+            </button>
+          ) : null}
+
           {messageToggle === true ? (
             <div className="hiddenDiv">
               <button onClick={closeMessageToggle} className="escButton">
@@ -144,8 +147,10 @@ export default connect(
 )(Messages);
 
 const ChatImage = styled.img`
-  height: 400px;
-  width: auto;
+  height: auto;
+  max-width: 75%;
+  object-fit: contain;
+  object-position: left;
 `;
 
 export const ChatMessagesCont = styled.div`
