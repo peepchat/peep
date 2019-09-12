@@ -96,26 +96,26 @@ const LoginInput = styled.input`
 `;
 
 const ForgotButton = styled.button`
-    color: #7289da;
-    display: block;
-    padding-left: 0;
-    padding-right: 0;
-    margin-bottom: 20px;
-    margin-top: 4px;
-    width: auto;
-    height: auto;
-    padding: 2px 4px;
-    box-sizing: border-box;
-    background: none;
-    border: none;
-    border-radius: 3px;
-    font-size: 11px;
-    font-weight: 500;
-    line-height: 16px;
-    text-decoration:none;
-    outline: none;
-}
+  color: #7289da;
+  display: block;
+  padding-left: 0;
+  padding-right: 0;
+  margin-bottom: 20px;
+  margin-top: 4px;
+  width: auto;
+  height: auto;
+  padding: 2px 4px;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+  text-decoration: none;
+  outline: none;
 `;
+
 const ForgotDiv = styled.div`
   margin: 0 auto;
   white-space: nowrap;
@@ -214,14 +214,22 @@ const Register = props => {
               <div className="loginMargin">
                 <LoginH5>Email</LoginH5>
               </div>
-              <LoginInput onChange={handleChange} name="email" />
+              <LoginInput
+                onChange={handleChange}
+                name="email"
+                className="email-input"
+              />
             </InputBox>
             <br />
             <InputBox>
               <div className="loginMargin">
                 <LoginH5>Nickname</LoginH5>
               </div>
-              <LoginInput onChange={handleChange} name="nickname" />
+              <LoginInput
+                onChange={handleChange}
+                name="nickname"
+                className="nickname-input"
+              />
             </InputBox>
             <br />
             <InputBox>
@@ -233,6 +241,7 @@ const Register = props => {
                 onChange={handleChange}
                 name="password"
                 type="password"
+                className="password-input"
               />
             </InputBox>
             <br />
@@ -241,7 +250,7 @@ const Register = props => {
             </LoginButton>
             <Link to="/">
               <ForgotButton onClick={clickGoBack}>
-                <ForgotDiv>
+                <ForgotDiv className="login">
                   <span className="needP">Already have an account?</span> Login
                 </ForgotDiv>
               </ForgotButton>

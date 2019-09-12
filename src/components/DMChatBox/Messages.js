@@ -17,6 +17,7 @@ import {
   deleteDirectMessage,
   getDirectMessages
 } from "../../redux/MessagesReducer/MessagesReducer";
+import { socket } from "../Navbar/Navbar";
 
 const Messages = props => {
   const [messageToggle, setMessageToggle] = useState(false);
@@ -40,6 +41,8 @@ const Messages = props => {
     props.editDirectMessage(props.dm.message_id, props.edit_Message);
     setTimeout(() => {
       getDirectMessages(props.dm.chat_id);
+      props.getMessages();
+      socket.emit("refresh");
     }, 75);
   };
   const handleMessageChange = event => {
@@ -118,8 +121,10 @@ const Messages = props => {
                 onClick={() => {
                   props.deleteDirectMessage(props.dm.message_id);
                   setTimeout(() => {
+                    socket.emit("refresh");
                     getDirectMessages(props.dm.chat_id);
-                  }, 75);
+                    props.getMessages();
+                  }, 100);
                 }}
                 className="hiddenDelete"
               >

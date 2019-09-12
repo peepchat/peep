@@ -170,6 +170,7 @@ const GroupChatBox = props => {
               email={props.email}
               userPic={props.userPic}
               key={index}
+              getMessages={getMessages}
             />
           );
         })}

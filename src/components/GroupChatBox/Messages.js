@@ -40,6 +40,7 @@ const Messages = props => {
     props.editGroupMessage(props.dm.message_id, props.edit_GroupMessage);
     setTimeout(() => {
       getGroupMessages(props.dm.group_id);
+      props.getMessages();
     }, 75);
   };
   const handleGroupMessage = event => {
@@ -117,6 +118,7 @@ const Messages = props => {
               <button
                 onClick={() => {
                   props.deleteGroupMessage(props.dm.message_id);
+                  props.getMessages();
                 }}
                 className="hiddenDelete"
               >
