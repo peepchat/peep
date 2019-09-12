@@ -2,10 +2,13 @@ require("dotenv").config();
 const express = require("express");
 const massive = require("massive");
 const session = require("express-session");
+const path = require("path"); // Usually moved to the start of file
 
 const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
+
+app.use(express.static(`${__dirname}/../build`));
 
 const AC = require("./controllers/auth_controller");
 const FC = require("./controllers/friend_controller");
@@ -166,6 +169,10 @@ io.on("connection", socket => {
       io.emit("refresh-friends");
     }, 150);
   });
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build/index.html"));
 });
 
 http.listen(SERVER_PORT, () => {
