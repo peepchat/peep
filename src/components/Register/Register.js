@@ -96,26 +96,26 @@ const LoginInput = styled.input`
 `;
 
 const ForgotButton = styled.button`
-    color: #7289da;
-    display: block;
-    padding-left: 0;
-    padding-right: 0;
-    margin-bottom: 20px;
-    margin-top: 4px;
-    width: auto;
-    height: auto;
-    padding: 2px 4px;
-    box-sizing: border-box;
-    background: none;
-    border: none;
-    border-radius: 3px;
-    font-size: 11px;
-    font-weight: 500;
-    line-height: 16px;
-    text-decoration:none;
-    outline: none;
-}
+  color: #7289da;
+  display: block;
+  padding-left: 0;
+  padding-right: 0;
+  margin-bottom: 20px;
+  margin-top: 4px;
+  width: auto;
+  height: auto;
+  padding: 2px 4px;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+  text-decoration: none;
+  outline: none;
 `;
+
 const ForgotDiv = styled.div`
   margin: 0 auto;
   white-space: nowrap;
