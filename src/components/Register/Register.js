@@ -214,14 +214,22 @@ const Register = props => {
               <div className="loginMargin">
                 <LoginH5>Email</LoginH5>
               </div>
-              <LoginInput onChange={handleChange} name="email" />
+              <LoginInput
+                onChange={handleChange}
+                name="email"
+                className="email-input"
+              />
             </InputBox>
             <br />
             <InputBox>
               <div className="loginMargin">
                 <LoginH5>Nickname</LoginH5>
               </div>
-              <LoginInput onChange={handleChange} name="nickname" />
+              <LoginInput
+                onChange={handleChange}
+                name="nickname"
+                className="nickname-input"
+              />
             </InputBox>
             <br />
             <InputBox>
@@ -233,6 +241,7 @@ const Register = props => {
                 onChange={handleChange}
                 name="password"
                 type="password"
+                className="password-input"
               />
             </InputBox>
             <br />
@@ -241,7 +250,7 @@ const Register = props => {
             </LoginButton>
             <Link to="/">
               <ForgotButton onClick={clickGoBack}>
-                <ForgotDiv>
+                <ForgotDiv className="login">
                   <span className="needP">Already have an account?</span> Login
                 </ForgotDiv>
               </ForgotButton>

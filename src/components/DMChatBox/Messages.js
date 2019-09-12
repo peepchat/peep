@@ -41,6 +41,7 @@ const Messages = props => {
     props.editDirectMessage(props.dm.message_id, props.edit_Message);
     setTimeout(() => {
       getDirectMessages(props.dm.chat_id);
+      props.getMessages();
       socket.emit("refresh");
     }, 75);
   };
@@ -122,6 +123,7 @@ const Messages = props => {
                   setTimeout(() => {
                     socket.emit("refresh");
                     getDirectMessages(props.dm.chat_id);
+                    props.getMessages();
                   }, 100);
                 }}
                 className="hiddenDelete"

@@ -36,7 +36,11 @@ const Login = props => {
               <div className="loginMargin">
                 <LoginH5>Email</LoginH5>
               </div>
-              <LoginInput onChange={handleChange} name="email" />
+              <LoginInput
+                onChange={handleChange}
+                name="email"
+                className="login-input"
+              />
             </InputBox>
             <br />
             <InputBox>
@@ -47,18 +51,23 @@ const Login = props => {
                 onChange={handleChange}
                 name="password"
                 type="password"
+                className="password-input"
               />
             </InputBox>
             <ForgotButton>
               <ForgotDiv>Forgot your password?</ForgotDiv>
             </ForgotButton>
-            <LoginButton type="submit" onClick={handleLogin}>
+            <LoginButton
+              type="submit"
+              onClick={handleLogin}
+              className="login-btn"
+            >
               <LoginDiv>Login</LoginDiv>
             </LoginButton>
             {error ? <WrongInfo>Wrong username & password</WrongInfo> : null}
             <ForgotButton>
               <Link to="/register">
-                <ForgotDiv>
+                <ForgotDiv className="register">
                   <span className="needP">Need an account?</span> Register
                 </ForgotDiv>
               </Link>

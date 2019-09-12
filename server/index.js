@@ -148,14 +148,23 @@ io.on("connection", socket => {
     await io.to(room).emit("refresh-chat-message");
   });
 
+  socket.on("logout", data => {
+    console.log(data.msg);
+    user_id = data.user_id;
+    database.edit_online_status([user_id, false]);
+    setTimeout(() => {
+      io.emit("refresh-friends");
+    }, 150);
+  });
+
   socket.on("disconnect", () => {
-    console.log("User disconnected");
+    // console.log("User disconnected");
     if (user_id !== null || user_id !== undefined) {
       database.edit_online_status([user_id, false]);
     }
     setTimeout(() => {
       io.emit("refresh-friends");
-    }, 100);
+    }, 150);
   });
 });
 

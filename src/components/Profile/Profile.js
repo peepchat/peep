@@ -350,8 +350,7 @@ function mapStateToProps(state) {
     pending: state.friendsReducer.pending,
     requests: state.friendsReducer.requests,
     edit_Nickname: state.authReducer.edit_Nickname,
-    groupRequests: state.groupReducer.groupRequests,
-    loading: state.userReducer.loading
+    groupRequests: state.groupReducer.groupRequests
   };
 }
 
