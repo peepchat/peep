@@ -429,7 +429,7 @@ export const ChatMessagesCont = styled.div`
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
-      min-width: 0;
+      min-width: 10rem;
       color: black !important;
       .messageEdit {
         .messageInput {
