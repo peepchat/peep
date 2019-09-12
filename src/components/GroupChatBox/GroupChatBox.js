@@ -376,7 +376,7 @@ export const ChatMessagesCont = styled.div`
           &:hover {
             border-radius: 10px;
             transition: 300ms;
-            background-color: ${props => props.theme.teal1};
+            
             transform: scale(0.97);
           }
         }
@@ -389,7 +389,7 @@ export const ChatMessagesCont = styled.div`
           &:hover {
             border-radius: 10px;
             transition: 300ms;
-            background-color: ${props => props.theme.teal3};
+           
             transform: scale(0.97);
           }
         }
@@ -401,7 +401,7 @@ export const ChatMessagesCont = styled.div`
           font-size: 1.3rem;
           &:hover {
             border-radius: 10px;
-            background-color: hsl(0, 0%, 96%);
+            
             transition: 300ms;
             transform: scale(0.97);
           }
