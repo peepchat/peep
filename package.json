@@ -15,7 +15,7 @@
     "express-session": "^1.16.2",
     "firebase": "^6.6.0",
     "massive": "^5.11.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "passport": "^0.4.0",
     "passport-auth0": "^1.2.1",
     "react": "^16.9.0",
